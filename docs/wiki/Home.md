@@ -13,7 +13,7 @@ In the above diagram, this module provides the capability to deploy landing zone
 
 We recommend that you deploy the platform using the [Azure Landing Zones Bicep modules][alz_bicep_module] and then use this module to deploy the landing zones.
 
-Before deployment, please review the [required permissions](Permissions). Then to get started, look at one of the [examples](Examples).
+Before deployment, please review the [required permissions](https://github.com/azure/bicep-lz-vending/wiki/permissions). Then to get started, look at one of the [examples](https://github.com/azure/bicep-lz-vending/wiki/examples).
 
 [comment]: # (Link labels below, please sort a-z, thanks!)
 
