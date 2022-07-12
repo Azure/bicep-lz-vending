@@ -1,0 +1,7 @@
+# Default owners
+* @Azure/bicep-lz-vending-admins
+
+# Require admin approval for the following files:
+.github/CODEOWNERS @Azure/bicep-lz-vending-admins
+.github/fabricbot.json @Azure/bicep-lz-vending-admins
+.github/workflows/ @Azure/bicep-lz-vending-admins
