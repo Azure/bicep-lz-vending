@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "subscriptionAliasEnabled": {
+      "value": true
+    },
+    "subscriptionDisplayName": {
+      "value": "bicep-lz-vending-test-001"
+    },
+    "subscriptionAliasName": {
+      "value": "bicep-lz-vending-test-001"
+    },
+    "subscriptionBillingScope": {
+      "value": "/providers/Microsoft.Billing/billingAccounts/7690848/enrollmentAccounts/318926"
+    },
+    "subscriptionWorkload": {
+      "value": "Production"
+    }
+  }
+}
