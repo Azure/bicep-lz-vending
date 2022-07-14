@@ -16,6 +16,9 @@
     },
     "subscriptionWorkload": {
       "value": "Production"
+    },
+    "exisitingSubscriptionId": {
+        "value": ""
     }
   }
 }

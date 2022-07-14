@@ -24,11 +24,13 @@ param subscriptionBillingScope string
 @description('The workload type can be either `Production` or `DevTest` and is case sensitive.')
 param subscriptionWorkload string = 'Production'
 
-@maxLength(32)
+@maxLength(36)
 @description('An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.')
 param exisitingSubscriptionId string = ''
 
 // VARIABLES
+
+var existingSubscriptionIDEmptyCheck = empty(exisitingSubscriptionId) ? 'No Subscription ID Provided' : exisitingSubscriptionId
 
 // Deployment name variables
 // LIMITS: Tenant = 64, Management Group = 64, Subscription = 64, Resource Group = 64
@@ -51,5 +53,5 @@ module createSubscription 'src/self/Microsoft.Subscription/aliases/deploy.bicep'
 
 // OUTPUTS
 
-output subscriptionId string = createSubscription.outputs.subscriptionId
-output subscriptionResourceId string = createSubscription.outputs.subscriptionResourceId
+output subscriptionId string = (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '${exisitingSubscriptionId}'
+output subscriptionResourceId string = (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionResourceId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '/subscriptions/${exisitingSubscriptionId}'
