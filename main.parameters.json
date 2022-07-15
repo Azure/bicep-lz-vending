@@ -2,6 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "subscriptionTags": {
+        "value": {
+          "test-key": "test-value",
+          "test-key2": "test-value2"
+        }
+    },
     "subscriptionAliasEnabled": {
       "value": true
     },
@@ -19,6 +25,15 @@
     },
     "exisitingSubscriptionId": {
         "value": ""
+    },
+    "virtualNetworkEnabled": {
+        "value": true
+    },
+    "virtualNetworkLocation": {
+        "value": "uksouth"
+    },
+    "virtualNetworkResourceGroupName": {
+        "value": "rsg-networking-001"
     }
   }
 }

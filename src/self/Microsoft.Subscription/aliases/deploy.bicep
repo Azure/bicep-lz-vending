@@ -29,4 +29,3 @@ resource subscriptionAlias 'Microsoft.Subscription/aliases@2021-10-01' = {
 
 output subscriptionId string = subscriptionAlias.properties.subscriptionId
 output subscriptionResourceId string = '/subscriptions/${subscriptionAlias.properties.subscriptionId}'
-
