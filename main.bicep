@@ -3,7 +3,7 @@ targetScope = 'managementGroup'
 // PARAMETERS
 
 // Subscription Parameters
-@description(' Whether to create a new subscription using the subscription alias resource. If disabled, supply the existingSubscriptionId parameter instead.')
+@description('Whether to create a new subscription using the subscription alias resource. If false, supply the existingSubscriptionId parameter instead to deploy resources to an existing subscription.')
 param subscriptionAliasEnabled bool = true
 
 @maxLength(63)
@@ -30,14 +30,17 @@ param exisitingSubscriptionId string = ''
 
 // Subscription Resources Wrapper Parameters
 
+@description('An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
 param subscriptionTags object = {}
 
-param virtualNetworkTags object = {}
+@description('Whether to create a virtual network or not.')
+param virtualNetworkEnabled bool = false
 
+@maxLength(90)
+@description('The name of the resource group to create the virtual network in.')
 param virtualNetworkResourceGroupName string = ''
 
-param virtualNetworkEnabled bool = true
-
+@description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
 param virtualNetworkLocation string = deployment().location
 
 // VARIABLES
@@ -72,7 +75,6 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkLocation: virtualNetworkLocation
     virtualNetworkResourceGroupName: virtualNetworkResourceGroupName
     subscriptionTags: subscriptionTags
-    virtualNetworkTags: virtualNetworkTags
   }
 }
 

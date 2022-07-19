@@ -5,17 +5,20 @@ targetScope = 'managementGroup'
 @maxLength(36)
 param subscriptionId string
 
+@description('An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
 param subscriptionTags object = {}
 
-param virtualNetworkTags object = {}
+@description('Whether to create a virtual network or not.')
+param virtualNetworkEnabled bool = false
 
-param virtualNetworkResourceGroupName string
+@maxLength(90)
+@description('The name of the resource group to create the virtual network in.')
+param virtualNetworkResourceGroupName string = ''
 
-param virtualNetworkEnabled bool
+@description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
+param virtualNetworkLocation string = deployment().location
 
 // param virtualNetworkAddressSpace array
-
-param virtualNetworkLocation string
 
 // param virtualNetworkPeeringEnabled bool
 
@@ -49,7 +52,6 @@ module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resource
   params: {
     name: virtualNetworkResourceGroupName
     location: virtualNetworkLocation
-    tags: virtualNetworkTags
   }
 }
 
