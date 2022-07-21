@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "subscriptionTags": {
-        "value": {
-          "test-key": "test-value",
-          "test-key2": "test-value2"
-        }
+      "value": {
+        "test-key": "test-value",
+        "test-key2": "test-value2"
+      }
     },
     "subscriptionAliasEnabled": {
       "value": true
@@ -24,16 +24,25 @@
       "value": "Production"
     },
     "exisitingSubscriptionId": {
-        "value": ""
+      "value": ""
     },
     "virtualNetworkEnabled": {
-        "value": true
+      "value": true
     },
     "virtualNetworkLocation": {
-        "value": "uksouth"
+      "value": "uksouth"
     },
     "virtualNetworkResourceGroupName": {
-        "value": "rsg-networking-001"
+      "value": "rsg-networking-001"
+    },
+    "virtualNetworkName": {
+      "value": "vnet-bicep-lz-vending-test-001"
+    },
+    "virtualNetworkAddressSpace": {
+      "value": [
+        "192.168.123.0/24",
+        "192.168.124.0/24"
+      ]
     }
   }
 }

@@ -13,12 +13,17 @@ param virtualNetworkEnabled bool = false
 
 @maxLength(90)
 @description('The name of the resource group to create the virtual network in.')
-param virtualNetworkResourceGroupName string = ''
+param virtualNetworkResourceGroupName string
 
 @description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
 param virtualNetworkLocation string = deployment().location
 
-// param virtualNetworkAddressSpace array
+@maxLength(64)
+@description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
+param virtualNetworkName string 
+
+@description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
+param virtualNetworkAddressSpace array
 
 // param virtualNetworkPeeringEnabled bool
 
@@ -29,8 +34,9 @@ param virtualNetworkLocation string = deployment().location
 // Deployment name variables
 // LIMITS: Tenant = 64, Management Group = 64, Subscription = 64, Resource Group = 64
 var deploymentNames = {
-  createResourceGroupForLzNetworking: take('lz-vend-rsg-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation)}', 64)
-  tagSubscription: take('lz-vend-tag-sub-${uniqueString(subscriptionId)}', 64)
+  createResourceGroupForLzNetworking: take('lz-vend-rsg-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, deployment().name)}', 64)
+  tagSubscription: take('lz-vend-tag-sub-${uniqueString(subscriptionId, deployment().name)}', 64)
+  createLzVnet: take('lz-vend-vnet-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, deployment().name)}', 64)
 }
 
 // RESOURCES & MODULES
@@ -52,6 +58,19 @@ module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resource
   params: {
     name: virtualNetworkResourceGroupName
     location: virtualNetworkLocation
+  }
+}
+
+module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy.bicep' = if (virtualNetworkEnabled) {
+  dependsOn: [
+    createResourceGroupForLzNetworking
+  ]
+  scope: resourceGroup(subscriptionId,  virtualNetworkResourceGroupName)
+  name: deploymentNames.createLzVnet
+  params: {
+    name: virtualNetworkName
+    location: virtualNetworkLocation
+    addressPrefixes: virtualNetworkAddressSpace
   }
 }
 

@@ -43,6 +43,12 @@ param virtualNetworkResourceGroupName string = ''
 @description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
 param virtualNetworkLocation string = deployment().location
 
+@description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
+param virtualNetworkName string
+
+@description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
+param virtualNetworkAddressSpace array
+
 // VARIABLES
 
 var existingSubscriptionIDEmptyCheck = empty(exisitingSubscriptionId) ? 'No Subscription ID Provided' : exisitingSubscriptionId
@@ -50,8 +56,8 @@ var existingSubscriptionIDEmptyCheck = empty(exisitingSubscriptionId) ? 'No Subs
 // Deployment name variables
 // LIMITS: Tenant = 64, Management Group = 64, Subscription = 64, Resource Group = 64
 var deploymentNames = {
-  createSubscription: take('lz-vend-sub-create-${subscriptionAliasName}-${uniqueString(subscriptionAliasName, subscriptionDisplayName, subscriptionBillingScope, subscriptionWorkload)}', 64)
-  createSubscriptionResources: take('lz-vend-sub-res-create-${subscriptionAliasName}-${uniqueString(subscriptionAliasName, subscriptionDisplayName, subscriptionBillingScope, subscriptionWorkload)}', 64)
+  createSubscription: take('lz-vend-sub-create-${subscriptionAliasName}-${uniqueString(subscriptionAliasName, subscriptionDisplayName, subscriptionBillingScope, subscriptionWorkload, deployment().name)}', 64)
+  createSubscriptionResources: take('lz-vend-sub-res-create-${subscriptionAliasName}-${uniqueString(subscriptionAliasName, subscriptionDisplayName, subscriptionBillingScope, subscriptionWorkload, deployment().name)}', 64)
 }
 
 // RESOURCES & MODULES
@@ -71,10 +77,12 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
   name: deploymentNames.createSubscriptionResources
   params: {
     subscriptionId: (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionId : exisitingSubscriptionId
-    virtualNetworkEnabled: virtualNetworkEnabled
-    virtualNetworkLocation: virtualNetworkLocation
-    virtualNetworkResourceGroupName: virtualNetworkResourceGroupName
     subscriptionTags: subscriptionTags
+    virtualNetworkEnabled: virtualNetworkEnabled
+    virtualNetworkResourceGroupName: virtualNetworkResourceGroupName
+    virtualNetworkLocation: virtualNetworkLocation
+    virtualNetworkName: virtualNetworkName
+    virtualNetworkAddressSpace: virtualNetworkAddressSpace
   }
 }
 
