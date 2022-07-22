@@ -43,6 +43,15 @@
         "192.168.123.0/24",
         "192.168.124.0/24"
       ]
+    },
+    "virtualNetworkPeeringEnabled": {
+      "value": true
+    },
+    "hubNetworkResourceId": {
+      "value": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualNetworks/vnet-hub-uks-001"
+    },
+    "virtualNetworkUseRemoteGateways" : {
+      "value": true
     }
   }
 }

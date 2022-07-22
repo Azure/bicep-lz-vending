@@ -49,6 +49,15 @@ param virtualNetworkName string
 @description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
 param virtualNetworkAddressSpace array
 
+@description('Whether to enable peering/connection with the supplied hub virtual network or virtual hub.')
+param virtualNetworkPeeringEnabled bool = false
+
+@description('The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.')
+param hubNetworkResourceId string = ''
+
+@description('Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to false, otherwise peering will fail to create.')
+param virtualNetworkUseRemoteGateways bool = true
+
 // VARIABLES
 
 var existingSubscriptionIDEmptyCheck = empty(exisitingSubscriptionId) ? 'No Subscription ID Provided' : exisitingSubscriptionId
@@ -83,6 +92,9 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkLocation: virtualNetworkLocation
     virtualNetworkName: virtualNetworkName
     virtualNetworkAddressSpace: virtualNetworkAddressSpace
+    virtualNetworkPeeringEnabled: virtualNetworkPeeringEnabled
+    hubNetworkResourceId: hubNetworkResourceId
+    virtualNetworkUseRemoteGateways: virtualNetworkUseRemoteGateways
   }
 }
 
