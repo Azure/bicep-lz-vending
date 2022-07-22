@@ -30,6 +30,12 @@ param exisitingSubscriptionId string = ''
 
 // Subscription Resources Wrapper Parameters
 
+@description('Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.')
+param subscriptionManagementGroupAssociationEnabled bool = true
+
+@description('The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.')
+param subscriptionManagementGroupId string = ''
+
 @description('An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
 param subscriptionTags object = {}
 
@@ -95,6 +101,8 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
   name: deploymentNames.createSubscriptionResources
   params: {
     subscriptionId: (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionId : exisitingSubscriptionId
+    subscriptionManagementGroupAssociationEnabled: subscriptionManagementGroupAssociationEnabled
+    subscriptionManagementGroupId: subscriptionManagementGroupId
     subscriptionTags: subscriptionTags
     virtualNetworkEnabled: virtualNetworkEnabled
     virtualNetworkResourceGroupName: virtualNetworkResourceGroupName

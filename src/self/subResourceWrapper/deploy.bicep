@@ -5,6 +5,12 @@ targetScope = 'managementGroup'
 @maxLength(36)
 param subscriptionId string
 
+@description('Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.')
+param subscriptionManagementGroupAssociationEnabled bool = true
+
+@description('The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.')
+param subscriptionManagementGroupId string = ''
+
 @description('An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
 param subscriptionTags object = {}
 
@@ -48,8 +54,9 @@ param virtualNetworkVwanPropagatedLabels array = []
 // Deployment name variables
 // LIMITS: Tenant = 64, Management Group = 64, Subscription = 64, Resource Group = 64
 var deploymentNames = {
-  createResourceGroupForLzNetworking: take('lz-vend-rsg-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, deployment().name)}', 64)
+  moveSubscriptionToManagementGroup: take('lz-vend-move-sub-${uniqueString(subscriptionId, subscriptionManagementGroupId, deployment().name)}', 64)
   tagSubscription: take('lz-vend-tag-sub-${uniqueString(subscriptionId, deployment().name)}', 64)
+  createResourceGroupForLzNetworking: take('lz-vend-rsg-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, deployment().name)}', 64)
   createLzVnet: take('lz-vend-vnet-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, deployment().name)}', 64)
   createVirtualWanConnection: take('lz-vend-vhc-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, virtualHubResourceIdChecked, deployment().name)}', 64)
 }
@@ -71,6 +78,15 @@ var virtualWanHubConnectionPropogatedRouteTables = !empty(virtualNetworkVwanProp
 var virtualWanHubConnectionPropogatedLabels = !empty(virtualNetworkVwanPropagatedLabels) ? virtualNetworkVwanPropagatedLabels : [ 'default' ]
 
 // RESOURCES & MODULES
+
+module moveSubscriptionToManagementGroup '../Microsoft.Management/managementGroups/subscriptions/deploy.bicep' = if (subscriptionManagementGroupAssociationEnabled && !empty(subscriptionManagementGroupId)) {
+  scope: managementGroup(subscriptionManagementGroupId)
+  name: deploymentNames.moveSubscriptionToManagementGroup
+  params: {
+    subscriptionManagementGroupId: subscriptionManagementGroupId
+    subscriptionId: subscriptionId
+  }
+}
 
 module tagSubscription '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bicep' = if (!empty(subscriptionTags)) {
   scope: subscription(subscriptionId)
