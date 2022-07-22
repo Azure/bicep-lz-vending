@@ -31,8 +31,17 @@ param virtualNetworkPeeringEnabled bool = false
 @description('The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.')
 param hubNetworkResourceId string = ''
 
-@description('Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to false, otherwise peering will fail to create.')
+@description('Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create. Set this to `false` for virtual wan hub connections.')
 param virtualNetworkUseRemoteGateways bool = true
+
+@description('The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.')
+param virtualNetworkVwanAssociatedRouteTableResourceId string = ''
+
+@description('An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.')
+param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
+
+@description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
+param virtualNetworkVwanPropagatedLabels array = []
 
 // VARIABLES
 
@@ -42,7 +51,7 @@ var deploymentNames = {
   createResourceGroupForLzNetworking: take('lz-vend-rsg-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, deployment().name)}', 64)
   tagSubscription: take('lz-vend-tag-sub-${uniqueString(subscriptionId, deployment().name)}', 64)
   createLzVnet: take('lz-vend-vnet-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, deployment().name)}', 64)
-  // createVirtualWanConnection: take('lz-vend-vhc-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, virtualHubResourceIdChecked, deployment().name)}', 64)
+  createVirtualWanConnection: take('lz-vend-vhc-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, virtualHubResourceIdChecked, deployment().name)}', 64)
 }
 
 // Check hubNetworkResourceId to see if it's a virtual WAN connection instead of normal virtual network peering
@@ -50,10 +59,16 @@ var virtualHubResourceIdChecked = (!empty(hubNetworkResourceId) && contains(hubN
 var hubVirtualNetworkResourceIdChecked = (!empty(hubNetworkResourceId) && contains(hubNetworkResourceId, '/providers/Microsoft.Network/virtualNetworks/') ? hubNetworkResourceId : '')
 
 // Virtual WAN data
-// var virtualWanHubName = split(virtualHubResourceIdChecked, '/')[8]
-// var virtualWanHubSubscriptionId = split(virtualHubResourceIdChecked, '/')[2]
-// var virtualWanHubConnectionName = 'vhc-${guid(virtualHubResourceIdChecked, virtualNetworkName, virtualNetworkResourceGroupName, virtualNetworkLocation)}'
-
+var virtualWanHubName = split(virtualHubResourceIdChecked, '/')[8]
+var virtualWanHubSubscriptionId = split(virtualHubResourceIdChecked, '/')[2]
+var virtualWanHubResourceGroupName = split(virtualHubResourceIdChecked, '/')[4]
+var virtualWanHubConnectionName = 'vhc-${guid(virtualHubResourceIdChecked, virtualNetworkName, virtualNetworkResourceGroupName, virtualNetworkLocation)}'
+var virtualWanHubConnectionAssociatedRouteTable = !empty(virtualNetworkVwanAssociatedRouteTableResourceId) ? virtualNetworkVwanAssociatedRouteTableResourceId : '${virtualHubResourceIdChecked}/hubRouteTables/defaultRouteTable'
+var virutalWanHubDefaultRouteTableId = {
+  id: '${virtualHubResourceIdChecked}/hubRouteTables/defaultRouteTable'
+}
+var virtualWanHubConnectionPropogatedRouteTables = !empty(virtualNetworkVwanPropagatedRouteTablesResourceIds) ? virtualNetworkVwanPropagatedRouteTablesResourceIds : array(virutalWanHubDefaultRouteTableId)
+var virtualWanHubConnectionPropogatedLabels = !empty(virtualNetworkVwanPropagatedLabels) ? virtualNetworkVwanPropagatedLabels : [ 'default' ]
 
 // RESOURCES & MODULES
 
@@ -104,17 +119,26 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
   }
 }
 
-// module createVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualHubResourceIdChecked) ) {
-//   dependsOn: [
-//     createResourceGroupForLzNetworking
-//   ]
-//   scope: resourceGroup(subscriptionId, virtualNetworkResourceGroupName)
-//   name: deploymentNames.createVirtualWanConnection
-//   params: {
-//     name: virtualWanHubConnectionName
-//     virtualHubName: virtualWanHubName
-//     remoteVirtualNetworkId: createLzVnet.outputs.resourceId
-//   }
-// }
+module createVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualHubResourceIdChecked)) {
+  dependsOn: [
+    createResourceGroupForLzNetworking
+  ]
+  scope: resourceGroup(virtualWanHubSubscriptionId, virtualWanHubResourceGroupName)
+  name: deploymentNames.createVirtualWanConnection
+  params: {
+    name: virtualWanHubConnectionName
+    virtualHubName: virtualWanHubName
+    remoteVirtualNetworkId: createLzVnet.outputs.resourceId
+    routingConfiguration: {
+      associatedRouteTable: {
+        id: virtualWanHubConnectionAssociatedRouteTable
+      }
+      propagatedRouteTables: {
+        ids: virtualWanHubConnectionPropogatedRouteTables
+        labels: virtualWanHubConnectionPropogatedLabels
+      }
+    }
+  }
+}
 
 // OUTPUTS

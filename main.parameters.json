@@ -47,11 +47,28 @@
     "virtualNetworkPeeringEnabled": {
       "value": true
     },
+    // HUB VNET
+    // "hubNetworkResourceId": {
+    //   "value": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualNetworks/vnet-hub-uks-001"
+    // },
+    // VWAN HUB
     "hubNetworkResourceId": {
-      "value": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualNetworks/vnet-hub-uks-001"
+      "value": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualHubs/vhub-uks-001"
     },
-    "virtualNetworkUseRemoteGateways" : {
+    "virtualNetworkUseRemoteGateways": {
       "value": true
+    },
+    "virtualNetworkVwanAssociatedRouteTableResourceId": {
+      "value": ""
+    },
+    "virtualNetworkVwanPropagatedRouteTablesResourceIds": {
+      "value": []
+    },
+    "virtualNetworkVwanPropagatedLabels": {
+      "value": [
+        "default",
+        "jack"
+      ]
     }
   }
 }

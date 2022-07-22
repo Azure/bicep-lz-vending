@@ -58,6 +58,15 @@ param hubNetworkResourceId string = ''
 @description('Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to false, otherwise peering will fail to create.')
 param virtualNetworkUseRemoteGateways bool = true
 
+@description('The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.')
+param virtualNetworkVwanAssociatedRouteTableResourceId string = ''
+
+@description('An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.')
+param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
+
+@description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
+param virtualNetworkVwanPropagatedLabels array = []
+
 // VARIABLES
 
 var existingSubscriptionIDEmptyCheck = empty(exisitingSubscriptionId) ? 'No Subscription ID Provided' : exisitingSubscriptionId
@@ -95,6 +104,9 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkPeeringEnabled: virtualNetworkPeeringEnabled
     hubNetworkResourceId: hubNetworkResourceId
     virtualNetworkUseRemoteGateways: virtualNetworkUseRemoteGateways
+    virtualNetworkVwanAssociatedRouteTableResourceId: virtualNetworkVwanAssociatedRouteTableResourceId
+    virtualNetworkVwanPropagatedRouteTablesResourceIds: virtualNetworkVwanPropagatedRouteTablesResourceIds
+    virtualNetworkVwanPropagatedLabels: virtualNetworkVwanPropagatedLabels
   }
 }
 
