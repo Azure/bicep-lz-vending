@@ -46,6 +46,9 @@ param virtualNetworkEnabled bool = false
 @description('The name of the resource group to create the virtual network in.')
 param virtualNetworkResourceGroupName string = ''
 
+@description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
+param virtualNetworkResourceGroupLockEnabled bool = true
+
 @description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
 param virtualNetworkLocation string = deployment().location
 
@@ -106,6 +109,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     subscriptionTags: subscriptionTags
     virtualNetworkEnabled: virtualNetworkEnabled
     virtualNetworkResourceGroupName: virtualNetworkResourceGroupName
+    virtualNetworkResourceGroupLockEnabled: virtualNetworkResourceGroupLockEnabled
     virtualNetworkLocation: virtualNetworkLocation
     virtualNetworkName: virtualNetworkName
     virtualNetworkAddressSpace: virtualNetworkAddressSpace

@@ -21,6 +21,9 @@ param virtualNetworkEnabled bool = false
 @description('The name of the resource group to create the virtual network in.')
 param virtualNetworkResourceGroupName string
 
+@description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
+param virtualNetworkResourceGroupLockEnabled bool = true
+
 @description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
 param virtualNetworkLocation string = deployment().location
 
@@ -105,6 +108,7 @@ module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resource
   params: {
     name: virtualNetworkResourceGroupName
     location: virtualNetworkLocation
+    lock: virtualNetworkResourceGroupLockEnabled ? 'CanNotDelete' : ''
   }
 }
 

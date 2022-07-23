@@ -41,6 +41,9 @@
     "virtualNetworkResourceGroupName": {
       "value": "rsg-networking-001"
     },
+    "virtualNetworkResourceGroupLockEnabled": {
+      "value": true
+    },
     "virtualNetworkName": {
       "value": "vnet-bicep-lz-vending-test-001"
     },
