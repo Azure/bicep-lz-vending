@@ -52,6 +52,23 @@ param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
 @description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
 param virtualNetworkVwanPropagatedLabels array = []
 
+@description('Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAassignments`.')
+param roleAssignmentEnabled bool = false
+
+@description('Supply an array of objects containing the details of the role assignments to create.')
+param roleAssignments array = [
+  {
+    principalId: '00000000-0000-0000-0000-000000000000'
+    definition: 'Contributor'
+    relativeScope: ''
+  }
+  {
+    principalId: '00000000-0000-0000-0000-000000000000'
+    definition: 'Contributor'
+    relativeScope: '/resourceGroups/rsg-networking-001'
+  }
+]
+
 // VARIABLES
 
 // Deployment name variables
@@ -61,7 +78,8 @@ var deploymentNames = {
   tagSubscription: take('lz-vend-tag-sub-${uniqueString(subscriptionId, deployment().name)}', 64)
   createResourceGroupForLzNetworking: take('lz-vend-rsg-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, deployment().name)}', 64)
   createLzVnet: take('lz-vend-vnet-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, deployment().name)}', 64)
-  createVirtualWanConnection: take('lz-vend-vhc-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, virtualHubResourceIdChecked, deployment().name)}', 64)
+  createLzVirtualWanConnection: take('lz-vend-vhc-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, virtualHubResourceIdChecked, deployment().name)}', 64)
+  createLzRoleAssignments: take('lz-vend-rbac-create-${uniqueString(subscriptionId, deployment().name)}', 64)
 }
 
 // Check hubNetworkResourceId to see if it's a virtual WAN connection instead of normal virtual network peering
@@ -139,12 +157,12 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
   }
 }
 
-module createVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualHubResourceIdChecked)) {
+module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualHubResourceIdChecked)) {
   dependsOn: [
     createResourceGroupForLzNetworking
   ]
   scope: resourceGroup(virtualWanHubSubscriptionId, virtualWanHubResourceGroupName)
-  name: deploymentNames.createVirtualWanConnection
+  name: deploymentNames.createLzVirtualWanConnection
   params: {
     name: virtualWanHubConnectionName
     virtualHubName: virtualWanHubName
@@ -160,5 +178,20 @@ module createVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualH
     }
   }
 }
+
+module createLzRoleAssignments '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = [for assignment in roleAssignments: if (roleAssignmentEnabled && !empty(roleAssignments)) {
+  dependsOn: [
+    createResourceGroupForLzNetworking
+  ]
+  name: take('${deploymentNames.createLzRoleAssignments}-${uniqueString(assignment.principalId, assignment.definition, assignment.relativeScope)}', 64)
+  params: {
+    location: virtualNetworkLocation
+    principalId: assignment.principalId
+    roleDefinitionIdOrName: assignment.definition
+    subscriptionId: subscriptionId
+    resourceGroupName: (contains(assignment.relativeScope, '/resourceGroups/') ? assignment.relativeScope : '')
+    
+  }
+}]
 
 // OUTPUTS
