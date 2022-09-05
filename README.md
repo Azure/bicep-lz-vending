@@ -25,6 +25,12 @@ Please see the content in the [wiki](https://github.com/Azure/bicep-lz-vending/w
 TBC
 ```
 
+## Parameters
+
+Parameters for the `main.bicep` module can be found [here: `main.bicep.parameters.md`](main.bicep.parameters.md).
+
+> These docs are automatically generated using [PSDocs.Azure](https://azure.github.io/PSDocs.Azure) from the Bicep module file itself and [this GitHub Action](.github/workflows/psdocs-azure.yml)
+
 ## Contributing
 
 This project welcomes contributions and suggestions.

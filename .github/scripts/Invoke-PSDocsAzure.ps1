@@ -37,10 +37,14 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
     $jobj.metadata | Add-Member -name "name" -Value "``$docNameWithBicepExt`` Parameters" -MemberType NoteProperty
 
     if ($docName -eq 'main') {
-        $jobj.metadata | Add-Member -name "description" -Value "These are the input parameters for the Bicep module: [``$docNameWithBicepExt``](../../$docNameWithBicepExt)`r`n`r`n> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)" -MemberType NoteProperty
+        $jobj.metadata | Add-Member -name "description" -Value "These are the input parameters for the Bicep module: [``$docNameWithBicepExt``](./$docNameWithBicepExt)`r`n`r`n> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)" -MemberType NoteProperty
+        $docOutputPath = "./"
+        $docName = "main.bicep.parameters"
     }
     if ($docName -eq 'deploy') {
-        $jobj.metadata | Add-Member -name "description" -Value "These are the input parameters for the Bicep module: [``$docNameWithBicepExt``](../../src/self/subResourceWrapper/$docNameWithBicepExt)`r`n`r`n> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)" -MemberType NoteProperty
+        $jobj.metadata | Add-Member -name "description" -Value "These are the input parameters for the Bicep module: [``$docNameWithBicepExt``](./$docNameWithBicepExt)`r`n`r`n> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)" -MemberType NoteProperty
+        $docOutputPath = "src/self/subResourceWrapper/"
+        $docName = "readme"
     }
 
     $templatepath = $template.DirectoryName
@@ -50,7 +54,7 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
 
     # Generate markdown
     Write-Information -InformationAction Continue "====> Creating MD file using PSDocs.Azure for: $template"
-    Invoke-PSDocument -Module PSDocs.Azure -OutputPath docs/PSDocs.Azure/ -InputObject $template.FullName -InstanceName $docName;
+    Invoke-PSDocument -Module PSDocs.Azure -OutputPath $docOutputPath -InputObject $template.FullName -InstanceName $docName;
 }
 
 # Remove JSON files that were temporarily created
