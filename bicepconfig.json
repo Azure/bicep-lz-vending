@@ -38,7 +38,7 @@
           "level": "error"
         },
         "explicit-values-for-loc-params": {
-          "level": "error"
+          "level": "off" // CARML Reason: Our modules default to e.g. the location of their parent resource group which is sufficient if deploying a self-contained solution
         },
         "no-hardcoded-location": {
           "level": "error"
@@ -65,7 +65,7 @@
           "level": "error"
         },
         "prefer-unquoted-property-names": {
-          "level": "error"
+          "level": "off" // CARML Reason: This complains primarily about RBAC roles which are all in quotes to be consistent within the list of roles with and without spaces in their name
         },
         "secure-secrets-in-params": {
           "level": "error"
