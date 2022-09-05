@@ -18,7 +18,7 @@ $bicepModulesToBuild | ForEach-Object {
     # Remove Bicep extension from input path and replace with JSON instead
     $bicepPathSplit = $_.Split('.')[1]
     $jsonPathOutput = '.' + $bicepPathSplit + '.json'
-    
+
     # Add to array for doc creation by PSDocs.Azure
     $docsToGenerate.Add($jsonPathOutput)
 }
@@ -47,7 +47,6 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
     $convertedtemplatename = $template.Name
     $convertedfullpath = $templatepath + "\" + $convertedtemplatename
     $jobj | ConvertTo-Json -Depth 100 | Set-Content -Path $convertedfullpath
-    
 
     # Generate markdown
     Write-Information -InformationAction Continue "====> Creating MD file using PSDocs.Azure for: $template"
