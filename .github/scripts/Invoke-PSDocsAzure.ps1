@@ -28,8 +28,20 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
     # Generate a standard name of the markdown file. i.e. <name>_<version>.md
 
     $template = Get-Item -Path $_.TemplateFile
+    $templateraw = Get-Content -Raw -Path $_.Templatefile;
     $templateName = $template.Name.Split('.')[0]
     $docName = "$($templateName)"
+    $docNameWithBicepExt = ($docNameWithoutExtension) + '.bicep'
+    $docNameWithoutExtension = [System.IO.Path]::GetFileNameWithoutExtension($template.Name);
+    $jobj = ConvertFrom-Json -InputObject $templateraw
+    $jobj.metadata | Add-Member -name "name" -Value "``$docNameWithBicepExt`` Parameters" -MemberType NoteProperty
+    $jobj.metadata | Add-Member -name "description" -Value "``$docNameWithBicepExt`` Parameters Description" -MemberType NoteProperty
+
+    $templatepath = $template.DirectoryName
+    $convertedtemplatename = $template.Name
+    $convertedfullpath = $templatepath + "\" + $convertedtemplatename
+    $jobj | ConvertTo-Json -Depth 100 | Set-Content -Path $convertedfullpath
+    
 
     # Generate markdown
     Write-Information -InformationAction Continue "====> Creating MD file using PSDocs.Azure for: $template"
