@@ -21,7 +21,7 @@ Please see the content in the [wiki](https://github.com/Azure/bicep-lz-vending/w
 
 ## Example
 
-Below is an example showing how to use this module. 
+Below is an example showing how to use this module.
 
 > For more examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki) and if you cannot find an example you are looking for please [raise an issue](https://github.com/Azure/bicep-lz-vending/issues/new/choose) on the repo 👍
 
