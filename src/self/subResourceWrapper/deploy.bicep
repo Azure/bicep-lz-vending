@@ -52,7 +52,7 @@ param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
 @description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
 param virtualNetworkVwanPropagatedLabels array = []
 
-@description('Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAassignments`.')
+@description('Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.')
 param roleAssignmentEnabled bool = false
 
 @description('Supply an array of objects containing the details of the role assignments to create.')

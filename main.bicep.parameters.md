@@ -29,6 +29,8 @@ virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways 
 virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.
 virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
+roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
+roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.
 
 ### subscriptionAliasEnabled
 
@@ -174,6 +176,20 @@ An array of virtual hub route table resource IDs to propogate routes to. If left
 
 An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
 
+### roleAssignmentEnabled
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
+
+- Default value: `False`
+
+### roleAssignments
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Supply an array of objects containing the details of the role assignments to create.
+
 ## Outputs
 
 Name | Type | Description
@@ -254,6 +270,12 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
             "value": []
         },
         "virtualNetworkVwanPropagatedLabels": {
+            "value": []
+        },
+        "roleAssignmentEnabled": {
+            "value": false
+        },
+        "roleAssignments": {
             "value": []
         }
     }

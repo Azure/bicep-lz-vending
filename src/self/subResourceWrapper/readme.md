@@ -24,7 +24,7 @@ virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways 
 virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.
 virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
-roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAassignments`.
+roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
 roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.
 
 ### subscriptionId
@@ -139,7 +139,7 @@ An array of virtual hub route table labels to propogate routes to. If left blank
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAassignments`.
+Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
 
 - Default value: `False`
 
@@ -148,8 +148,6 @@ Whether to create role assignments or not. If true, supply the array of role ass
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 Supply an array of objects containing the details of the role assignments to create.
-
-- Default value: ` `
 
 ## Snippets
 
@@ -215,18 +213,7 @@ Supply an array of objects containing the details of the role assignments to cre
             "value": false
         },
         "roleAssignments": {
-            "value": [
-                {
-                    "principalId": "00000000-0000-0000-0000-000000000000",
-                    "definition": "Contributor",
-                    "relativeScope": ""
-                },
-                {
-                    "principalId": "00000000-0000-0000-0000-000000000000",
-                    "definition": "Contributor",
-                    "relativeScope": "/resourceGroups/rsg-networking-001"
-                }
-            ]
+            "value": []
         }
     }
 }
