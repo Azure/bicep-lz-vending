@@ -124,5 +124,8 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
 
 // OUTPUTS
 
+@description('The Subscription ID that has been created or provided.')
 output subscriptionId string = (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '${exisitingSubscriptionId}'
+
+@description('The Subscription Resource ID that has been created or provided.')
 output subscriptionResourceId string = (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionResourceId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '/subscriptions/${exisitingSubscriptionId}'

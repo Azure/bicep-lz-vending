@@ -178,8 +178,8 @@ An array of virtual hub route table labels to propogate routes to. If left blank
 
 Name | Type | Description
 ---- | ---- | -----------
-subscriptionId | string |
-subscriptionResourceId | string |
+subscriptionId | string | The Subscription ID that has been created or provided.
+subscriptionResourceId | string | The Subscription Resource ID that has been created or provided.
 
 ## Snippets
 
