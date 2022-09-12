@@ -72,6 +72,15 @@
         },
         "use-stable-resource-identifiers": {
           "level": "error"
+        },
+        "secure-params-in-nested-deploy": {
+          "level": "error"
+        },
+        "use-recent-api-versions": {
+          "level": "error"
+        },
+        "use-resource-id-functions": {
+          "level": "error"
         }
       }
     }
