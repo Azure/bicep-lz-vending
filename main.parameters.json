@@ -78,6 +78,28 @@
         "default",
         "jack"
       ]
+    },
+    "roleAssignmentEnabled": {
+      "value": true
+    },
+    "roleAssignments": {
+      "value": [
+        {
+          "principalId": "1aef052e-551f-4ff0-97ed-cfbcaff2509a",
+          "definition": "Contributor",
+          "relativeScope": ""
+        },
+        {
+          "principalId": "7eca0dca-6701-46f1-b7b6-8b424dab50b3",
+          "definition": "Reader",
+          "relativeScope": "/resourceGroups/rsg-networking-001"
+        },
+        {
+          "principalId": "1aef052e-551f-4ff0-97ed-cfbcaff2509a",
+          "definition": "User Access Administrator",
+          "relativeScope": ""
+        }
+      ]
     }
   }
 }

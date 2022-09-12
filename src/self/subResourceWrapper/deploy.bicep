@@ -56,18 +56,7 @@ param virtualNetworkVwanPropagatedLabels array = []
 param roleAssignmentEnabled bool = false
 
 @description('Supply an array of objects containing the details of the role assignments to create.')
-param roleAssignments array = [
-  {
-    principalId: '00000000-0000-0000-0000-000000000000'
-    definition: 'Contributor'
-    relativeScope: ''
-  }
-  {
-    principalId: '00000000-0000-0000-0000-000000000000'
-    definition: 'Contributor'
-    relativeScope: '/resourceGroups/rsg-networking-001'
-  }
-]
+param roleAssignments array = []
 
 // VARIABLES
 
@@ -189,8 +178,7 @@ module createLzRoleAssignments '../../carml/v0.6.0/Microsoft.Authorization/roleA
     principalId: assignment.principalId
     roleDefinitionIdOrName: assignment.definition
     subscriptionId: subscriptionId
-    resourceGroupName: (contains(assignment.relativeScope, '/resourceGroups/') ? assignment.relativeScope : '')
-    
+    resourceGroupName: (contains(assignment.relativeScope, '/resourceGroups/') ? split(assignment.relativeScope, '/')[2] : '')
   }
 }]
 

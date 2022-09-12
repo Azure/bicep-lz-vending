@@ -76,6 +76,12 @@ param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
 @description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
 param virtualNetworkVwanPropagatedLabels array = []
 
+@description('Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAassignments`.')
+param roleAssignmentEnabled bool = false
+
+@description('Supply an array of objects containing the details of the role assignments to create.')
+param roleAssignments array = []
+
 // VARIABLES
 
 var existingSubscriptionIDEmptyCheck = empty(exisitingSubscriptionId) ? 'No Subscription ID Provided' : exisitingSubscriptionId
@@ -119,6 +125,8 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkVwanAssociatedRouteTableResourceId: virtualNetworkVwanAssociatedRouteTableResourceId
     virtualNetworkVwanPropagatedRouteTablesResourceIds: virtualNetworkVwanPropagatedRouteTablesResourceIds
     virtualNetworkVwanPropagatedLabels: virtualNetworkVwanPropagatedLabels
+    roleAssignmentEnabled: roleAssignmentEnabled
+    roleAssignments: roleAssignments
   }
 }
 
