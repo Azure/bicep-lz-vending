@@ -77,7 +77,7 @@
           "level": "error"
         },
         "use-recent-api-versions": {
-          "level": "error"
+          "level": "off"
         },
         "use-resource-id-functions": {
           "level": "error"
