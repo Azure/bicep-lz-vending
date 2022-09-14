@@ -36,50 +36,221 @@ param subscriptionManagementGroupAssociationEnabled bool = true
 @description('The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.')
 param subscriptionManagementGroupId string = ''
 
-@description('An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
+@metadata({
+  example: {
+    tagKey1: 'value'
+    'tag-key-2': 'value'
+  }
+})
+@description('''An object of Tag key & value pairs to be appended to a Subscription. 
+
+> **NOTE:** Tags will only be overwriten if existing tag exists with same key as provided in this parameter; values provided here win.
+
+- Type: `{}` Object
+- Default value: `{}` *(empty object)*
+''')
 param subscriptionTags object = {}
 
-@description('Whether to create a virtual network or not.')
+@metadata({
+  example: true
+})
+@description('''Whether to create a Virtual Network or not.
+
+If set to `true` ensure you also provide values for the following parameters at a minimum:
+
+- `virtualNetworkResourceGroupName`
+- `virtualNetworkResourceGroupLockEnabled`
+- `virtualNetworkLocation`
+- `virtualNetworkName`
+- `virtualNetworkAddressSpace`
+
+> Other parameters may need to be set based on other parameters that you enable that are listed above. Check each parameters documentation for further information.
+
+- Type: Boolean
+''')
 param virtualNetworkEnabled bool = false
 
+@metadata({
+  example: 'rg-networking-001'
+})
 @maxLength(90)
-@description('The name of the resource group to create the virtual network in.')
+@description('''The name of the Resource Group to create the Virtual Network in that is created by this module.
+
+- Type: String
+''')
 param virtualNetworkResourceGroupName string = ''
 
-@description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
+@metadata({
+  example: true
+})
+@description('''Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.
+
+- Type: Boolean
+''')
 param virtualNetworkResourceGroupLockEnabled bool = true
 
-@description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
+@metadata({
+  example: 'uksouth'
+})
+@description('''The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.
+
+- Type: String
+''')
 param virtualNetworkLocation string = deployment().location
 
-@description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
-param virtualNetworkName string
+@metadata({
+  example: 'vnet-example-001'
+})
+@maxLength(64)
+@description('''The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
 
-@description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
-param virtualNetworkAddressSpace array
+- Type: String
+- Default value: `''` *(empty string)*
+''')
+param virtualNetworkName string = ''
 
-@description('Whether to enable peering/connection with the supplied hub virtual network or virtual hub.')
+@metadata({
+  example: [
+    '10.0.0.0/16'
+  ]
+})
+@description('''The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+''')
+param virtualNetworkAddressSpace array = []
+
+@metadata({
+  example: true
+})
+@description('''Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.
+
+- Type: Boolean
+''')
 param virtualNetworkPeeringEnabled bool = false
 
-@description('The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.')
+@metadata({
+  example: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx'
+})
+@description('''The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Vitrual Network Peering or a Vitrual WAN Virtual Hub Connection.
+
+**Example Expected Values:**
+- `''` (empty string)
+- Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx`
+- Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`
+
+- Type: String
+- Default value: `''` *(empty string)*
+''')
 param hubNetworkResourceId string = ''
 
-@description('Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to false, otherwise peering will fail to create.')
+@metadata({
+  example: true
+})
+@description('''Enables the use of remote gateways in the spefcified hub virtual network.
+
+> **IMPORTANT:** If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create.
+
+- Type: Boolean
+''')
 param virtualNetworkUseRemoteGateways bool = true
 
-@description('The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.')
+@metadata({
+  example: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/xxxxxxxxx'
+})
+@description('''The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.
+
+- Type: String
+- Default value: `''` *(empty string)* = Which means if the parameter `virtualNetworkPeeringEnabled` is `true` and also the parameter `hubNetworkResourceId` is not empty then the `defaultRouteTable` will be associated of the provided Virtual Hub in the parameter `hubNetworkResourceId`.
+    - e.g. `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable`
+''')
 param virtualNetworkVwanAssociatedRouteTableResourceId string = ''
 
-@description('An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.')
+@metadata({
+  example: [
+    {
+      id: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable'
+    }
+    {
+      id: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/xxxxxxxxx'
+    }
+  ]
+})
+@description('''An array of of objects of virtual hub route table resource IDs to propogate routes to. If left blank/empty the `defaultRouteTable` will be propogated to only.
+
+Each object must contain the following `key`:
+- `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propogate too
+
+> See below [example in parameter file](#parameter-file)
+
+> **IMPORTANT:** If you provide any Route Tables in this array of objects you must ensure you include also the `defaultRouteTable` Resource ID as an object in the array as it is not added by default when a value is provided for this parameter.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+''')
 param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
 
-@description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
+@metadata({
+  example: [
+    'default'
+    'anotherLabel'
+  ]
+})
+@description('''An array of virtual hub route table labels to propogate routes to. If left blank/empty the default label will be propogated to only.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+''')
 param virtualNetworkVwanPropagatedLabels array = []
 
-@description('Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.')
+@metadata({
+  example: true
+})
+@description('''Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
+
+- Type: Boolean
+''')
 param roleAssignmentEnabled bool = false
 
-@description('Supply an array of objects containing the details of the role assignments to create.')
+@metadata({
+  example: [
+    {
+      principalId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      definition: 'Contributor'
+      relativeScope: ''
+    }
+    {
+      principalId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      definition: '/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      relativeScope: ''
+    }
+    {
+      principalId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      definition: 'Reader'
+      relativeScope: '/resourceGroups/rsg-networking-001'
+    }
+    {
+      principalId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      definition: '/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+      relativeScope: '/resourceGroups/rsg-networking-001'
+    }
+  ]
+})
+@description('''Supply an array of objects containing the details of the role assignments to create.
+
+Each object must contain the following `keys`:
+- `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too.
+- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Defintion.
+- `relativeScope` = 2 options can be provided for input value:
+    1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope
+    2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group
+
+> See below [example in parameter file](#parameter-file) of various combinations
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+''')
 param roleAssignments array = []
 
 // VARIABLES

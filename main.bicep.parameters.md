@@ -16,21 +16,21 @@ subscriptionWorkload | No       | The workload type can be either `Production` o
 exisitingSubscriptionId | No       | An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
 subscriptionManagementGroupAssociationEnabled | No       | Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.
 subscriptionManagementGroupId | No       | The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.
-subscriptionTags | No       | An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.
-virtualNetworkEnabled | No       | Whether to create a virtual network or not.
-virtualNetworkResourceGroupName | No       | The name of the resource group to create the virtual network in.
-virtualNetworkResourceGroupLockEnabled | No       | Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.
-virtualNetworkLocation | No       | The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.
-virtualNetworkName | Yes      | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
-virtualNetworkAddressSpace | Yes      | The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
-virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub virtual network or virtual hub.
-hubNetworkResourceId | No       | The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.
-virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to false, otherwise peering will fail to create.
-virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.
-virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.
-virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
-roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
-roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.
+subscriptionTags | No       | An object of Tag key & value pairs to be appended to a Subscription.   > **NOTE:** Tags will only be overwriten if existing tag exists with same key as provided in this parameter; values provided here win.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
+virtualNetworkEnabled | No       | Whether to create a Virtual Network or not.  If set to `true` ensure you also provide values for the following parameters at a minimum:  - `virtualNetworkResourceGroupName` - `virtualNetworkResourceGroupLockEnabled` - `virtualNetworkLocation` - `virtualNetworkName` - `virtualNetworkAddressSpace`  > Other parameters may need to be set based on other parameters that you enable that are listed above. Check each parameters documentation for further information.  - Type: Boolean 
+virtualNetworkResourceGroupName | No       | The name of the Resource Group to create the Virtual Network in that is created by this module.  - Type: String 
+virtualNetworkResourceGroupLockEnabled | No       | Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.  - Type: Boolean 
+virtualNetworkLocation | No       | The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.  - Type: String 
+virtualNetworkName | No       | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.  - Type: String - Default value: `''` *(empty string)* 
+virtualNetworkAddressSpace | No       | The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.  - Type: Boolean 
+hubNetworkResourceId | No       | The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Vitrual Network Peering or a Vitrual WAN Virtual Hub Connection.  **Example Expected Values:** - `''` (empty string) - Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx` - Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
+virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways in the spefcified hub virtual network.  > **IMPORTANT:** If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create.  - Type: Boolean 
+virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.  - Type: String - Default value: `''` *(empty string)* = Which means if the parameter `virtualNetworkPeeringEnabled` is `true` and also the parameter `hubNetworkResourceId` is not empty then the `defaultRouteTable` will be associated of the provided Virtual Hub in the parameter `hubNetworkResourceId`.     - e.g. `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable` 
+virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of objects of virtual hub route table resource IDs to propogate routes to. If left blank/empty the `defaultRouteTable` will be propogated to only.  Each object must contain the following `key`: - `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propogate too  > See below [example in parameter file](#parameter-file)  > **IMPORTANT:** If you provide any Route Tables in this array of objects you must ensure you include also the `defaultRouteTable` Resource ID as an object in the array as it is not added by default when a value is provided for this parameter.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propogate routes to. If left blank/empty the default label will be propogated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.  - Type: Boolean 
+roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Defintion. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 
 ### subscriptionAliasEnabled
 
@@ -92,13 +92,32 @@ The destination management group ID for the new subscription. Note: Do not suppl
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.
+An object of Tag key & value pairs to be appended to a Subscription. 
+
+> **NOTE:** Tags will only be overwriten if existing tag exists with same key as provided in this parameter; values provided here win.
+
+- Type: `{}` Object
+- Default value: `{}` *(empty object)*
+
 
 ### virtualNetworkEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Whether to create a virtual network or not.
+Whether to create a Virtual Network or not.
+
+If set to `true` ensure you also provide values for the following parameters at a minimum:
+
+- `virtualNetworkResourceGroupName`
+- `virtualNetworkResourceGroupLockEnabled`
+- `virtualNetworkLocation`
+- `virtualNetworkName`
+- `virtualNetworkAddressSpace`
+
+> Other parameters may need to be set based on other parameters that you enable that are listed above. Check each parameters documentation for further information.
+
+- Type: Boolean
+
 
 - Default value: `False`
 
@@ -106,13 +125,19 @@ Whether to create a virtual network or not.
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The name of the resource group to create the virtual network in.
+The name of the Resource Group to create the Virtual Network in that is created by this module.
+
+- Type: String
+
 
 ### virtualNetworkResourceGroupLockEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.
+Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.
+
+- Type: Boolean
+
 
 - Default value: `True`
 
@@ -120,27 +145,41 @@ Enables the deployment of a `CanNotDelete` resource locks to the virtual network
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.
+The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.
+
+- Type: String
+
 
 - Default value: `[deployment().location]`
 
 ### virtualNetworkName
 
-![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
 
+- Type: String
+- Default value: `''` *(empty string)*
+
+
 ### virtualNetworkAddressSpace
 
-![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
+The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+
 
 ### virtualNetworkPeeringEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Whether to enable peering/connection with the supplied hub virtual network or virtual hub.
+Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.
+
+- Type: Boolean
+
 
 - Default value: `False`
 
@@ -148,13 +187,27 @@ Whether to enable peering/connection with the supplied hub virtual network or vi
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.
+The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Vitrual Network Peering or a Vitrual WAN Virtual Hub Connection.
+
+**Example Expected Values:**
+- `''` (empty string)
+- Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx`
+- Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`
+
+- Type: String
+- Default value: `''` *(empty string)*
+
 
 ### virtualNetworkUseRemoteGateways
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to false, otherwise peering will fail to create.
+Enables the use of remote gateways in the spefcified hub virtual network.
+
+> **IMPORTANT:** If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create.
+
+- Type: Boolean
+
 
 - Default value: `True`
 
@@ -162,25 +215,48 @@ Enables the use of remote gateways in the spefcified hub virtual network. If no 
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.
+The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.
+
+- Type: String
+- Default value: `''` *(empty string)* = Which means if the parameter `virtualNetworkPeeringEnabled` is `true` and also the parameter `hubNetworkResourceId` is not empty then the `defaultRouteTable` will be associated of the provided Virtual Hub in the parameter `hubNetworkResourceId`.
+    - e.g. `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable`
+
 
 ### virtualNetworkVwanPropagatedRouteTablesResourceIds
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.
+An array of of objects of virtual hub route table resource IDs to propogate routes to. If left blank/empty the `defaultRouteTable` will be propogated to only.
+
+Each object must contain the following `key`:
+- `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propogate too
+
+> See below [example in parameter file](#parameter-file)
+
+> **IMPORTANT:** If you provide any Route Tables in this array of objects you must ensure you include also the `defaultRouteTable` Resource ID as an object in the array as it is not added by default when a value is provided for this parameter.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+
 
 ### virtualNetworkVwanPropagatedLabels
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
+An array of virtual hub route table labels to propogate routes to. If left blank/empty the default label will be propogated to only.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+
 
 ### roleAssignmentEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
+
+- Type: Boolean
+
 
 - Default value: `False`
 
@@ -189,6 +265,19 @@ Whether to create role assignments or not. If true, supply the array of role ass
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 Supply an array of objects containing the details of the role assignments to create.
+
+Each object must contain the following `keys`:
+- `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too.
+- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Defintion.
+- `relativeScope` = 2 options can be provided for input value:
+    1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope
+    2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group
+
+> See below [example in parameter file](#parameter-file) of various combinations
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+
 
 ## Outputs
 
@@ -234,49 +323,85 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
             "value": ""
         },
         "subscriptionTags": {
-            "value": {}
+            "value": {
+                "tagKey1": "value",
+                "tag-key-2": "value"
+            }
         },
         "virtualNetworkEnabled": {
-            "value": false
+            "value": true
         },
         "virtualNetworkResourceGroupName": {
-            "value": ""
+            "value": "rg-networking-001"
         },
         "virtualNetworkResourceGroupLockEnabled": {
             "value": true
         },
         "virtualNetworkLocation": {
-            "value": "[deployment().location]"
+            "value": "uksouth"
         },
         "virtualNetworkName": {
-            "value": ""
+            "value": "vnet-example-001"
         },
         "virtualNetworkAddressSpace": {
-            "value": []
+            "value": [
+                "10.0.0.0/16"
+            ]
         },
         "virtualNetworkPeeringEnabled": {
-            "value": false
+            "value": true
         },
         "hubNetworkResourceId": {
-            "value": ""
+            "value": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx"
         },
         "virtualNetworkUseRemoteGateways": {
             "value": true
         },
         "virtualNetworkVwanAssociatedRouteTableResourceId": {
-            "value": ""
+            "value": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/xxxxxxxxx"
         },
         "virtualNetworkVwanPropagatedRouteTablesResourceIds": {
-            "value": []
+            "value": [
+                {
+                    "id": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable"
+                },
+                {
+                    "id": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/xxxxxxxxx"
+                }
+            ]
         },
         "virtualNetworkVwanPropagatedLabels": {
-            "value": []
+            "value": [
+                "default",
+                "anotherLabel"
+            ]
         },
         "roleAssignmentEnabled": {
-            "value": false
+            "value": true
         },
         "roleAssignments": {
-            "value": []
+            "value": [
+                {
+                    "principalId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                    "definition": "Contributor",
+                    "relativeScope": ""
+                },
+                {
+                    "principalId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                    "definition": "/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                    "relativeScope": ""
+                },
+                {
+                    "principalId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                    "definition": "Reader",
+                    "relativeScope": "/resourceGroups/rsg-networking-001"
+                },
+                {
+                    "principalId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                    "definition": "/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                    "relativeScope": "/resourceGroups/rsg-networking-001"
+                }
+            ]
         }
     }
 }

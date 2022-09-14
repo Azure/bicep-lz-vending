@@ -29,10 +29,10 @@ param virtualNetworkLocation string = deployment().location
 
 @maxLength(64)
 @description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
-param virtualNetworkName string
+param virtualNetworkName string = ''
 
 @description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
-param virtualNetworkAddressSpace array
+param virtualNetworkAddressSpace array = []
 
 @description('Whether to enable peering/connection with the supplied hub virtual network or virtual hub.')
 param virtualNetworkPeeringEnabled bool = false
@@ -109,7 +109,7 @@ module tagSubscription '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bicep
   }
 }
 
-module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled) {
+module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName) ) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForLzNetworking
   params: {
@@ -119,7 +119,7 @@ module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resource
   }
 }
 
-module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy.bicep' = if (virtualNetworkEnabled) {
+module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
   dependsOn: [
     createResourceGroupForLzNetworking
   ]
