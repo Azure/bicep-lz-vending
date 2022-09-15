@@ -3,37 +3,100 @@ targetScope = 'managementGroup'
 // PARAMETERS
 
 // Subscription Parameters
-@description('Whether to create a new subscription using the subscription alias resource. If false, supply the existingSubscriptionId parameter instead to deploy resources to an existing subscription.')
+@metadata({
+  example: true
+})
+@description('''Whether to create a new Subscription using the Subscription Alias resource. If `false`, supply an existing Subscription's ID in the parameter named `existingSubscriptionId` instead to deploy resources to an existing Subscription.
+
+- Type: Boolean
+''')
 param subscriptionAliasEnabled bool = true
 
+@metadata({
+  example: 'sub-bicep-lz-vending-example-001'
+})
 @maxLength(63)
-@description('The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.')
+@description('''The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.
+
+The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
+
+> The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.
+
+- Type: String
+''')
 param subscriptionDisplayName string
 
+@metadata({
+  example: 'sub-bicep-lz-vending-example-001'
+})
 @maxLength(63)
-@description('The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, -, _ and space. The maximum length is 63 characters.')
+@description('''The name of the Subscription Alias, that will be created by this module.
+
+The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
+
+- Type: String
+''')
 param subscriptionAliasName string
 
-@description('The billing scope for the new subscription alias. A valid billing scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.')
+@metadata({
+  example: 'providers/Microsoft.Billing/billingAccounts/1234567/enrollmentAccounts/123456'
+})
+@description('''The Billing Scope for the new Subscription alias, that will be created by this module.
+
+A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.
+
+> See below [example in parameter file](#parameter-file) for an example
+
+- Type: String
+''')
 param subscriptionBillingScope string
 
+@metadata({
+  example: 'Production'
+})
 @allowed([
   'DevTest'
   'Production'
 ])
-@description('The workload type can be either `Production` or `DevTest` and is case sensitive.')
+@description('''The workload type can be either `Production` or `DevTest` and is case sensitive.
+
+- Type: String
+''')
 param subscriptionWorkload string = 'Production'
 
+@metadata({
+  example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+})
 @maxLength(36)
-@description('An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.')
-param exisitingSubscriptionId string = ''
+@description('''An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
+
+- Type: String
+- Default value: `''` *(empty string)*
+''')
+param existingSubscriptionId string = ''
 
 // Subscription Resources Wrapper Parameters
+@metadata({
+  example: true
+})
+@description('''Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.
 
-@description('Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.')
+- Type: Boolean
+''')
 param subscriptionManagementGroupAssociationEnabled bool = true
 
-@description('The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.')
+@metadata({
+  example: '/providers/Microsoft.Management/managementGroups/alz-landingzones-corp'
+})
+@description('''The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`). 
+
+**IMPORTANT:** Do not supply the display name of the Management Group. The Management Group ID forms part of the Azure Resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.
+
+> See below [example in parameter file](#parameter-file) for an example
+
+- Type: String
+- Default value: `''` *(empty string)*
+''')
 param subscriptionManagementGroupId string = ''
 
 @metadata({
@@ -44,7 +107,7 @@ param subscriptionManagementGroupId string = ''
 })
 @description('''An object of Tag key & value pairs to be appended to a Subscription. 
 
-> **NOTE:** Tags will only be overwriten if existing tag exists with same key as provided in this parameter; values provided here win.
+> **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.
 
 - Type: `{}` Object
 - Default value: `{}` *(empty object)*
@@ -77,6 +140,7 @@ param virtualNetworkEnabled bool = false
 @description('''The name of the Resource Group to create the Virtual Network in that is created by this module.
 
 - Type: String
+- Default value: `''` *(empty string)*
 ''')
 param virtualNetworkResourceGroupName string = ''
 
@@ -133,7 +197,7 @@ param virtualNetworkPeeringEnabled bool = false
 @metadata({
   example: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx'
 })
-@description('''The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Vitrual Network Peering or a Vitrual WAN Virtual Hub Connection.
+@description('''The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.
 
 **Example Expected Values:**
 - `''` (empty string)
@@ -148,9 +212,9 @@ param hubNetworkResourceId string = ''
 @metadata({
   example: true
 })
-@description('''Enables the use of remote gateways in the spefcified hub virtual network.
+@description('''Enables the use of remote gateways in the specified hub virtual network.
 
-> **IMPORTANT:** If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create.
+> **IMPORTANT:** If no gateways exist in the hub virtual network, set this to `false`, otherwise peering will fail to create.
 
 - Type: Boolean
 ''')
@@ -177,10 +241,10 @@ param virtualNetworkVwanAssociatedRouteTableResourceId string = ''
     }
   ]
 })
-@description('''An array of of objects of virtual hub route table resource IDs to propogate routes to. If left blank/empty the `defaultRouteTable` will be propogated to only.
+@description('''An array of of objects of virtual hub route table resource IDs to propagate routes to. If left blank/empty the `defaultRouteTable` will be propagated to only.
 
 Each object must contain the following `key`:
-- `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propogate too
+- `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propagate too
 
 > See below [example in parameter file](#parameter-file)
 
@@ -197,7 +261,7 @@ param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
     'anotherLabel'
   ]
 })
-@description('''An array of virtual hub route table labels to propogate routes to. If left blank/empty the default label will be propogated to only.
+@description('''An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
@@ -241,7 +305,7 @@ param roleAssignmentEnabled bool = false
 
 Each object must contain the following `keys`:
 - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too.
-- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Defintion.
+- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition.
 - `relativeScope` = 2 options can be provided for input value:
     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope
     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group
@@ -255,7 +319,7 @@ param roleAssignments array = []
 
 // VARIABLES
 
-var existingSubscriptionIDEmptyCheck = empty(exisitingSubscriptionId) ? 'No Subscription ID Provided' : exisitingSubscriptionId
+var existingSubscriptionIDEmptyCheck = empty(existingSubscriptionId) ? 'No Subscription ID Provided' : existingSubscriptionId
 
 // Deployment name variables
 // LIMITS: Tenant = 64, Management Group = 64, Subscription = 64, Resource Group = 64
@@ -266,7 +330,7 @@ var deploymentNames = {
 
 // RESOURCES & MODULES
 
-module createSubscription 'src/self/Microsoft.Subscription/aliases/deploy.bicep' = if (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) {
+module createSubscription 'src/self/Microsoft.Subscription/aliases/deploy.bicep' = if (subscriptionAliasEnabled && empty(existingSubscriptionId)) {
   scope: tenant()
   name: deploymentNames.createSubscription
   params: {
@@ -277,10 +341,10 @@ module createSubscription 'src/self/Microsoft.Subscription/aliases/deploy.bicep'
   }
 }
 
-module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = if ((subscriptionAliasEnabled || !empty(exisitingSubscriptionId)) && virtualNetworkEnabled && !empty(virtualNetworkResourceGroupName)) {
+module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = if ((subscriptionAliasEnabled || !empty(existingSubscriptionId)) && virtualNetworkEnabled && !empty(virtualNetworkResourceGroupName)) {
   name: deploymentNames.createSubscriptionResources
   params: {
-    subscriptionId: (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionId : exisitingSubscriptionId
+    subscriptionId: (subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : existingSubscriptionId
     subscriptionManagementGroupAssociationEnabled: subscriptionManagementGroupAssociationEnabled
     subscriptionManagementGroupId: subscriptionManagementGroupId
     subscriptionTags: subscriptionTags
@@ -304,7 +368,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
 // OUTPUTS
 
 @description('The Subscription ID that has been created or provided.')
-output subscriptionId string = (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '${exisitingSubscriptionId}'
+output subscriptionId string = (subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '${existingSubscriptionId}'
 
 @description('The Subscription Resource ID that has been created or provided.')
-output subscriptionResourceId string = (subscriptionAliasEnabled && empty(exisitingSubscriptionId)) ? createSubscription.outputs.subscriptionResourceId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '/subscriptions/${exisitingSubscriptionId}'
+output subscriptionResourceId string = (subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionResourceId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '/subscriptions/${existingSubscriptionId}'

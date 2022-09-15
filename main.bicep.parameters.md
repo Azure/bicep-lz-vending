@@ -8,35 +8,38 @@ These are the input parameters for the Bicep module: [`main.bicep`](./main.bicep
 
 Parameter name | Required | Description
 -------------- | -------- | -----------
-subscriptionAliasEnabled | No       | Whether to create a new subscription using the subscription alias resource. If false, supply the existingSubscriptionId parameter instead to deploy resources to an existing subscription.
-subscriptionDisplayName | Yes      | The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.
-subscriptionAliasName | Yes      | The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, -, _ and space. The maximum length is 63 characters.
-subscriptionBillingScope | Yes      | The billing scope for the new subscription alias. A valid billing scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.
-subscriptionWorkload | No       | The workload type can be either `Production` or `DevTest` and is case sensitive.
-exisitingSubscriptionId | No       | An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
-subscriptionManagementGroupAssociationEnabled | No       | Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.
-subscriptionManagementGroupId | No       | The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.
-subscriptionTags | No       | An object of Tag key & value pairs to be appended to a Subscription.   > **NOTE:** Tags will only be overwriten if existing tag exists with same key as provided in this parameter; values provided here win.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
+subscriptionAliasEnabled | No       | Whether to create a new Subscription using the Subscription Alias resource. If `false`, supply an existing Subscription's ID in the parameter named `existingSubscriptionId` instead to deploy resources to an existing Subscription.  - Type: Boolean 
+subscriptionDisplayName | Yes      | The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.  - Type: String 
+subscriptionAliasName | Yes      | The name of the Subscription Alias, that will be created by this module.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  - Type: String 
+subscriptionBillingScope | Yes      | The Billing Scope for the new Subscription alias, that will be created by this module.  A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.  > See below [example in parameter file](#parameter-file) for an example  - Type: String 
+subscriptionWorkload | No       | The workload type can be either `Production` or `DevTest` and is case sensitive.  - Type: String 
+existingSubscriptionId | No       | An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.  - Type: String - Default value: `''` *(empty string)* 
+subscriptionManagementGroupAssociationEnabled | No       | Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.  - Type: Boolean 
+subscriptionManagementGroupId | No       | The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`).   **IMPORTANT:** Do not supply the display name of the Management Group. The Management Group ID forms part of the Azure Resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.  > See below [example in parameter file](#parameter-file) for an example  - Type: String - Default value: `''` *(empty string)* 
+subscriptionTags | No       | An object of Tag key & value pairs to be appended to a Subscription.   > **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
 virtualNetworkEnabled | No       | Whether to create a Virtual Network or not.  If set to `true` ensure you also provide values for the following parameters at a minimum:  - `virtualNetworkResourceGroupName` - `virtualNetworkResourceGroupLockEnabled` - `virtualNetworkLocation` - `virtualNetworkName` - `virtualNetworkAddressSpace`  > Other parameters may need to be set based on other parameters that you enable that are listed above. Check each parameters documentation for further information.  - Type: Boolean 
-virtualNetworkResourceGroupName | No       | The name of the Resource Group to create the Virtual Network in that is created by this module.  - Type: String 
+virtualNetworkResourceGroupName | No       | The name of the Resource Group to create the Virtual Network in that is created by this module.  - Type: String - Default value: `''` *(empty string)* 
 virtualNetworkResourceGroupLockEnabled | No       | Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.  - Type: Boolean 
 virtualNetworkLocation | No       | The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.  - Type: String 
 virtualNetworkName | No       | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.  - Type: String - Default value: `''` *(empty string)* 
 virtualNetworkAddressSpace | No       | The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.  - Type: Boolean 
-hubNetworkResourceId | No       | The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Vitrual Network Peering or a Vitrual WAN Virtual Hub Connection.  **Example Expected Values:** - `''` (empty string) - Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx` - Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
-virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways in the spefcified hub virtual network.  > **IMPORTANT:** If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create.  - Type: Boolean 
+hubNetworkResourceId | No       | The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.  **Example Expected Values:** - `''` (empty string) - Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx` - Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
+virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways in the specified hub virtual network.  > **IMPORTANT:** If no gateways exist in the hub virtual network, set this to `false`, otherwise peering will fail to create.  - Type: Boolean 
 virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.  - Type: String - Default value: `''` *(empty string)* = Which means if the parameter `virtualNetworkPeeringEnabled` is `true` and also the parameter `hubNetworkResourceId` is not empty then the `defaultRouteTable` will be associated of the provided Virtual Hub in the parameter `hubNetworkResourceId`.     - e.g. `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable` 
-virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of objects of virtual hub route table resource IDs to propogate routes to. If left blank/empty the `defaultRouteTable` will be propogated to only.  Each object must contain the following `key`: - `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propogate too  > See below [example in parameter file](#parameter-file)  > **IMPORTANT:** If you provide any Route Tables in this array of objects you must ensure you include also the `defaultRouteTable` Resource ID as an object in the array as it is not added by default when a value is provided for this parameter.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
-virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propogate routes to. If left blank/empty the default label will be propogated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of objects of virtual hub route table resource IDs to propagate routes to. If left blank/empty the `defaultRouteTable` will be propagated to only.  Each object must contain the following `key`: - `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propagate too  > See below [example in parameter file](#parameter-file)  > **IMPORTANT:** If you provide any Route Tables in this array of objects you must ensure you include also the `defaultRouteTable` Resource ID as an object in the array as it is not added by default when a value is provided for this parameter.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.  - Type: Boolean 
-roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Defintion. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 
 ### subscriptionAliasEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Whether to create a new subscription using the subscription alias resource. If false, supply the existingSubscriptionId parameter instead to deploy resources to an existing subscription.
+Whether to create a new Subscription using the Subscription Alias resource. If `false`, supply an existing Subscription's ID in the parameter named `existingSubscriptionId` instead to deploy resources to an existing Subscription.
+
+- Type: Boolean
+
 
 - Default value: `True`
 
@@ -46,17 +49,36 @@ Whether to create a new subscription using the subscription alias resource. If f
 
 The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.
 
+The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
+
+> The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.
+
+- Type: String
+
+
 ### subscriptionAliasName
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
 
-The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, -, _ and space. The maximum length is 63 characters.
+The name of the Subscription Alias, that will be created by this module.
+
+The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
+
+- Type: String
+
 
 ### subscriptionBillingScope
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
 
-The billing scope for the new subscription alias. A valid billing scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.
+The Billing Scope for the new Subscription alias, that will be created by this module.
+
+A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.
+
+> See below [example in parameter file](#parameter-file) for an example
+
+- Type: String
+
 
 ### subscriptionWorkload
 
@@ -64,21 +86,31 @@ The billing scope for the new subscription alias. A valid billing scope starts w
 
 The workload type can be either `Production` or `DevTest` and is case sensitive.
 
+- Type: String
+
+
 - Default value: `Production`
 
 - Allowed values: `DevTest`, `Production`
 
-### exisitingSubscriptionId
+### existingSubscriptionId
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
 
+- Type: String
+- Default value: `''` *(empty string)*
+
+
 ### subscriptionManagementGroupAssociationEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.
+Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.
+
+- Type: Boolean
+
 
 - Default value: `True`
 
@@ -86,7 +118,15 @@ Whether to move the subscription to the specified management group supplied in t
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.
+The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`). 
+
+**IMPORTANT:** Do not supply the display name of the Management Group. The Management Group ID forms part of the Azure Resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.
+
+> See below [example in parameter file](#parameter-file) for an example
+
+- Type: String
+- Default value: `''` *(empty string)*
+
 
 ### subscriptionTags
 
@@ -94,7 +134,7 @@ The destination management group ID for the new subscription. Note: Do not suppl
 
 An object of Tag key & value pairs to be appended to a Subscription. 
 
-> **NOTE:** Tags will only be overwriten if existing tag exists with same key as provided in this parameter; values provided here win.
+> **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.
 
 - Type: `{}` Object
 - Default value: `{}` *(empty object)*
@@ -128,6 +168,7 @@ If set to `true` ensure you also provide values for the following parameters at 
 The name of the Resource Group to create the Virtual Network in that is created by this module.
 
 - Type: String
+- Default value: `''` *(empty string)*
 
 
 ### virtualNetworkResourceGroupLockEnabled
@@ -187,7 +228,7 @@ Whether to enable peering/connection with the supplied hub Virtual Network or Vi
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Vitrual Network Peering or a Vitrual WAN Virtual Hub Connection.
+The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.
 
 **Example Expected Values:**
 - `''` (empty string)
@@ -202,9 +243,9 @@ The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which th
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Enables the use of remote gateways in the spefcified hub virtual network.
+Enables the use of remote gateways in the specified hub virtual network.
 
-> **IMPORTANT:** If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create.
+> **IMPORTANT:** If no gateways exist in the hub virtual network, set this to `false`, otherwise peering will fail to create.
 
 - Type: Boolean
 
@@ -226,10 +267,10 @@ The resource ID of the virtual hub route table to associate to the virtual hub c
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-An array of of objects of virtual hub route table resource IDs to propogate routes to. If left blank/empty the `defaultRouteTable` will be propogated to only.
+An array of of objects of virtual hub route table resource IDs to propagate routes to. If left blank/empty the `defaultRouteTable` will be propagated to only.
 
 Each object must contain the following `key`:
-- `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propogate too
+- `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propagate too
 
 > See below [example in parameter file](#parameter-file)
 
@@ -243,7 +284,7 @@ Each object must contain the following `key`:
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-An array of virtual hub route table labels to propogate routes to. If left blank/empty the default label will be propogated to only.
+An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
@@ -268,7 +309,7 @@ Supply an array of objects containing the details of the role assignments to cre
 
 Each object must contain the following `keys`:
 - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too.
-- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Defintion.
+- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition.
 - `relativeScope` = 2 options can be provided for input value:
     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope
     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group
@@ -302,25 +343,25 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
             "value": true
         },
         "subscriptionDisplayName": {
-            "value": ""
+            "value": "sub-bicep-lz-vending-example-001"
         },
         "subscriptionAliasName": {
-            "value": ""
+            "value": "sub-bicep-lz-vending-example-001"
         },
         "subscriptionBillingScope": {
-            "value": ""
+            "value": "providers/Microsoft.Billing/billingAccounts/1234567/enrollmentAccounts/123456"
         },
         "subscriptionWorkload": {
             "value": "Production"
         },
-        "exisitingSubscriptionId": {
-            "value": ""
+        "existingSubscriptionId": {
+            "value": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
         },
         "subscriptionManagementGroupAssociationEnabled": {
             "value": true
         },
         "subscriptionManagementGroupId": {
-            "value": ""
+            "value": "/providers/Microsoft.Management/managementGroups/alz-landingzones-corp"
         },
         "subscriptionTags": {
             "value": {
