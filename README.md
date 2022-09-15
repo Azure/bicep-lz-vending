@@ -29,8 +29,6 @@ Below is an example showing how to use this module.
 TBC
 ```
 
-test ` ` 
-
 ## Parameters
 
 Parameters for the [`main.bicep`](main.bicep) module can be found [here: `main.bicep.parameters.md`](main.bicep.parameters.md).
