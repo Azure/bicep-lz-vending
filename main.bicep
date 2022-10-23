@@ -332,7 +332,7 @@ param roleAssignments array = []
 })
 @sys.description('''Disable telemetry collection by this module.
 
-For more information on the telemtry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)]()
+For more information on the telemtery collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)]()
 ''')
 param disableTelemetry bool = false
 
