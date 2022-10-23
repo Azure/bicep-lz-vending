@@ -33,7 +33,7 @@ TBC
 
 Parameters for the [`main.bicep`](main.bicep) module can be found [here: `main.bicep.parameters.md`](main.bicep.parameters.md).
 
-> These docs are automatically generated using [PSDocs.Azure](https://azure.github.io/PSDocs.Azure) from the Bicep module file itself and [this GitHub Action](.github/workflows/psdocs-azure.yml)
+> These docs are automatically generated using [PSDocs.Azure](https://azure.github.io/PSDocs.Azure) from the Bicep module file itself and [this GitHub Action](.github/workflows/update-bicep-module-docs.yml) as part of PRs that amend this bicep module.
 
 ## Contributing
 
