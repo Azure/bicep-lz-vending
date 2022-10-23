@@ -1,61 +1,71 @@
 targetScope = 'managementGroup'
 
+// METADATA - Used by PSDocs
+
+metadata name = '`/subResourcesWrapper/deploy.bicep` Parameters'
+
+metadata description = '''These are the input parameters for the Bicep module: [`deploy.bicep`](./deploy.bicep)
+
+This is the sub-orchestration module that is used and called by the [`main.bicep`](../../../main.bicep)  module to deploy the resources into the subscription that has been created (or an existing one provided), based on the parameter input values that are provided to it at deployment time from the `main.bicep` orchestration module.
+
+> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)'''
+
 // PARAMETERS
 
 @maxLength(36)
 param subscriptionId string
 
-@description('Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.')
+@sys.description('Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.')
 param subscriptionManagementGroupAssociationEnabled bool = true
 
-@description('The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.')
+@sys.description('The destination management group ID for the new subscription. Note: Do not supply the display name. The management group ID forms part of the Azure resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.')
 param subscriptionManagementGroupId string = ''
 
-@description('An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
+@sys.description('An object of tag key/value pairs to be appended to a subscription. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
 param subscriptionTags object = {}
 
-@description('Whether to create a virtual network or not.')
+@sys.description('Whether to create a virtual network or not.')
 param virtualNetworkEnabled bool = false
 
 @maxLength(90)
-@description('The name of the resource group to create the virtual network in.')
+@sys.description('The name of the resource group to create the virtual network in.')
 param virtualNetworkResourceGroupName string
 
-@description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
+@sys.description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
 param virtualNetworkResourceGroupLockEnabled bool = true
 
-@description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
+@sys.description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
 param virtualNetworkLocation string = deployment().location
 
 @maxLength(64)
-@description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
+@sys.description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
 param virtualNetworkName string = ''
 
-@description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
+@sys.description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
 param virtualNetworkAddressSpace array = []
 
-@description('Whether to enable peering/connection with the supplied hub virtual network or virtual hub.')
+@sys.description('Whether to enable peering/connection with the supplied hub virtual network or virtual hub.')
 param virtualNetworkPeeringEnabled bool = false
 
-@description('The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.')
+@sys.description('The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.')
 param hubNetworkResourceId string = ''
 
-@description('Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create. Set this to `false` for virtual wan hub connections.')
+@sys.description('Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create. Set this to `false` for virtual wan hub connections.')
 param virtualNetworkUseRemoteGateways bool = true
 
-@description('The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.')
+@sys.description('The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.')
 param virtualNetworkVwanAssociatedRouteTableResourceId string = ''
 
-@description('An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.')
+@sys.description('An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.')
 param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
 
-@description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
+@sys.description('An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.')
 param virtualNetworkVwanPropagatedLabels array = []
 
-@description('Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.')
+@sys.description('Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.')
 param roleAssignmentEnabled bool = false
 
-@description('Supply an array of objects containing the details of the role assignments to create.')
+@sys.description('Supply an array of objects containing the details of the role assignments to create.')
 param roleAssignments array = []
 
 // VARIABLES

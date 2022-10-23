@@ -31,18 +31,13 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
     $templateraw = Get-Content -Raw -Path $_.Templatefile;
     $templateName = $template.Name.Split('.')[0]
     $docName = "$($templateName)"
-    $docNameWithoutExtension = [System.IO.Path]::GetFileNameWithoutExtension($template.Name)
-    $docNameWithBicepExt = ($docNameWithoutExtension) + '.bicep'
     $jobj = ConvertFrom-Json -InputObject $templateraw
-    $jobj.metadata | Add-Member -name "name" -Value "``$docNameWithBicepExt`` Parameters" -MemberType NoteProperty
 
     if ($docName -eq 'main') {
-        $jobj.metadata | Add-Member -name "description" -Value "These are the input parameters for the Bicep module: [``$docNameWithBicepExt``](./$docNameWithBicepExt)`r`n`r`n> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)" -MemberType NoteProperty
         $docOutputPath = "./"
         $docName = "main.bicep.parameters"
     }
     if ($docName -eq 'deploy') {
-        $jobj.metadata | Add-Member -name "description" -Value "These are the input parameters for the Bicep module: [``$docNameWithBicepExt``](./$docNameWithBicepExt)`r`n`r`n> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)" -MemberType NoteProperty
         $docOutputPath = "src/self/subResourceWrapper/"
         $docName = "readme"
     }

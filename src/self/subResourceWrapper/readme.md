@@ -1,6 +1,8 @@
-# `deploy.bicep` Parameters
+# `/subResourcesWrapper/deploy.bicep` Parameters
 
 These are the input parameters for the Bicep module: [`deploy.bicep`](./deploy.bicep)
+
+This is the sub-orchestration module that is used and called by the [`main.bicep`](../../../main.bicep)  module to deploy the resources into the subscription that has been created (or an existing one provided), based on the parameter input values that are provided to it at deployment time from the `main.bicep` orchestration module.
 
 > For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)
 

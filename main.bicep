@@ -1,12 +1,22 @@
 targetScope = 'managementGroup'
 
+// METADATA - Used by PSDocs
+
+metadata name = '`main.bicep` Parameters'
+
+metadata description = '''These are the input parameters for the Bicep module: [`main.bicep`](./main.bicep)
+
+This is the orchestration module that is used and called by a consumer of the module to deploy a Landing Zone Subscription and its associated resources, based on the parameter input values that are provided to it at deployment time.
+
+> For more information and examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki)'''
+
 // PARAMETERS
 
 // Subscription Parameters
 @metadata({
   example: true
 })
-@description('''Whether to create a new Subscription using the Subscription Alias resource. If `false`, supply an existing Subscription's ID in the parameter named `existingSubscriptionId` instead to deploy resources to an existing Subscription.
+@sys.description('''Whether to create a new Subscription using the Subscription Alias resource. If `false`, supply an existing Subscription's ID in the parameter named `existingSubscriptionId` instead to deploy resources to an existing Subscription.
 
 - Type: Boolean
 ''')
@@ -16,7 +26,7 @@ param subscriptionAliasEnabled bool = true
   example: 'sub-bicep-lz-vending-example-001'
 })
 @maxLength(63)
-@description('''The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.
+@sys.description('''The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.
 
 The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
 
@@ -30,7 +40,7 @@ param subscriptionDisplayName string
   example: 'sub-bicep-lz-vending-example-001'
 })
 @maxLength(63)
-@description('''The name of the Subscription Alias, that will be created by this module.
+@sys.description('''The name of the Subscription Alias, that will be created by this module.
 
 The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
 
@@ -41,7 +51,7 @@ param subscriptionAliasName string
 @metadata({
   example: 'providers/Microsoft.Billing/billingAccounts/1234567/enrollmentAccounts/123456'
 })
-@description('''The Billing Scope for the new Subscription alias, that will be created by this module.
+@sys.description('''The Billing Scope for the new Subscription alias, that will be created by this module.
 
 A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.
 
@@ -58,7 +68,7 @@ param subscriptionBillingScope string
   'DevTest'
   'Production'
 ])
-@description('''The workload type can be either `Production` or `DevTest` and is case sensitive.
+@sys.description('''The workload type can be either `Production` or `DevTest` and is case sensitive.
 
 - Type: String
 ''')
@@ -68,7 +78,7 @@ param subscriptionWorkload string = 'Production'
   example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 })
 @maxLength(36)
-@description('''An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
+@sys.description('''An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -79,7 +89,7 @@ param existingSubscriptionId string = ''
 @metadata({
   example: true
 })
-@description('''Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.
+@sys.description('''Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.
 
 - Type: Boolean
 ''')
@@ -88,7 +98,7 @@ param subscriptionManagementGroupAssociationEnabled bool = true
 @metadata({
   example: '/providers/Microsoft.Management/managementGroups/alz-landingzones-corp'
 })
-@description('''The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`). 
+@sys.description('''The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`).
 
 **IMPORTANT:** Do not supply the display name of the Management Group. The Management Group ID forms part of the Azure Resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.
 
@@ -105,7 +115,7 @@ param subscriptionManagementGroupId string = ''
     'tag-key-2': 'value'
   }
 })
-@description('''An object of Tag key & value pairs to be appended to a Subscription. 
+@sys.description('''An object of Tag key & value pairs to be appended to a Subscription.
 
 > **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.
 
@@ -117,7 +127,7 @@ param subscriptionTags object = {}
 @metadata({
   example: true
 })
-@description('''Whether to create a Virtual Network or not.
+@sys.description('''Whether to create a Virtual Network or not.
 
 If set to `true` ensure you also provide values for the following parameters at a minimum:
 
@@ -137,7 +147,7 @@ param virtualNetworkEnabled bool = false
   example: 'rg-networking-001'
 })
 @maxLength(90)
-@description('''The name of the Resource Group to create the Virtual Network in that is created by this module.
+@sys.description('''The name of the Resource Group to create the Virtual Network in that is created by this module.
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -147,7 +157,7 @@ param virtualNetworkResourceGroupName string = ''
 @metadata({
   example: true
 })
-@description('''Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.
+@sys.description('''Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.
 
 - Type: Boolean
 ''')
@@ -156,7 +166,7 @@ param virtualNetworkResourceGroupLockEnabled bool = true
 @metadata({
   example: 'uksouth'
 })
-@description('''The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.
+@sys.description('''The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.
 
 - Type: String
 ''')
@@ -166,7 +176,7 @@ param virtualNetworkLocation string = deployment().location
   example: 'vnet-example-001'
 })
 @maxLength(64)
-@description('''The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
+@sys.description('''The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -178,7 +188,7 @@ param virtualNetworkName string = ''
     '10.0.0.0/16'
   ]
 })
-@description('''The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
+@sys.description('''The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
@@ -188,7 +198,7 @@ param virtualNetworkAddressSpace array = []
 @metadata({
   example: true
 })
-@description('''Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.
+@sys.description('''Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.
 
 - Type: Boolean
 ''')
@@ -197,7 +207,7 @@ param virtualNetworkPeeringEnabled bool = false
 @metadata({
   example: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx'
 })
-@description('''The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.
+@sys.description('''The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.
 
 **Example Expected Values:**
 - `''` (empty string)
@@ -212,7 +222,7 @@ param hubNetworkResourceId string = ''
 @metadata({
   example: true
 })
-@description('''Enables the use of remote gateways in the specified hub virtual network.
+@sys.description('''Enables the use of remote gateways in the specified hub virtual network.
 
 > **IMPORTANT:** If no gateways exist in the hub virtual network, set this to `false`, otherwise peering will fail to create.
 
@@ -223,7 +233,7 @@ param virtualNetworkUseRemoteGateways bool = true
 @metadata({
   example: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/xxxxxxxxx'
 })
-@description('''The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.
+@sys.description('''The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.
 
 - Type: String
 - Default value: `''` *(empty string)* = Which means if the parameter `virtualNetworkPeeringEnabled` is `true` and also the parameter `hubNetworkResourceId` is not empty then the `defaultRouteTable` will be associated of the provided Virtual Hub in the parameter `hubNetworkResourceId`.
@@ -241,7 +251,7 @@ param virtualNetworkVwanAssociatedRouteTableResourceId string = ''
     }
   ]
 })
-@description('''An array of of objects of virtual hub route table resource IDs to propagate routes to. If left blank/empty the `defaultRouteTable` will be propagated to only.
+@sys.description('''An array of of objects of virtual hub route table resource IDs to propagate routes to. If left blank/empty the `defaultRouteTable` will be propagated to only.
 
 Each object must contain the following `key`:
 - `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propagate too
@@ -261,7 +271,7 @@ param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
     'anotherLabel'
   ]
 })
-@description('''An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.
+@sys.description('''An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
@@ -271,7 +281,7 @@ param virtualNetworkVwanPropagatedLabels array = []
 @metadata({
   example: true
 })
-@description('''Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
+@sys.description('''Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
 
 - Type: Boolean
 ''')
@@ -301,7 +311,7 @@ param roleAssignmentEnabled bool = false
     }
   ]
 })
-@description('''Supply an array of objects containing the details of the role assignments to create.
+@sys.description('''Supply an array of objects containing the details of the role assignments to create.
 
 Each object must contain the following `keys`:
 - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too.
@@ -367,8 +377,8 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
 
 // OUTPUTS
 
-@description('The Subscription ID that has been created or provided.')
+@sys.description('The Subscription ID that has been created or provided.')
 output subscriptionId string = (subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '${existingSubscriptionId}'
 
-@description('The Subscription Resource ID that has been created or provided.')
+@sys.description('The Subscription Resource ID that has been created or provided.')
 output subscriptionResourceId string = (subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionResourceId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '/subscriptions/${existingSubscriptionId}'
