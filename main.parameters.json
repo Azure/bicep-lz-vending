@@ -71,7 +71,11 @@
       "value": ""
     },
     "virtualNetworkVwanPropagatedRouteTablesResourceIds": {
-      "value": []
+      "value": [
+        {
+          "id": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualHubs/vhub-uks-001/hubRouteTables/test-rt"
+        }
+      ]
     },
     "virtualNetworkVwanPropagatedLabels": {
       "value": [
@@ -83,23 +87,7 @@
       "value": true
     },
     "roleAssignments": {
-      "value": [
-        {
-          "principalId": "1aef052e-551f-4ff0-97ed-cfbcaff2509a",
-          "definition": "Contributor",
-          "relativeScope": ""
-        },
-        {
-          "principalId": "7eca0dca-6701-46f1-b7b6-8b424dab50b3",
-          "definition": "Reader",
-          "relativeScope": "/resourceGroups/rsg-networking-001"
-        },
-        {
-          "principalId": "1aef052e-551f-4ff0-97ed-cfbcaff2509a",
-          "definition": "User Access Administrator",
-          "relativeScope": ""
-        }
-      ]
+      "value": []
     }
   }
 }
