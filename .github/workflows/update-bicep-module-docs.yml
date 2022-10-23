@@ -86,6 +86,7 @@ jobs:
       - name: Install PSDocs.Azure Module
         shell: pwsh
         run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module -Name 'PSDocs.Azure'
 
       - name: Update Bicep Module Docs for PR
