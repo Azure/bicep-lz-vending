@@ -1,0 +1,93 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "subscriptionManagementGroupAssociationEnabled": {
+      "value": true
+    },
+    "subscriptionManagementGroupId": {
+      "value": "test-lz-vend"
+    },
+    "subscriptionTags": {
+      "value": {
+        "test-key": "test-value",
+        "test-key2": "test-value2"
+      }
+    },
+    "subscriptionAliasEnabled": {
+      "value": true
+    },
+    "subscriptionDisplayName": {
+      "value": "bicep-lz-vending-test-001"
+    },
+    "subscriptionAliasName": {
+      "value": "bicep-lz-vending-test-001"
+    },
+    "subscriptionBillingScope": {
+      "value": "/providers/Microsoft.Billing/billingAccounts/7690848/enrollmentAccounts/318926"
+    },
+    "subscriptionWorkload": {
+      "value": "Production"
+    },
+    "exisitingSubscriptionId": {
+      "value": ""
+    },
+    "virtualNetworkEnabled": {
+      "value": true
+    },
+    "virtualNetworkLocation": {
+      "value": "uksouth"
+    },
+    "virtualNetworkResourceGroupName": {
+      "value": "rsg-networking-001"
+    },
+    "virtualNetworkResourceGroupLockEnabled": {
+      "value": true
+    },
+    "virtualNetworkName": {
+      "value": "vnet-bicep-lz-vending-test-001"
+    },
+    "virtualNetworkAddressSpace": {
+      "value": [
+        "192.168.123.0/24",
+        "192.168.124.0/24"
+      ]
+    },
+    "virtualNetworkPeeringEnabled": {
+      "value": true
+    },
+    // HUB VNET
+    // "hubNetworkResourceId": {
+    //   "value": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualNetworks/vnet-hub-uks-001"
+    // },
+    // VWAN HUB
+    "hubNetworkResourceId": {
+      "value": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualHubs/vhub-uks-001"
+    },
+    "virtualNetworkUseRemoteGateways": {
+      "value": true
+    },
+    "virtualNetworkVwanAssociatedRouteTableResourceId": {
+      "value": ""
+    },
+    "virtualNetworkVwanPropagatedRouteTablesResourceIds": {
+      "value": [
+        {
+          "id": "/subscriptions/261c16cc-a6a5-4d50-8e59-b50a4aadbc61/resourceGroups/rsg-lz-vending-testing-hub/providers/Microsoft.Network/virtualHubs/vhub-uks-001/hubRouteTables/test-rt"
+        }
+      ]
+    },
+    "virtualNetworkVwanPropagatedLabels": {
+      "value": [
+        "default",
+        "jack"
+      ]
+    },
+    "roleAssignmentEnabled": {
+      "value": true
+    },
+    "roleAssignments": {
+      "value": []
+    }
+  }
+}

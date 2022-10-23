@@ -21,9 +21,19 @@ Please see the content in the [wiki](https://github.com/Azure/bicep-lz-vending/w
 
 ## Example
 
+Below is an example showing how to use this module.
+
+> For more examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki) and if you cannot find an example you are looking for please [raise an issue](https://github.com/Azure/bicep-lz-vending/issues/new/choose) on the repo 👍
+
 ```bicep
 TBC
 ```
+
+## Parameters
+
+Parameters for the [`main.bicep`](main.bicep) module can be found [here: `main.bicep.parameters.md`](main.bicep.parameters.md).
+
+> These docs are automatically generated using [PSDocs.Azure](https://azure.github.io/PSDocs.Azure) from the Bicep module file itself and [this GitHub Action](.github/workflows/psdocs-azure.yml)
 
 ## Contributing
 
