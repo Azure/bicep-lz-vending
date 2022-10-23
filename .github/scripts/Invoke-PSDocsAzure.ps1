@@ -3,8 +3,8 @@ Import-Module PSDocs.Azure
 
 # Bicep modules to create docs for in an array
 $bicepModulesToBuild = @(
-    '.\main.bicep'
-    '.\src\self\subResourceWrapper\deploy.bicep'
+    './main.bicep'
+    './src/self/subResourceWrapper/deploy.bicep'
 )
 
 # Bicep build the files in the array above and add newly created ARM/JSON files to new array for doc creations
@@ -28,10 +28,10 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
     # Generate a standard name of the markdown file. i.e. <name>_<version>.md
 
     $template = Get-Item -Path $_.TemplateFile
-    $templateraw = Get-Content -Raw -Path $_.Templatefile;
+    # $templateraw = Get-Content -Raw -Path $_.Templatefile;
     $templateName = $template.Name.Split('.')[0]
     $docName = "$($templateName)"
-    $jobj = ConvertFrom-Json -InputObject $templateraw
+    # $jobj = ConvertFrom-Json -InputObject $templateraw
 
     if ($docName -eq 'main') {
         $docOutputPath = "./"
@@ -42,14 +42,9 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
         $docName = "readme"
     }
 
-    $templatepath = $template.DirectoryName
-    $convertedtemplatename = $template.Name
-    $convertedfullpath = $templatepath + "\" + $convertedtemplatename
-    $jobj | ConvertTo-Json -Depth 100 | Set-Content -Path $convertedfullpath
-
     # Generate markdown
     Write-Information -InformationAction Continue "====> Creating MD file using PSDocs.Azure for: $template"
-    Invoke-PSDocument -Module PSDocs.Azure -OutputPath $docOutputPath -InputObject $template.FullName -InstanceName $docName;
+    Invoke-PSDocument -Module PSDocs.Azure -OutputPath $docOutputPath -InputObject $template.FullName -InstanceName $docName -Culture 'en-US'
 }
 
 # Remove JSON files that were temporarily created
