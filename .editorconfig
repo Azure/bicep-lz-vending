@@ -15,7 +15,7 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [**/src/carml/**]
-indent_size = 2
+indent_size = unset
 charset = unset
 end_of_line = unset
 trim_trailing_whitespace = unset
