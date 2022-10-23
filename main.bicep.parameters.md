@@ -33,6 +33,7 @@ virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of o
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.  - Type: Boolean 
 roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+disableTelemetry | No       | Disable telemetry collection by this module.  For more information on the telemtery collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry) 
 
 ### subscriptionAliasEnabled
 
@@ -322,6 +323,17 @@ Each object must contain the following `keys`:
 - Default value: `[]` *(empty array)*
 
 
+### disableTelemetry
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Disable telemetry collection by this module.
+
+For more information on the telemtery collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
+
+
+- Default value: `False`
+
 ## Outputs
 
 Name | Type | Description
@@ -445,6 +457,9 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
                     "relativeScope": "/resourceGroups/rsg-networking-001"
                 }
             ]
+        },
+        "disableTelemetry": {
+            "value": false
         }
     }
 }

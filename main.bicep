@@ -327,9 +327,20 @@ Each object must contain the following `keys`:
 ''')
 param roleAssignments array = []
 
+@metadata({
+  example: false
+})
+@sys.description('''Disable telemetry collection by this module.
+
+For more information on the telemtery collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
+''')
+param disableTelemetry bool = false
+
 // VARIABLES
 
 var existingSubscriptionIDEmptyCheck = empty(existingSubscriptionId) ? 'No Subscription ID Provided' : existingSubscriptionId
+
+var cuaPid = '10d75183-0090-47b2-9c1b-48e3a4a36786'
 
 // Deployment name variables
 // LIMITS: Tenant = 64, Management Group = 64, Subscription = 64, Resource Group = 64
@@ -339,6 +350,18 @@ var deploymentNames = {
 }
 
 // RESOURCES & MODULES
+resource moduleTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (!disableTelemetry) {
+  name: 'pid-${cuaPid}-${uniqueString(deployment().name, virtualNetworkLocation)}'
+  location: virtualNetworkLocation
+  properties: {
+    mode: 'Incremental'
+    template: {
+      '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
+      contentVersion: '1.0.0.0'
+      resources: []
+    }
+  }
+}
 
 module createSubscription 'src/self/Microsoft.Subscription/aliases/deploy.bicep' = if (subscriptionAliasEnabled && empty(existingSubscriptionId)) {
   scope: tenant()
