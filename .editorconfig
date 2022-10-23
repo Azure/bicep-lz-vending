@@ -20,3 +20,17 @@ charset = unset
 end_of_line = unset
 trim_trailing_whitespace = unset
 insert_final_newline = unset
+
+[main.bicep.parameters.md]
+indent_size = unset
+charset = unset
+end_of_line = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset
+
+[/src/self/subResourcesWrapper/readme.md]
+indent_size = unset
+charset = unset
+end_of_line = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset

@@ -28,7 +28,7 @@ jobs:
       - name: Install latest version of Bicep
         shell: sh
         run: |
-          # From https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#linux 
+          # From https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#linux
           # Fetch the latest Bicep CLI binary
           curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
           # Mark it as executable
@@ -58,7 +58,7 @@ jobs:
               Else
               {
                 echo $output
-              }   
+              }
           }
 
       # - name: List Azure Resource Types
@@ -81,7 +81,7 @@ jobs:
       #     }
 
       #     Write-Information "==> Remove nested deployments resource type" -InformationAction Continue
-      #     $resourceTypesFullList.Remove('Microsoft.Resources/Deployments') 
+      #     $resourceTypesFullList.Remove('Microsoft.Resources/Deployments')
 
       #     Write-Information "***** List of resource types in Bicep modules *****" -InformationAction Continue
       #     $resourceTypesFullList.Keys | Sort-Object
