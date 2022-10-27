@@ -44,7 +44,7 @@ param virtualNetworkLocation string = deployment().location
 @sys.description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
 param virtualNetworkName string = ''
 
-@sys.description('An object of tag key/value pairs to be appended to the Virtual Network is created. NOTE: Tags will be overwriten if existing tag exists with same key.')
+@sys.description('An object of tag key/value pairs to be set on the Virtual Network that is created. NOTE: Tags will be overwritten on resoruce if any exist already.')
 param virtualNetworkTags object = {}
 
 @sys.description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
