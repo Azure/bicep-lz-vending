@@ -131,7 +131,7 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Push empty commit for tests
         run: |
           echo "==> Commit empty commit..."
