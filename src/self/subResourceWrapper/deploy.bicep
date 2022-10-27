@@ -146,7 +146,7 @@ module tagResourceGroup '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bice
     subscriptionId: subscriptionId
     resourceGroupName: virtualNetworkResourceGroupName
     onlyUpdate: true
-    tags: subscriptionTags
+    tags: virtualNetworkResourceGroupTags
   }
 }
 

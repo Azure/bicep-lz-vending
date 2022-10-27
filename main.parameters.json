@@ -29,7 +29,7 @@
     "subscriptionWorkload": {
       "value": "Production"
     },
-    "exisitingSubscriptionId": {
+    "existingSubscriptionId": {
       "value": ""
     },
     "virtualNetworkEnabled": {
