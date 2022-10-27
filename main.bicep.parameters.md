@@ -21,9 +21,11 @@ subscriptionManagementGroupId | No       | The destination Management Group ID f
 subscriptionTags | No       | An object of Tag key & value pairs to be appended to a Subscription.  > **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
 virtualNetworkEnabled | No       | Whether to create a Virtual Network or not.  If set to `true` ensure you also provide values for the following parameters at a minimum:  - `virtualNetworkResourceGroupName` - `virtualNetworkResourceGroupLockEnabled` - `virtualNetworkLocation` - `virtualNetworkName` - `virtualNetworkAddressSpace`  > Other parameters may need to be set based on other parameters that you enable that are listed above. Check each parameters documentation for further information.  - Type: Boolean 
 virtualNetworkResourceGroupName | No       | The name of the Resource Group to create the Virtual Network in that is created by this module.  - Type: String - Default value: `''` *(empty string)* 
+virtualNetworkResourceGroupTags | No       | An object of Tag key & value pairs to be appended to the Resource Group that the Virtual Network is created in.  > **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
 virtualNetworkResourceGroupLockEnabled | No       | Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.  - Type: Boolean 
 virtualNetworkLocation | No       | The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.  - Type: String 
 virtualNetworkName | No       | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.  - Type: String - Default value: `''` *(empty string)* 
+virtualNetworkTags | No       | An object of tag key/value pairs to be set on the Virtual Network that is created.  > **NOTE:** Tags will be overwritten on resoruce if any exist already.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
 virtualNetworkAddressSpace | No       | The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.  - Type: Boolean 
 hubNetworkResourceId | No       | The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.  **Example Expected Values:** - `''` (empty string) - Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx` - Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
@@ -174,6 +176,18 @@ The name of the Resource Group to create the Virtual Network in that is created 
 - Default value: `''` *(empty string)*
 
 
+### virtualNetworkResourceGroupTags
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+An object of Tag key & value pairs to be appended to the Resource Group that the Virtual Network is created in.
+
+> **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.
+
+- Type: `{}` Object
+- Default value: `{}` *(empty object)*
+
+
 ### virtualNetworkResourceGroupLockEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
@@ -204,6 +218,18 @@ The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _,
 
 - Type: String
 - Default value: `''` *(empty string)*
+
+
+### virtualNetworkTags
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+An object of tag key/value pairs to be set on the Virtual Network that is created.
+
+> **NOTE:** Tags will be overwritten on resoruce if any exist already.
+
+- Type: `{}` Object
+- Default value: `{}` *(empty object)*
 
 
 ### virtualNetworkAddressSpace
@@ -389,6 +415,12 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
         "virtualNetworkResourceGroupName": {
             "value": "rg-networking-001"
         },
+        "virtualNetworkResourceGroupTags": {
+            "value": {
+                "tagKey1": "value",
+                "tag-key-2": "value"
+            }
+        },
         "virtualNetworkResourceGroupLockEnabled": {
             "value": true
         },
@@ -397,6 +429,12 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
         },
         "virtualNetworkName": {
             "value": "vnet-example-001"
+        },
+        "virtualNetworkTags": {
+            "value": {
+                "tagKey1": "value",
+                "tag-key-2": "value"
+            }
         },
         "virtualNetworkAddressSpace": {
             "value": [

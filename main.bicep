@@ -155,6 +155,21 @@ param virtualNetworkEnabled bool = false
 param virtualNetworkResourceGroupName string = ''
 
 @metadata({
+  example: {
+    tagKey1: 'value'
+    'tag-key-2': 'value'
+  }
+})
+@sys.description('''An object of Tag key & value pairs to be appended to the Resource Group that the Virtual Network is created in.
+
+> **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.
+
+- Type: `{}` Object
+- Default value: `{}` *(empty object)*
+''')
+param virtualNetworkResourceGroupTags object = {}
+
+@metadata({
   example: true
 })
 @sys.description('''Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.
@@ -182,6 +197,21 @@ param virtualNetworkLocation string = deployment().location
 - Default value: `''` *(empty string)*
 ''')
 param virtualNetworkName string = ''
+
+@metadata({
+  example: {
+    tagKey1: 'value'
+    'tag-key-2': 'value'
+  }
+})
+@sys.description('''An object of tag key/value pairs to be set on the Virtual Network that is created.
+
+> **NOTE:** Tags will be overwritten on resoruce if any exist already.
+
+- Type: `{}` Object
+- Default value: `{}` *(empty object)*
+''')
+param virtualNetworkTags object = {}
 
 @metadata({
   example: [
@@ -383,9 +413,11 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     subscriptionTags: subscriptionTags
     virtualNetworkEnabled: virtualNetworkEnabled
     virtualNetworkResourceGroupName: virtualNetworkResourceGroupName
+    virtualNetworkResourceGroupTags: virtualNetworkResourceGroupTags
     virtualNetworkResourceGroupLockEnabled: virtualNetworkResourceGroupLockEnabled
     virtualNetworkLocation: virtualNetworkLocation
     virtualNetworkName: virtualNetworkName
+    virtualNetworkTags: virtualNetworkTags
     virtualNetworkAddressSpace: virtualNetworkAddressSpace
     virtualNetworkPeeringEnabled: virtualNetworkPeeringEnabled
     hubNetworkResourceId: hubNetworkResourceId

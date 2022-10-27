@@ -29,7 +29,7 @@
     "subscriptionWorkload": {
       "value": "Production"
     },
-    "exisitingSubscriptionId": {
+    "existingSubscriptionId": {
       "value": ""
     },
     "virtualNetworkEnabled": {
@@ -41,11 +41,23 @@
     "virtualNetworkResourceGroupName": {
       "value": "rsg-networking-001"
     },
+    "virtualNetworkResourceGroupTags": {
+      "value": {
+        "test-key3": "test-value3",
+        "test-key4": "test-value4"
+      }
+    },
     "virtualNetworkResourceGroupLockEnabled": {
       "value": true
     },
     "virtualNetworkName": {
       "value": "vnet-bicep-lz-vending-test-001"
+    },
+    "virtualNetworkTags": {
+      "value": {
+        "test-key5": "test-value5",
+        "test-key6": "test-value6"
+      }
     },
     "virtualNetworkAddressSpace": {
       "value": [
