@@ -34,12 +34,18 @@ param virtualNetworkResourceGroupName string
 @sys.description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
 param virtualNetworkResourceGroupLockEnabled bool = true
 
+@sys.description('An object of tag key/value pairs to be appended to the Resource Group that the Virtual Network is created in. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
+param virtualNetworkResourceGroupTags object = {}
+
 @sys.description('The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.')
 param virtualNetworkLocation string = deployment().location
 
 @maxLength(64)
 @sys.description('The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
 param virtualNetworkName string = ''
+
+@sys.description('An object of tag key/value pairs to be appended to the Virtual Network is created. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.')
+param virtualNetworkTags object = {}
 
 @sys.description('The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`')
 param virtualNetworkAddressSpace array = []
@@ -76,6 +82,7 @@ var deploymentNames = {
   moveSubscriptionToManagementGroup: take('lz-vend-move-sub-${uniqueString(subscriptionId, subscriptionManagementGroupId, deployment().name)}', 64)
   tagSubscription: take('lz-vend-tag-sub-${uniqueString(subscriptionId, deployment().name)}', 64)
   createResourceGroupForLzNetworking: take('lz-vend-rsg-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, deployment().name)}', 64)
+  tagResoruceGroupForLzNetworking: take('lz-vend-tag-rsg-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, deployment().name)}', 64)
   createLzVnet: take('lz-vend-vnet-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, deployment().name)}', 64)
   createLzVirtualWanConnection: take('lz-vend-vhc-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, virtualHubResourceIdChecked, deployment().name)}', 64)
   createLzRoleAssignments: take('lz-vend-rbac-create-${uniqueString(subscriptionId, deployment().name)}', 64)
@@ -119,13 +126,27 @@ module tagSubscription '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bicep
   }
 }
 
-module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName) ) {
+module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForLzNetworking
   params: {
     name: virtualNetworkResourceGroupName
     location: virtualNetworkLocation
     lock: virtualNetworkResourceGroupLockEnabled ? 'CanNotDelete' : ''
+  }
+}
+
+module tagResourceGroup '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName) && !empty(virtualNetworkResourceGroupTags)) {
+  dependsOn: [
+    createResourceGroupForLzNetworking
+  ]
+  scope: subscription(subscriptionId)
+  name: deploymentNames.tagResoruceGroupForLzNetworking
+  params: {
+    subscriptionId: subscriptionId
+    resourceGroupName: virtualNetworkResourceGroupName
+    onlyUpdate: true
+    tags: subscriptionTags
   }
 }
 
