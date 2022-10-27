@@ -17,8 +17,10 @@ subscriptionTags | No       | An object of tag key/value pairs to be appended to
 virtualNetworkEnabled | No       | Whether to create a virtual network or not.
 virtualNetworkResourceGroupName | Yes      | The name of the resource group to create the virtual network in.
 virtualNetworkResourceGroupLockEnabled | No       | Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.
+virtualNetworkResourceGroupTags | No       | An object of tag key/value pairs to be appended to the Resource Group that the Virtual Network is created in. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.
 virtualNetworkLocation | No       | The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.
 virtualNetworkName | No       | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
+virtualNetworkTags | No       | An object of tag key/value pairs to be set on the Virtual Network that is created. NOTE: Tags will be overwritten on resoruce if any exist already.
 virtualNetworkAddressSpace | No       | The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
 virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub virtual network or virtual hub.
 hubNetworkResourceId | No       | The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.
@@ -77,6 +79,12 @@ Enables the deployment of a `CanNotDelete` resource locks to the virtual network
 
 - Default value: `True`
 
+### virtualNetworkResourceGroupTags
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+An object of tag key/value pairs to be appended to the Resource Group that the Virtual Network is created in. NOTE: Tags will only be overwriten if existing tag exists with same key; values provided here win.
+
 ### virtualNetworkLocation
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
@@ -90,6 +98,12 @@ The location of the virtual network. Use region shortnames e.g. uksouth, eastus,
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
+
+### virtualNetworkTags
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+An object of tag key/value pairs to be set on the Virtual Network that is created. NOTE: Tags will be overwritten on resoruce if any exist already.
 
 ### virtualNetworkAddressSpace
 
@@ -184,11 +198,17 @@ Supply an array of objects containing the details of the role assignments to cre
         "virtualNetworkResourceGroupLockEnabled": {
             "value": true
         },
+        "virtualNetworkResourceGroupTags": {
+            "value": {}
+        },
         "virtualNetworkLocation": {
             "value": "[deployment().location]"
         },
         "virtualNetworkName": {
             "value": ""
+        },
+        "virtualNetworkTags": {
+            "value": {}
         },
         "virtualNetworkAddressSpace": {
             "value": []
