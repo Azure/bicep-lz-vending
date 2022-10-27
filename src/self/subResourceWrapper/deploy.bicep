@@ -93,10 +93,10 @@ var virtualHubResourceIdChecked = (!empty(hubNetworkResourceId) && contains(hubN
 var hubVirtualNetworkResourceIdChecked = (!empty(hubNetworkResourceId) && contains(hubNetworkResourceId, '/providers/Microsoft.Network/virtualNetworks/') ? hubNetworkResourceId : '')
 
 // Virtual WAN data
-var virtualWanHubName = split(virtualHubResourceIdChecked, '/')[8]
-var virtualWanHubSubscriptionId = split(virtualHubResourceIdChecked, '/')[2]
-var virtualWanHubResourceGroupName = split(virtualHubResourceIdChecked, '/')[4]
-var virtualWanHubConnectionName = 'vhc-${guid(virtualHubResourceIdChecked, virtualNetworkName, virtualNetworkResourceGroupName, virtualNetworkLocation)}'
+var virtualWanHubName = (!empty(virtualHubResourceIdChecked) ? split(virtualHubResourceIdChecked, '/')[8] : '')
+var virtualWanHubSubscriptionId = (!empty(virtualHubResourceIdChecked) ? split(virtualHubResourceIdChecked, '/')[2] : '')
+var virtualWanHubResourceGroupName = (!empty(virtualHubResourceIdChecked) ? split(virtualHubResourceIdChecked, '/')[4] : '')
+var virtualWanHubConnectionName = 'vhc-${guid(virtualHubResourceIdChecked, virtualNetworkName, virtualNetworkResourceGroupName, virtualNetworkLocation, subscriptionId)}'
 var virtualWanHubConnectionAssociatedRouteTable = !empty(virtualNetworkVwanAssociatedRouteTableResourceId) ? virtualNetworkVwanAssociatedRouteTableResourceId : '${virtualHubResourceIdChecked}/hubRouteTables/defaultRouteTable'
 var virutalWanHubDefaultRouteTableId = {
   id: '${virtualHubResourceIdChecked}/hubRouteTables/defaultRouteTable'
