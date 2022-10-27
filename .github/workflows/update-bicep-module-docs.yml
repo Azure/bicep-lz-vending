@@ -131,3 +131,14 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push empty commit for tests
+        run: |
+          echo "==> Commit empty commit..."
+          git commit --allow-empty --message "$github_commit_message [$GITHUB_ACTOR/${GITHUB_SHA::8}]"
+
+          echo "==> Pushing empty commit changes..."
+          echo "Pushing empty commit to: $github_pr_repo"
+          git push "https://$GITHUB_TOKEN@github.com/$github_pr_repo.git" "HEAD:$GITHUB_HEAD_REF"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
