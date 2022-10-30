@@ -35,6 +35,18 @@ Please see the content in the [wiki](https://github.com/Azure/bicep-lz-vending/w
 
 Please see the [Known Issues in the wiki](https://github.com/Azure/bicep-lz-vending/wiki/knownissues).
 
+## Parameters for module `main.bicep`
+
+**Parameters documented here: [`main.bicep.parameters.md`](main.bicep.parameters.md).**
+
+Details on each of the parameters, including examples and an [example parameter file](main.bicep.parameters.md#parameter-file) (this is not a valid parameter file as all parameters contain values, so you must remove the un-required parameters or set them back to their default value, as documented), for the [`main.bicep`](main.bicep) module can be found [here: `main.bicep.parameters.md`](main.bicep.parameters.md).
+
+> These docs are automatically generated using [PSDocs.Azure](https://azure.github.io/PSDocs.Azure) from the Bicep module file itself and [this GitHub Action](.github/workflows/update-bicep-module-docs.yml) as part of PRs that amend this Bicep module.
+
+## Consumer Guide
+
+We have a [Consumer Guide](https://github.com/azure/bicep-lz-vending/wiki/consumerguide) available for guidance on how to consume this module.
+
 ## Example
 
 > For more examples please see the [wiki](https://github.com/Azure/bicep-lz-vending/wiki) and if you cannot find an example you are looking for please [raise an issue](https://github.com/Azure/bicep-lz-vending/issues/new/choose) on the repo 👍
@@ -72,14 +84,6 @@ TEMPLATEFILE="/main.bicep" # Set this to the path where you have checked out thi
 az deployment mg create --name ${DEPLOYMENTNAME:0:63} --parameters $TEMPLATEPARAMETERFILE --location $LOCATION --management-group-id $MANAGEMENTGROUPID --template-file $TEMPLATEFILE
 ```
 
-## Parameters for module `main.bicep`
-
-**Parameters documented here: [`main.bicep.parameters.md`](main.bicep.parameters.md).**
-
-Details on each of the parameters, including examples and an [example parameter file](main.bicep.parameters.md#parameter-file) (this is not a valid parameter file as all parameters contain values, so you must remove the un-required parameters or set them back to their default value, as documented), for the [`main.bicep`](main.bicep) module can be found [here: `main.bicep.parameters.md`](main.bicep.parameters.md).
-
-> These docs are automatically generated using [PSDocs.Azure](https://azure.github.io/PSDocs.Azure) from the Bicep module file itself and [this GitHub Action](.github/workflows/update-bicep-module-docs.yml) as part of PRs that amend this bicep module.
-
 ## Contributing
 
 This project welcomes contributions and suggestions.
@@ -95,6 +99,8 @@ You will only need to do this once across all repos using our CLA.
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+> Details on contributing to this repo can be found [here in the wiki](https://github.com/azure/bicep-lz-vending/wiki/contributing) 👍
 
 ## Telemetry
 

@@ -8,3 +8,5 @@ Here are some example configurations that demonstrate the module usage.
 | [Hub & Spoke](Example-1-Hub-and-Spoke)                                       | Example of how to create a landing zone (Subscription) with with a spoke Virtual Network peered to a Hub Virtual Network |
 | [Virtual WAN](Example-2-Virtual-WAN)                                         | Example of how to create a landing zone (Subscription) with a spoke Virtual Network connected to a Virtual WAN Hub       |
 | [Use with existing subscriptions](Example-3-Use-With-Existing-Subscriptions) | Example of how to use this module with existing landing zone Subscriptions                                               |
+
+Before deploying, review the [Consumer Guide](https://github.com/azure/bicep-lz-vending/wiki/consumerguide) for guidance on how to consume this module.

@@ -20,7 +20,7 @@ Replace this with any testing evidence to show that your Pull Request works/fixe
 
 ## As part of this Pull Request I have
 
-- [ ] Read the [Contribution Guide](https://github.com/Azure/bicep-lz-vending/wiki/Contributing) and ensured this PR is compliant with the guide
+- [ ] Read the [Contribution Guide](https://github.com/Azure/bicep-lz-vending/wiki/contributing) and ensured this PR is compliant with the guide
 - [ ] Checked for duplicate [Pull Requests](https://github.com/Azure/bicep-lz-vending/pulls)
 - [ ] Associated it with relevant [GitHub Issues](https://github.com/Azure/bicep-lz-vending/issues)
 - [ ] *(ALZ Bicep Core Team Only)* Associated it with relevant [ADO Items](https://aka.ms/alz/bicep/backlog)

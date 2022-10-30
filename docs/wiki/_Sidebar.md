@@ -5,6 +5,7 @@
 
 ---
 
+- [Consumer Guide](https://github.com/azure/bicep-lz-vending/wiki/consumerguide)
 - [Examples](https://github.com/azure/bicep-lz-vending/wiki/examples)
   - [Example 1 - Hub and Spoke](https://github.com/azure/bicep-lz-vending/wiki/Example-1-Hub-and-Spoke)
   - [Example 2 - Virtual WAN](https://github.com/azure/bicep-lz-vending/wiki/Example-2-Virtual-WAN)
@@ -14,3 +15,4 @@
 
 - [Telemetry](https://github.com/azure/bicep-lz-vending/wiki/telemetry)
 - [Upgrades](https://github.com/azure/bicep-lz-vending/wiki/upgrades)
+- [Contributing](https://github.com/azure/bicep-lz-vending/wiki/contributing)
