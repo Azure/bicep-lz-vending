@@ -1,0 +1,9 @@
+{
+	// Recommended extensions for Bicep LZ Vending
+	"recommendations": [
+		"ms-azuretools.vscode-bicep",
+		"msazurermtools.azurerm-vscode-tools",
+		"bencoleman.armview",
+		"editorconfig.editorconfig"
+	]
+}

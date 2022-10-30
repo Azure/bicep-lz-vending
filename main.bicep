@@ -32,9 +32,12 @@ The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). T
 
 > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.
 
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+
 - Type: String
+- Default value: `''` *(empty string)*
 ''')
-param subscriptionDisplayName string
+param subscriptionDisplayName string = ''
 
 @metadata({
   example: 'sub-bicep-lz-vending-example-001'
@@ -44,9 +47,12 @@ param subscriptionDisplayName string
 
 The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
 
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+
 - Type: String
+- Default value: `''` *(empty string)*
 ''')
-param subscriptionAliasName string
+param subscriptionAliasName string = ''
 
 @metadata({
   example: 'providers/Microsoft.Billing/billingAccounts/1234567/enrollmentAccounts/123456'
@@ -57,9 +63,12 @@ A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/
 
 > See below [example in parameter file](#parameter-file) for an example
 
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+
 - Type: String
+- Default value: `''` *(empty string)*
 ''')
-param subscriptionBillingScope string
+param subscriptionBillingScope string = ''
 
 @metadata({
   example: 'Production'
@@ -69,6 +78,8 @@ param subscriptionBillingScope string
   'Production'
 ])
 @sys.description('''The workload type can be either `Production` or `DevTest` and is case sensitive.
+
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
 
 - Type: String
 ''')
@@ -376,7 +387,7 @@ var cuaPid = '10d75183-0090-47b2-9c1b-48e3a4a36786'
 // LIMITS: Tenant = 64, Management Group = 64, Subscription = 64, Resource Group = 64
 var deploymentNames = {
   createSubscription: take('lz-vend-sub-create-${subscriptionAliasName}-${uniqueString(subscriptionAliasName, subscriptionDisplayName, subscriptionBillingScope, subscriptionWorkload, deployment().name)}', 64)
-  createSubscriptionResources: take('lz-vend-sub-res-create-${subscriptionAliasName}-${uniqueString(subscriptionAliasName, subscriptionDisplayName, subscriptionBillingScope, subscriptionWorkload, deployment().name)}', 64)
+  createSubscriptionResources: take('lz-vend-sub-res-create-${subscriptionAliasName}-${uniqueString(subscriptionAliasName, subscriptionDisplayName, subscriptionBillingScope, subscriptionWorkload, existingSubscriptionId, deployment().name)}', 64)
 }
 
 // RESOURCES & MODULES
