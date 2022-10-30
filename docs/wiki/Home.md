@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-Welcome to the lz-vending module documentation.
+Welcome to the Bicep Landing Zone (aka Subscription) vending module documentation.
 
 Please see the [README][readme] for information on module requirements, variables and outputs. This wiki contains longer form documentation.
 
