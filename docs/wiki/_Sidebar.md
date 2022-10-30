@@ -4,3 +4,4 @@
 - [Permissions required](https://github.com/azure/bicep-lz-vending/wiki/permissions)
 - [Examples](https://github.com/azure/bicep-lz-vending/wiki/examples)
 - [Telemetry](https://github.com/azure/bicep-lz-vending/wiki/telemetry)
+- [Known Issues](https://github.com/azure/bicep-lz-vending/wiki/knownissues)
