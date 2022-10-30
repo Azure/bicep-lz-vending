@@ -11,10 +11,10 @@ This is the orchestration module that is used and called by a consumer of the mo
 Parameter name | Required | Description
 -------------- | -------- | -----------
 subscriptionAliasEnabled | No       | Whether to create a new Subscription using the Subscription Alias resource. If `false`, supply an existing Subscription's ID in the parameter named `existingSubscriptionId` instead to deploy resources to an existing Subscription.  - Type: Boolean 
-subscriptionDisplayName | Yes      | The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.  - Type: String 
-subscriptionAliasName | Yes      | The name of the Subscription Alias, that will be created by this module.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  - Type: String 
-subscriptionBillingScope | Yes      | The Billing Scope for the new Subscription alias, that will be created by this module.  A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.  > See below [example in parameter file](#parameter-file) for an example  - Type: String 
-subscriptionWorkload | No       | The workload type can be either `Production` or `DevTest` and is case sensitive.  - Type: String 
+subscriptionDisplayName | No       | The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
+subscriptionAliasName | No       | The name of the Subscription Alias, that will be created by this module.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
+subscriptionBillingScope | No       | The Billing Scope for the new Subscription alias, that will be created by this module.  A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.  > See below [example in parameter file](#parameter-file) for an example  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
+subscriptionWorkload | No       | The workload type can be either `Production` or `DevTest` and is case sensitive.  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String 
 existingSubscriptionId | No       | An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.  - Type: String - Default value: `''` *(empty string)* 
 subscriptionManagementGroupAssociationEnabled | No       | Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.  - Type: Boolean 
 subscriptionManagementGroupId | No       | The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`).  **IMPORTANT:** Do not supply the display name of the Management Group. The Management Group ID forms part of the Azure Resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.  > See below [example in parameter file](#parameter-file) for an example  - Type: String - Default value: `''` *(empty string)* 
@@ -50,7 +50,7 @@ Whether to create a new Subscription using the Subscription Alias resource. If `
 
 ### subscriptionDisplayName
 
-![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.
 
@@ -58,23 +58,29 @@ The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). T
 
 > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.
 
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+
 - Type: String
+- Default value: `''` *(empty string)*
 
 
 ### subscriptionAliasName
 
-![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 The name of the Subscription Alias, that will be created by this module.
 
 The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
 
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+
 - Type: String
+- Default value: `''` *(empty string)*
 
 
 ### subscriptionBillingScope
 
-![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 The Billing Scope for the new Subscription alias, that will be created by this module.
 
@@ -82,7 +88,10 @@ A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/
 
 > See below [example in parameter file](#parameter-file) for an example
 
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+
 - Type: String
+- Default value: `''` *(empty string)*
 
 
 ### subscriptionWorkload
@@ -90,6 +99,8 @@ A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 The workload type can be either `Production` or `DevTest` and is case sensitive.
+
+> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
 
 - Type: String
 
