@@ -6,6 +6,9 @@
 ---
 
 - [Examples](https://github.com/azure/bicep-lz-vending/wiki/examples)
+  - [Example 1 - Hub and Spoke](https://github.com/azure/bicep-lz-vending/wiki/Example-1-Hub-and-Spoke)
+  - [Example 2 - Virtual WAN](https://github.com/azure/bicep-lz-vending/wiki/Example-2-Virtual-WAN)
+  - [Example 3 - Use with Existing Subscription](https://github.com/azure/bicep-lz-vending/wiki/Example-3-Use-With-Existing-Subscriptions)
 
 ---
 
