@@ -15,8 +15,6 @@ We recommend that you deploy the platform using the [Azure Landing Zones Bicep m
 
 Before deployment, please review the [required permissions](https://github.com/azure/bicep-lz-vending/wiki/permissions). Then to get started, look at one of the [examples](https://github.com/azure/bicep-lz-vending/wiki/examples).
 
-[comment]: # (Link labels below, please sort a-z, thanks!)
-
 [alz_conceptual_arch]: https://aka.ms/alz#azure-landing-zone-conceptual-architecture
 [alz_bicep_module]: https://aka.ms/alz/bicep
 [readme]: https://github.com/Azure/bicep-lz-vending#readme
