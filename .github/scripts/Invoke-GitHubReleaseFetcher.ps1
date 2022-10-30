@@ -35,6 +35,8 @@ $keepThese = @("version.json", "infra-as-code")
 # Check for pre-reqs
 #Requires -PSEdition Core
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required for colour outputs")]
+
 [CmdletBinding()]
 param (
   #Added this back into parameters as error occurs if multiple tenants are found when using Get-AzTenant
