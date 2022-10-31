@@ -412,7 +412,7 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
             "value": true
         },
         "subscriptionManagementGroupId": {
-            "value": "/providers/Microsoft.Management/managementGroups/alz-landingzones-corp"
+            "value": "alz-landingzones-corp"
         },
         "subscriptionTags": {
             "value": {
