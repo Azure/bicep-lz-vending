@@ -30,7 +30,7 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
       "value": true
     },
     "subscriptionManagementGroupId": {
-      "value": "/providers/Microsoft.Management/managementGroups/alz-landingzones-corp"
+      "value": "alz-landingzones-corp"
     },
     "subscriptionTags": {
       "value": {

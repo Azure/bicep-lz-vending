@@ -107,7 +107,7 @@ param existingSubscriptionId string = ''
 param subscriptionManagementGroupAssociationEnabled bool = true
 
 @metadata({
-  example: '/providers/Microsoft.Management/managementGroups/alz-landingzones-corp'
+  example: 'alz-landingzones-corp'
 })
 @sys.description('''The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`).
 
