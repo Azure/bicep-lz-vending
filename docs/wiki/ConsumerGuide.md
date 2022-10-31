@@ -34,8 +34,8 @@ We have created a GitHub Action Workflow ([`gh-release-checker.yml`](../../.gith
 
 1. Create a new GitHub repository
    - See [Create a repo](https://docs.github.com/get-started/quickstart/create-a-repo) for guidance
-2. Copy the [`Invoke-GitHubReleaseFetcher.ps1`](../../.github/scripts/Invoke-GitHubReleaseFetcher.ps1) script into the following location in your new GitHub repository: `.github/scripts/`
-3. Copy the [`gh-release-checker.yml`](../../.github/workflows/gh-release-checker.yml) GitHub Action into the following location in your new GitHub repository: `.github/workflows/`
+2. Copy the [`Invoke-GitHubReleaseFetcher.ps1`](https://github.com/Azure/bicep-lz-vending/blob/main/.github/scripts/Invoke-GitHubReleaseFetcher.ps1) script into the following location in your new GitHub repository: `.github/scripts/`
+3. Copy the [`gh-release-checker.yml`](https://github.com/Azure/bicep-lz-vending/blob/main/.github/workflows/gh-release-checker.yml) GitHub Action into the following location in your new GitHub repository: `.github/workflows/`
 4. Commit these files into the `main` (default branch) in your GitHub repository
 5. Manually trigger the GitHub action called: `Check & Pull Latest Upstream GitHub Release` from the "Actions" blade in your GitHub repository
    - Further guidance on this can be found here in [Manually running a workflow](https://docs.github.com/actions/managing-workflow-runs/manually-running-a-workflow)
