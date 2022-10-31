@@ -29,7 +29,7 @@ The identity used must have permissions to:
 
 - **Create Subscriptions using the `Microsoft.Subscription/aliases` resource**
   - See documentation on this resource here in: [Create Azure subscriptions programmatically](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription)
-    - See documentation for instructions on how to grant/assign EA roles to SPNs: [Assign roles to Azure Enterprise Agreement service principal name](https:learn.microsoft.com/azure/cost-management-billing/manage/assign-roles-azure-service-principals)
+    - See documentation for instructions on how to grant/assign EA roles to SPNs: [Assign roles to Azure Enterprise Agreement service principal name](https://learn.microsoft.com/azure/cost-management-billing/manage/assign-roles-azure-service-principals)
 - **Manage the Subscription's Management Group association using the `Microsoft.Management/managementGroups/subscriptions` resource**
   - See documentation on the required permissions here in: [What are Azure management groups? - Moving management groups and subscriptions](https://learn.microsoft.com/azure/governance/management-groups/overview#moving-management-groups-and-subscriptions)
     - **Note:** The identity that creates the Subscription will have the RBAC `Owner` role assigned to the Subscription by default. If you are using an existing Subscription with this module, you must ensure the identity you are using with this module has `Owner` permissions upon that existing Subscription prior to using the module with it.
