@@ -28,7 +28,7 @@ The option to use will be different per consumer based on their experience and s
 
 ## Creating your own GitHub Repository & Utilizing the `Invoke-GitHubReleaseFetcher.ps1` script & `gh-release-checker.yml` GitHub Action Workflow
 
-We have created a GitHub Action Workflow ([`gh-release-checker.yml`](../../.github/workflows/gh-release-checker.yml)) and a supporting PowerShell script ([`Invoke-GitHubReleaseFetcher.ps1`](../../.github/scripts/Invoke-GitHubReleaseFetcher.ps1)) that enables you to place only these 2 into a new GitHub repository and then either manually trigger the workflow or leave it to trigger on its schedule (every weekday at 00:00) and it will check for the latest releases available from this repository, `Azure/bicep-lz-vending`, and create a Pull Request into a `./releases/<VERSION>` folder in your repository.
+We have created a GitHub Action Workflow ([`gh-release-checker.yml`](https://github.com/Azure/bicep-lz-vending/blob/main/.github/workflows/gh-release-checker.yml)) and a supporting PowerShell script ([`Invoke-GitHubReleaseFetcher.ps1`](https://github.com/Azure/bicep-lz-vending/blob/main/.github/scripts/Invoke-GitHubReleaseFetcher.ps1)) that enables you to place only these 2 into a new GitHub repository and then either manually trigger the workflow or leave it to trigger on its schedule (every weekday at 00:00) and it will check for the latest releases available from this repository, `Azure/bicep-lz-vending`, and create a Pull Request into a `./releases/<VERSION>` folder in your repository.
 
 ### Steps to use this method, action & scripts
 
