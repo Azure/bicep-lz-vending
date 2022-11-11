@@ -237,6 +237,19 @@ param virtualNetworkTags object = {}
 param virtualNetworkAddressSpace array = []
 
 @metadata({
+  example: [
+    '10.4.1.4'
+    '10.2.1.5'
+  ]
+})
+@sys.description('''The custom DNS servers to use on the virtual network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the virtual network.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+''')
+param virtualNetworkDnsServers array = []
+
+@metadata({
   example: true
 })
 @sys.description('''Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.
@@ -430,6 +443,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkName: virtualNetworkName
     virtualNetworkTags: virtualNetworkTags
     virtualNetworkAddressSpace: virtualNetworkAddressSpace
+    virtualNetworkDnsServers: virtualNetworkDnsServers
     virtualNetworkPeeringEnabled: virtualNetworkPeeringEnabled
     hubNetworkResourceId: hubNetworkResourceId
     virtualNetworkUseRemoteGateways: virtualNetworkUseRemoteGateways
