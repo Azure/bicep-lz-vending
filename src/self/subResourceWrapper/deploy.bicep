@@ -53,6 +53,9 @@ param virtualNetworkAddressSpace array = []
 @sys.description('The custom DNS servers to use on the virtual network, e.g. `["10.4.1.4", "10.2.1.5"]. If left empty (default) then Azure DNS will be used for the virtual network.`')
 param virtualNetworkDnsServers array = []
 
+@sys.description('The resoruce ID of an existing DDoS Network Protection Plan that you wish to link to this virtual network.')
+param virtualNetworkDdosPlanId string = ''
+
 @sys.description('Whether to enable peering/connection with the supplied hub virtual network or virtual hub.')
 param virtualNetworkPeeringEnabled bool = false
 
@@ -165,6 +168,7 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
     location: virtualNetworkLocation
     addressPrefixes: virtualNetworkAddressSpace
     dnsServers: virtualNetworkDnsServers
+    ddosProtectionPlanId: virtualNetworkDdosPlanId
     virtualNetworkPeerings: (virtualNetworkPeeringEnabled && !empty(hubVirtualNetworkResourceIdChecked)) ? [
       {
         allowForwardedTraffic: true

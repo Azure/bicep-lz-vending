@@ -242,12 +242,26 @@ param virtualNetworkAddressSpace array = []
     '10.2.1.5'
   ]
 })
-@sys.description('''The custom DNS servers to use on the virtual network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the virtual network.
+@sys.description('''The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Nsetwork.
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
 ''')
 param virtualNetworkDnsServers array = []
+
+@metadata({
+  example: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx'
+})
+@sys.description('''The Resoruce ID of an existing DDoS Network Protection Plan that you wish to link to this Virtual Network.
+
+**Example Expected Values:**
+- `''` (empty string)
+- DDoS Netowrk Protection Plan Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx`
+
+- Type: String
+- Default value: `''` *(empty string)*
+''')
+param virtualNetworkDdosPlanId string = ''
 
 @metadata({
   example: true
@@ -444,6 +458,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkTags: virtualNetworkTags
     virtualNetworkAddressSpace: virtualNetworkAddressSpace
     virtualNetworkDnsServers: virtualNetworkDnsServers
+    virtualNetworkDdosPlanId: virtualNetworkDdosPlanId
     virtualNetworkPeeringEnabled: virtualNetworkPeeringEnabled
     hubNetworkResourceId: hubNetworkResourceId
     virtualNetworkUseRemoteGateways: virtualNetworkUseRemoteGateways
