@@ -22,6 +22,8 @@ virtualNetworkLocation | No       | The location of the virtual network. Use reg
 virtualNetworkName | No       | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
 virtualNetworkTags | No       | An object of tag key/value pairs to be set on the Virtual Network that is created. NOTE: Tags will be overwritten on resoruce if any exist already.
 virtualNetworkAddressSpace | No       | The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
+virtualNetworkDnsServers | No       | The custom DNS servers to use on the virtual network, e.g. `["10.4.1.4", "10.2.1.5"]. If left empty (default) then Azure DNS will be used for the virtual network.`
+virtualNetworkDdosPlanId | No       | The resoruce ID of an existing DDoS Network Protection Plan that you wish to link to this virtual network.
 virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub virtual network or virtual hub.
 hubNetworkResourceId | No       | The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.
 virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create. Set this to `false` for virtual wan hub connections.
@@ -110,6 +112,18 @@ An object of tag key/value pairs to be set on the Virtual Network that is create
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
 The address space of the virtual network, supplied as multiple CIDR blocks, e.g. `["10.0.0.0/16","172.16.0.0/12"]`
+
+### virtualNetworkDnsServers
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The custom DNS servers to use on the virtual network, e.g. `["10.4.1.4", "10.2.1.5"]. If left empty (default) then Azure DNS will be used for the virtual network.`
+
+### virtualNetworkDdosPlanId
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The resoruce ID of an existing DDoS Network Protection Plan that you wish to link to this virtual network.
 
 ### virtualNetworkPeeringEnabled
 
@@ -212,6 +226,12 @@ Supply an array of objects containing the details of the role assignments to cre
         },
         "virtualNetworkAddressSpace": {
             "value": []
+        },
+        "virtualNetworkDnsServers": {
+            "value": []
+        },
+        "virtualNetworkDdosPlanId": {
+            "value": ""
         },
         "virtualNetworkPeeringEnabled": {
             "value": false

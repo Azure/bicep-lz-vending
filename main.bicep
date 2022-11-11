@@ -32,7 +32,7 @@ The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). T
 
 > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -47,7 +47,7 @@ param subscriptionDisplayName string = ''
 
 The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -63,7 +63,7 @@ A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/
 
 > See below [example in parameter file](#parameter-file) for an example
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -79,7 +79,7 @@ param subscriptionBillingScope string = ''
 ])
 @sys.description('''The workload type can be either `Production` or `DevTest` and is case sensitive.
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 ''')
@@ -192,7 +192,7 @@ param virtualNetworkResourceGroupLockEnabled bool = true
 @metadata({
   example: 'uksouth'
 })
-@sys.description('''The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.
+@sys.description('''The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targeted to unless overridden.
 
 - Type: String
 ''')
@@ -217,7 +217,7 @@ param virtualNetworkName string = ''
 })
 @sys.description('''An object of tag key/value pairs to be set on the Virtual Network that is created.
 
-> **NOTE:** Tags will be overwritten on resoruce if any exist already.
+> **NOTE:** Tags will be overwritten on resource if any exist already.
 
 - Type: `{}` Object
 - Default value: `{}` *(empty object)*
@@ -235,6 +235,33 @@ param virtualNetworkTags object = {}
 - Default value: `[]` *(empty array)*
 ''')
 param virtualNetworkAddressSpace array = []
+
+@metadata({
+  example: [
+    '10.4.1.4'
+    '10.2.1.5'
+  ]
+})
+@sys.description('''The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Network.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+''')
+param virtualNetworkDnsServers array = []
+
+@metadata({
+  example: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx'
+})
+@sys.description('''The resource ID of an existing DDoS Network Protection Plan that you wish to link to this Virtual Network.
+
+**Example Expected Values:**
+- `''` (empty string)
+- DDoS Netowrk Protection Plan Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx`
+
+- Type: String
+- Default value: `''` *(empty string)*
+''')
+param virtualNetworkDdosPlanId string = ''
 
 @metadata({
   example: true
@@ -373,7 +400,7 @@ param roleAssignments array = []
 })
 @sys.description('''Disable telemetry collection by this module.
 
-For more information on the telemtery collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
+For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
 ''')
 param disableTelemetry bool = false
 
@@ -430,6 +457,8 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkName: virtualNetworkName
     virtualNetworkTags: virtualNetworkTags
     virtualNetworkAddressSpace: virtualNetworkAddressSpace
+    virtualNetworkDnsServers: virtualNetworkDnsServers
+    virtualNetworkDdosPlanId: virtualNetworkDdosPlanId
     virtualNetworkPeeringEnabled: virtualNetworkPeeringEnabled
     hubNetworkResourceId: hubNetworkResourceId
     virtualNetworkUseRemoteGateways: virtualNetworkUseRemoteGateways

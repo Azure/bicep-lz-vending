@@ -11,10 +11,10 @@ This is the orchestration module that is used and called by a consumer of the mo
 Parameter name | Required | Description
 -------------- | -------- | -----------
 subscriptionAliasEnabled | No       | Whether to create a new Subscription using the Subscription Alias resource. If `false`, supply an existing Subscription's ID in the parameter named `existingSubscriptionId` instead to deploy resources to an existing Subscription.  - Type: Boolean 
-subscriptionDisplayName | No       | The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
-subscriptionAliasName | No       | The name of the Subscription Alias, that will be created by this module.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
-subscriptionBillingScope | No       | The Billing Scope for the new Subscription alias, that will be created by this module.  A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.  > See below [example in parameter file](#parameter-file) for an example  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
-subscriptionWorkload | No       | The workload type can be either `Production` or `DevTest` and is case sensitive.  > **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**  - Type: String 
+subscriptionDisplayName | No       | The name of the subscription alias. The string must be comprised of a-z, A-Z, 0-9, - and _. The maximum length is 63 characters.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.  > **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
+subscriptionAliasName | No       | The name of the Subscription Alias, that will be created by this module.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
+subscriptionBillingScope | No       | The Billing Scope for the new Subscription alias, that will be created by this module.  A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.  > See below [example in parameter file](#parameter-file) for an example  > **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
+subscriptionWorkload | No       | The workload type can be either `Production` or `DevTest` and is case sensitive.  > **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**  - Type: String 
 existingSubscriptionId | No       | An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.  - Type: String - Default value: `''` *(empty string)* 
 subscriptionManagementGroupAssociationEnabled | No       | Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.  - Type: Boolean 
 subscriptionManagementGroupId | No       | The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`).  **IMPORTANT:** Do not supply the display name of the Management Group. The Management Group ID forms part of the Azure Resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.  > See below [example in parameter file](#parameter-file) for an example  - Type: String - Default value: `''` *(empty string)* 
@@ -23,10 +23,12 @@ virtualNetworkEnabled | No       | Whether to create a Virtual Network or not.  
 virtualNetworkResourceGroupName | No       | The name of the Resource Group to create the Virtual Network in that is created by this module.  - Type: String - Default value: `''` *(empty string)* 
 virtualNetworkResourceGroupTags | No       | An object of Tag key & value pairs to be appended to the Resource Group that the Virtual Network is created in.  > **NOTE:** Tags will only be overwritten if existing tag exists with same key as provided in this parameter; values provided here win.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
 virtualNetworkResourceGroupLockEnabled | No       | Enables the deployment of a `CanNotDelete` resource locks to the Virtual Networks Resource Group that is created by this module.  - Type: Boolean 
-virtualNetworkLocation | No       | The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.  - Type: String 
+virtualNetworkLocation | No       | The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targeted to unless overridden.  - Type: String 
 virtualNetworkName | No       | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.  - Type: String - Default value: `''` *(empty string)* 
-virtualNetworkTags | No       | An object of tag key/value pairs to be set on the Virtual Network that is created.  > **NOTE:** Tags will be overwritten on resoruce if any exist already.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
+virtualNetworkTags | No       | An object of tag key/value pairs to be set on the Virtual Network that is created.  > **NOTE:** Tags will be overwritten on resource if any exist already.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
 virtualNetworkAddressSpace | No       | The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+virtualNetworkDnsServers | No       | The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Network.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+virtualNetworkDdosPlanId | No       | The resource ID of an existing DDoS Network Protection Plan that you wish to link to this Virtual Network.  **Example Expected Values:** - `''` (empty string) - DDoS Netowrk Protection Plan Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
 virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.  - Type: Boolean 
 hubNetworkResourceId | No       | The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.  **Example Expected Values:** - `''` (empty string) - Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx` - Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
 virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways in the specified hub virtual network.  > **IMPORTANT:** If no gateways exist in the hub virtual network, set this to `false`, otherwise peering will fail to create.  - Type: Boolean 
@@ -35,7 +37,7 @@ virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of o
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.  - Type: Boolean 
 roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
-disableTelemetry | No       | Disable telemetry collection by this module.  For more information on the telemtery collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry) 
+disableTelemetry | No       | Disable telemetry collection by this module.  For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry) 
 
 ### subscriptionAliasEnabled
 
@@ -58,7 +60,7 @@ The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). T
 
 > The value for this parameter and the parameter named `subscriptionAliasName` are usually set to the same value for simplicity. But they can be different if required for a reason.
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -72,7 +74,7 @@ The name of the Subscription Alias, that will be created by this module.
 
 The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -88,7 +90,7 @@ A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/
 
 > See below [example in parameter file](#parameter-file) for an example
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 - Default value: `''` *(empty string)*
@@ -100,7 +102,7 @@ A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/
 
 The workload type can be either `Production` or `DevTest` and is case sensitive.
 
-> **Not required when providing an exisiting Subscription ID via the paramater `existingSubscriptionId`**
+> **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**
 
 - Type: String
 
@@ -214,7 +216,7 @@ Enables the deployment of a `CanNotDelete` resource locks to the Virtual Network
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targetted to unless overridden.
+The location of the virtual network. Use region shortnames e.g. `uksouth`, `eastus`, etc. Defaults to the region where the ARM/Bicep deployment is targeted to unless overridden.
 
 - Type: String
 
@@ -237,7 +239,7 @@ The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _,
 
 An object of tag key/value pairs to be set on the Virtual Network that is created.
 
-> **NOTE:** Tags will be overwritten on resoruce if any exist already.
+> **NOTE:** Tags will be overwritten on resource if any exist already.
 
 - Type: `{}` Object
 - Default value: `{}` *(empty object)*
@@ -251,6 +253,30 @@ The address space of the Virtual Network that will be created by this module, su
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
+
+
+### virtualNetworkDnsServers
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Network.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+
+
+### virtualNetworkDdosPlanId
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The resource ID of an existing DDoS Network Protection Plan that you wish to link to this Virtual Network.
+
+**Example Expected Values:**
+- `''` (empty string)
+- DDoS Netowrk Protection Plan Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx`
+
+- Type: String
+- Default value: `''` *(empty string)*
 
 
 ### virtualNetworkPeeringEnabled
@@ -366,7 +392,7 @@ Each object must contain the following `keys`:
 
 Disable telemetry collection by this module.
 
-For more information on the telemtery collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
+For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
 
 
 - Default value: `False`
@@ -451,6 +477,15 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
             "value": [
                 "10.0.0.0/16"
             ]
+        },
+        "virtualNetworkDnsServers": {
+            "value": [
+                "10.4.1.4",
+                "10.2.1.5"
+            ]
+        },
+        "virtualNetworkDdosPlanId": {
+            "value": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx"
         },
         "virtualNetworkPeeringEnabled": {
             "value": true

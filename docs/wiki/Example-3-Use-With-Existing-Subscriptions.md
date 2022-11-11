@@ -74,6 +74,15 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
         "10.0.0.0/16"
       ]
     },
+    "virtualNetworkDnsServers": {
+      "value": [
+        "10.4.1.4",
+        "10.2.1.5"
+      ]
+    },
+    "virtualNetworkDdosPlanId": {
+      "value": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg-hub-network-001/providers/Microsoft.Network/ddosProtectionPlans/ddos-001"
+    },
     "virtualNetworkPeeringEnabled": {
       "value": true
     },
