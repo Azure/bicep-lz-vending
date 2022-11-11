@@ -242,7 +242,7 @@ param virtualNetworkAddressSpace array = []
     '10.2.1.5'
   ]
 })
-@sys.description('''The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Nsetwork.
+@sys.description('''The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Network.
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
