@@ -27,7 +27,7 @@ virtualNetworkLocation | No       | The location of the virtual network. Use reg
 virtualNetworkName | No       | The name of the virtual network. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.  - Type: String - Default value: `''` *(empty string)* 
 virtualNetworkTags | No       | An object of tag key/value pairs to be set on the Virtual Network that is created.  > **NOTE:** Tags will be overwritten on resource if any exist already.  - Type: `{}` Object - Default value: `{}` *(empty object)* 
 virtualNetworkAddressSpace | No       | The address space of the Virtual Network that will be created by this module, supplied as multiple CIDR blocks in an array, e.g. `["10.0.0.0/16","172.16.0.0/12"]`  - Type: `[]` Array - Default value: `[]` *(empty array)* 
-virtualNetworkDnsServers | No       | The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Nsetwork.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+virtualNetworkDnsServers | No       | The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Network.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 virtualNetworkDdosPlanId | No       | The resource ID of an existing DDoS Network Protection Plan that you wish to link to this Virtual Network.  **Example Expected Values:** - `''` (empty string) - DDoS Netowrk Protection Plan Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/ddosProtectionPlans/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
 virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub Virtual Network or Virtual WAN Virtual Hub.  - Type: Boolean 
 hubNetworkResourceId | No       | The resource ID of the Virtual Network or Virtual WAN Hub in the hub to which the created Virtual Network, by this module, will be peered/connected to via Virtual Network Peering or a Virtual WAN Virtual Hub Connection.  **Example Expected Values:** - `''` (empty string) - Hub Virtual Network Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualNetworks/xxxxxxxxxx` - Virtual WAN Virtual Hub Resource ID: `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxxx`  - Type: String - Default value: `''` *(empty string)* 
@@ -259,7 +259,7 @@ The address space of the Virtual Network that will be created by this module, su
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Nsetwork.
+The custom DNS servers to use on the Virtual Network, e.g. `["10.4.1.4", "10.2.1.5"]`. If left empty (default) then Azure DNS will be used for the Virtual Network.
 
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
