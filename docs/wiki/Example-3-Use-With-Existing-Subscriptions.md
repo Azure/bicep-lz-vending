@@ -1,6 +1,42 @@
 <!-- markdownlint-disable MD041 -->
 ## Example 3 - Landing Zone (Subscription) using an existing Subscription
 
+### Bicep Module Registry
+
+Here is a simple example Bicep file for deploying a landing zone (Subscription) with a spoke Virtual Network peered to a Virtual WAN Hub using the [Bicep Module Registry](https://github.com/Azure/bicep-registry-modules):
+
+```bicep
+targetScope = 'managementGroup'
+
+@description('Specifies the location for resources.')
+param location string = 'uksouth'
+
+module sub003 'br/public:lz/sub-vending:1.1.1' = {
+  name: 'sub003'
+  params: {
+    subscriptionAliasEnabled: false
+    subscriptionTags: {
+      test: 'true'
+    }
+    subscriptionWorkload: 'Production'
+    subscriptionManagementGroupAssociationEnabled: true
+    subscriptionManagementGroupId: 'alz-landingzones-corp'
+    virtualNetworkEnabled: true
+    virtualNetworkLocation: location
+    virtualNetworkResourceGroupName: 'rsg-${location}-net-001'
+    virtualNetworkName: 'vnet-${location}-001'
+    virtualNetworkAddressSpace: [
+      '10.0.0.0/16'
+    ]
+    virtualNetworkResourceGroupLockEnabled: false
+    virtualNetworkPeeringEnabled: true
+    hubNetworkResourceId: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rsg-uks-net-vwan-001/providers/Microsoft.Network/virtualHubs/vhub-uks-001'
+  }
+}
+```
+
+### ARM JSON Parameter File
+
 Here is a simple example parameter file for deploying a landing zone (Subscription) with a spoke Virtual Network connected to a Virtual WAN Hub:
 
 > Note the Virtual WAN routing configuration here will use the defaults. Meaning the Virtual Hub Connection will be associated to the default route table and the default label. For advanced routing configuration, see the examples in the [`main.bicep` module parameters documentation](../../main.bicep.parameters.md)

@@ -3,6 +3,8 @@
 ## Overview
 
 > ℹ️ This module requires the usage of Bicep version `v0.11.1` or later. For details on installing/upgrading Bicep see: [Install Bicep tools](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install) ℹ️
+>
+> ℹ️ This module is also available on the Bicep Module Registry [here](https://github.com/Azure/bicep-registry-modules/tree/main/modules/lz/sub-vending). Examples also included in our [wiki examples](https://github.com/Azure/bicep-lz-vending/wiki/examples). ℹ️
 
 The landing zone Bicep modules are designed to accelerate deployment of the individual landing zones (aka Subscriptions) within an Azure AD Tenant.
 
