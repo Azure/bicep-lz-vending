@@ -10,7 +10,9 @@ This repository has been created to help customers and partners to create, deplo
 There are various ways to consume the Bicep modules included in `bicep-lz-vending`. The options are:
 
 - Creating your own GitHub Repository & Utilizing the `Invoke-GitHubReleaseFetcher.ps1` script & `gh-release-checker.yml` GitHub Action Workflow
-  - See detailed instruction on using this below
+  - See detailed instruction on using this [below](#creating-your-own-github-repository--utilizing-the-invoke-githubreleasefetcherps1-script--gh-release-checkeryml-github-action-workflow)
+- Use and reference the modules directly from the [Bicep Module Registry (Public)](https://github.com/Azure/bicep-registry-modules)
+  - [Bicep Landing Zone (Subscription) Vending Module on Bicep Module Registry (Public)](https://github.com/Azure/bicep-registry-modules/tree/main/modules/lz/sub-vending)
 - Clone this repository
 - Fork & Clone this repository
 - Download a `.zip` copy of this repo
@@ -22,7 +24,6 @@ There are various ways to consume the Bicep modules included in `bicep-lz-vendin
   - Template Specs
     - See:
       - [Azure Resource Manager template specs in Bicep](https://docs.microsoft.com/azure/azure-resource-manager/bicep/template-specs)
-- Use and reference the modules directly from the Microsoft Public Bicep Registry - ***Coming Soon***
 
 The option to use will be different per consumer based on their experience and skill levels with the various pieces of technology and their features.
 
