@@ -29,7 +29,7 @@ param virtualNetworkEnabled bool = false
 
 @maxLength(90)
 @sys.description('The name of the resource group to create the virtual network in.')
-param virtualNetworkResourceGroupName string
+param virtualNetworkResourceGroupName string = ''
 
 @sys.description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
 param virtualNetworkResourceGroupLockEnabled bool = true
@@ -181,7 +181,7 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
     addressPrefixes: virtualNetworkAddressSpace
     dnsServers: virtualNetworkDnsServers
     ddosProtectionPlanId: virtualNetworkDdosPlanId
-    virtualNetworkPeerings: (virtualNetworkPeeringEnabled && !empty(hubVirtualNetworkResourceIdChecked)) ? [
+    virtualNetworkPeerings: (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(hubVirtualNetworkResourceIdChecked) && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) ? [
       {
         allowForwardedTraffic: true
         allowVirtualNetworkAccess: true
@@ -199,7 +199,7 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
   }
 }
 
-module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualHubResourceIdChecked)) {
+module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualHubResourceIdChecked) && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName) && !empty(virtualWanHubResourceGroupName) && !empty(virtualWanHubSubscriptionId)) {
   dependsOn: [
     createResourceGroupForLzNetworking
   ]
@@ -208,7 +208,7 @@ module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtua
   params: {
     name: virtualWanHubConnectionName
     virtualHubName: virtualWanHubName
-    remoteVirtualNetworkId: createLzVnet.outputs.resourceId
+    remoteVirtualNetworkId: '/subscriptions/${subscriptionId}/resourceGroups/${virtualNetworkResourceGroupName}/providers/Microsoft.Network/virtualNetworks/${virtualNetworkName}'
     routingConfiguration: {
       associatedRouteTable: {
         id: virtualWanHubConnectionAssociatedRouteTable
