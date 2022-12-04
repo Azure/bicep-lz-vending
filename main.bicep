@@ -467,6 +467,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkVwanPropagatedLabels: virtualNetworkVwanPropagatedLabels
     roleAssignmentEnabled: roleAssignmentEnabled
     roleAssignments: roleAssignments
+    disableTelemetry: disableTelemetry
   }
 }
 
