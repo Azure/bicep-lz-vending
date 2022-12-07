@@ -442,7 +442,7 @@ module createSubscription 'src/self/Microsoft.Subscription/aliases/deploy.bicep'
   }
 }
 
-module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = if ((subscriptionAliasEnabled || !empty(existingSubscriptionId)) && virtualNetworkEnabled && !empty(virtualNetworkResourceGroupName)) {
+module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = if (subscriptionAliasEnabled || !empty(existingSubscriptionId)) {
   name: deploymentNames.createSubscriptionResources
   params: {
     subscriptionId: (subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : existingSubscriptionId
@@ -467,6 +467,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkVwanPropagatedLabels: virtualNetworkVwanPropagatedLabels
     roleAssignmentEnabled: roleAssignmentEnabled
     roleAssignments: roleAssignments
+    disableTelemetry: disableTelemetry
   }
 }
 
