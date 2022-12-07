@@ -5,82 +5,82 @@
       "verbose": true,
       "rules": {
         "adminusername-should-not-be-literal": {
-          "level": "error"
+          "level": "warning"
         },
         "no-hardcoded-env-urls": {
-          "level": "error"
+          "level": "warning"
         },
         "no-unnecessary-dependson": {
-          "level": "error"
+          "level": "warning"
         },
         "no-unused-params": {
-          "level": "error"
+          "level": "warning"
         },
         "no-unused-vars": {
-          "level": "error"
+          "level": "warning"
         },
         "outputs-should-not-contain-secrets": {
-          "level": "error"
+          "level": "warning"
         },
         "prefer-interpolation": {
-          "level": "error"
+          "level": "warning"
         },
         "secure-parameter-default": {
-          "level": "error"
+          "level": "warning"
         },
         "simplify-interpolation": {
-          "level": "error"
+          "level": "warning"
         },
         "protect-commandtoexecute-secrets": {
-          "level": "error"
+          "level": "warning"
         },
         "use-stable-vm-image": {
-          "level": "error"
+          "level": "warning"
         },
         "explicit-values-for-loc-params": {
           "level": "off" // CARML Reason: Our modules default to e.g. the location of their parent resource group which is sufficient if deploying a self-contained solution
         },
         "no-hardcoded-location": {
-          "level": "error"
+          "level": "warning"
         },
         "no-loc-expr-outside-params": {
-          "level": "error"
+          "level": "warning"
         },
         "max-outputs": {
-          "level": "error"
+          "level": "warning"
         },
         "max-params": {
-          "level": "error"
+          "level": "warning"
         },
         "max-resources": {
-          "level": "error"
+          "level": "warning"
         },
         "max-variables": {
-          "level": "error"
+          "level": "warning"
         },
         "artifacts-parameters": {
-          "level": "error"
+          "level": "warning"
         },
         "no-unused-existing-resources": {
-          "level": "error"
+          "level": "warning"
         },
         "prefer-unquoted-property-names": {
           "level": "off" // CARML Reason: This complains primarily about RBAC roles which are all in quotes to be consistent within the list of roles with and without spaces in their name
         },
         "secure-secrets-in-params": {
-          "level": "error"
+          "level": "warning"
         },
         "use-stable-resource-identifiers": {
-          "level": "error"
+          "level": "warning"
         },
         "secure-params-in-nested-deploy": {
-          "level": "error"
+          "level": "warning"
         },
         "use-recent-api-versions": {
           "level": "off"
         },
         "use-resource-id-functions": {
-          "level": "error"
+          "level": "warning"
         }
       }
     }

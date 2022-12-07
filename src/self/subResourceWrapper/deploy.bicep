@@ -29,7 +29,7 @@ param virtualNetworkEnabled bool = false
 
 @maxLength(90)
 @sys.description('The name of the resource group to create the virtual network in.')
-param virtualNetworkResourceGroupName string
+param virtualNetworkResourceGroupName string = ''
 
 @sys.description('Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.')
 param virtualNetworkResourceGroupLockEnabled bool = true
@@ -186,7 +186,7 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
   }
 }
 
-module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualHubResourceIdChecked)) {
+module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtualHubs/hubVirtualNetworkConnections/deploy.bicep' = if (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName) && !empty(virtualHubResourceIdChecked)) {
   dependsOn: [
     createResourceGroupForLzNetworking
   ]
@@ -195,7 +195,7 @@ module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtua
   params: {
     name: virtualWanHubConnectionName
     virtualHubName: virtualWanHubName
-    remoteVirtualNetworkId: createLzVnet.outputs.resourceId
+    remoteVirtualNetworkId: virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName) && !empty(virtualHubResourceIdChecked) ? createLzVnet.outputs.resourceId : ''
     routingConfiguration: {
       associatedRouteTable: {
         id: virtualWanHubConnectionAssociatedRouteTable
