@@ -29,7 +29,7 @@ We would like feedback on what's missing in the module. Please raise an [issue](
 
 ## Community Events/Recordings
 
-- [Bicep Community Call - November 2022](https://youtu.be/hu0PgCamxt0?t=1038)
+- [Bicep Community Call - November 2022](https://youtu.be/hu0PgCamxt0?t=1038) 📽️🎬🎞️
 
 ## Change Log/Releases
 
