@@ -27,6 +27,10 @@ This is currently split logically into the following capabilities:
 
 We would like feedback on what's missing in the module. Please raise an [issue](https://github.com/Azure/bicep-lz-vending/issues) if you have any suggestions.
 
+## Community Events/Recordings
+
+- [Bicep Community Call - November 2022](https://youtu.be/hu0PgCamxt0?t=1038) 📽️🎬🎞️
+
 ## Change Log/Releases
 
 Please see this repositories [GitHub releases](https://github.com/Azure/bicep-lz-vending/releases) for information on the latest changes and releases.

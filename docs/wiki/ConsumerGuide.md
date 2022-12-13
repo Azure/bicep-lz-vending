@@ -13,6 +13,7 @@ There are various ways to consume the Bicep modules included in `bicep-lz-vendin
   - See detailed instruction on using this [below](#creating-your-own-github-repository--utilizing-the-invoke-githubreleasefetcherps1-script--gh-release-checkeryml-github-action-workflow)
 - Use and reference the modules directly from the [Bicep Module Registry (Public)](https://github.com/Azure/bicep-registry-modules)
   - [Bicep Landing Zone (Subscription) Vending Module on Bicep Module Registry (Public)](https://github.com/Azure/bicep-registry-modules/tree/main/modules/lz/sub-vending)
+  - See a live demo using the Bicep Module Registry on the [Bicep Community Call - November 2022](https://youtu.be/hu0PgCamxt0?t=1038) 📽️🎬🎞️
 - Clone this repository
 - Fork & Clone this repository
 - Download a `.zip` copy of this repo
