@@ -27,6 +27,7 @@ virtualNetworkDdosPlanId | No       | The resoruce ID of an existing DDoS Networ
 virtualNetworkPeeringEnabled | No       | Whether to enable peering/connection with the supplied hub virtual network or virtual hub.
 hubNetworkResourceId | No       | The resource ID of the virtual network or virtual wan hub in the hub to which the created virtual network will be peered/connected to via vitrual network peering or a vitrual hub connection.
 virtualNetworkUseRemoteGateways | No       | Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create. Set this to `false` for virtual wan hub connections.
+virtualNetworkVwanEnableInternetSecurity | No       | Enables the ability for the Virtual WAN Hub Connection to learn the default route 0.0.0.0/0 from the Hub.
 virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.
 virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
@@ -148,6 +149,14 @@ Enables the use of remote gateways in the spefcified hub virtual network. If no 
 
 - Default value: `True`
 
+### virtualNetworkVwanEnableInternetSecurity
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Enables the ability for the Virtual WAN Hub Connection to learn the default route 0.0.0.0/0 from the Hub.
+
+- Default value: `True`
+
 ### virtualNetworkVwanAssociatedRouteTableResourceId
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
@@ -249,6 +258,9 @@ Disable telemetry collection by this module. For more information on the telemet
             "value": ""
         },
         "virtualNetworkUseRemoteGateways": {
+            "value": true
+        },
+        "virtualNetworkVwanEnableInternetSecurity": {
             "value": true
         },
         "virtualNetworkVwanAssociatedRouteTableResourceId": {
