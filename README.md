@@ -1,5 +1,8 @@
 # Bicep landing zone vending module for Azure
 
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/azure/bicep-lz-vending.svg)](http://isitmaintained.com/project/azure/bicep-lz-vending "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/azure/bicep-lz-vending.svg)](http://isitmaintained.com/project/azure/bicep-lz-vending "Percentage of issues still open")
+
 ## Overview
 
 > ℹ️ This module requires the usage of Bicep version `v0.11.1` or later. For details on installing/upgrading Bicep see: [Install Bicep tools](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install) ℹ️
