@@ -1,7 +1,6 @@
 # Bicep landing zone vending module for Azure
 
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/azure/bicep-lz-vending.svg)](http://isitmaintained.com/project/azure/bicep-lz-vending "Average time to resolve an issue")
-
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/azure/bicep-lz-vending.svg)](http://isitmaintained.com/project/azure/bicep-lz-vending "Percentage of issues still open")
 
 ## Overview
