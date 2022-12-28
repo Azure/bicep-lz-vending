@@ -74,7 +74,7 @@ jobs:
             }
             $bicepDeployment = New-AzManagementGroupDeployment @inputObject
             $outputValue = $bicepDeployment.properties.outputs.createdSubId.value
-            echo "SUBID=$outputValue" >> $env:GITHUB_ENV
+            echo "SUBID=$outputValue" >> $GITHUB_ENV
           azPSVersion: "latest"
 
       - name: Pester Tests
@@ -89,6 +89,5 @@ jobs:
             $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "${{ env.SUBID }}"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
             $configuration.Run.Container = $container
             $configuration.Run.PassThru = $true
-            $result = Invoke-Pester -Configuration $configuration
-            exit $result.FailedCount
+            Invoke-Pester -Configuration $configuration
           azPSVersion: "latest"
