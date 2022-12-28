@@ -57,7 +57,7 @@ jobs:
           azPSVersion: "latest"
 
       - name: Vend Subscriptions & Networking Scenarios (What-If & Validate)
-        id: vend
+        id: vend-whatif
         uses: azure/powershell@v1
         with:
           inlineScript: |
