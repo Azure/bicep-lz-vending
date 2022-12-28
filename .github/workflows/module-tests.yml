@@ -1,0 +1,76 @@
+name: Module Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**.bicep"
+      - "tests/pester/**.ps1"
+  workflow_dispatch: {}
+
+env:
+  ARM_BILLING_SCOPE_RID: "${{ secrets.ARM_BILLING_SCOPE_RID }}"
+  ARM_LOCATION: "uksouth"
+  ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
+  ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
+  ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+  GH_PR_NUMBER: "${{ github.event.number }}"
+
+jobs:
+  vending:
+    name: Vending Subscription for Tests and Networking Scenarios
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Azure Login
+        id: login
+        uses: azure/login@v1
+        with:
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          client-secret: ${{ env.ARM_CLIENT_SECRET }}
+          enable-AzPSSession: true
+          allow-no-subscriptions: true
+
+      - name: Vend Subscriptions & Networking Scenarios
+        id: vend
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $inputObject = @{
+              DeploymentName        = 'pr-$(${{ env.GH_PR_NUMBER }})-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
+              ManagementGroupId     = 'bicep-lz-vending-automation-child'
+              Location              = ${{ env.ARM_LOCATION }}
+              TemplateFile          = "./tests/lz-vending/full.test.bicep"
+              TemplateParameterObject =  @{
+                location = ${{ env.ARM_LOCATION }}
+                prNumber = ${{ env.GH_PR_NUMBER }}
+                subscriptionBillingScope = ${{ env.ARM_BILLING_SCOPE_RID }}
+              }
+            }
+            $bicepDeployment = New-AzManagementGroupDeployment @inputObject
+            echo "createdSubId=$($bicepDeployment.Outputs.createdSubId.value)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          azPSVersion: "latest"
+
+      - name: Pester Tests
+        id: pester
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $configuration = [PesterConfiguration]::Default
+            $configuration.TestResult.Enabled = $true
+            $configuration.Output.Verbosity = 'Detailed'
+            $configuration.TestResult.OutputPath = "$(Agent.BuildDirectory)/pr-test-output.xml"
+            $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = ${{ needs.vend.outputs.createdSubId }}; prNumber = ${{ env.GH_PR_NUMBER }}; location = ${{ env.ARM_LOCATION }} }
+            $configuration.Run.Container = $container
+            $configuration.Run.PassThru = $true
+            $result = Invoke-Pester -Configuration $configuration
+            exit $result.FailedCount
+          azPSVersion: "latest"
