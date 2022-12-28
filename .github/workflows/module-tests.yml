@@ -45,7 +45,7 @@ jobs:
             $inputObject = @{
               DeploymentName        = 'pr-$(${{ env.GH_PR_NUMBER }})-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
               ManagementGroupId     = "bicep-lz-vending-automation-child"
-              Location              = "${{ env.ARM_LOCATION }}""
+              Location              = "${{ env.ARM_LOCATION }}"
               TemplateFile          = "./tests/lz-vending/full.test.bicep"
               TemplateParameterObject =  @{
                 location = "${{ env.ARM_LOCATION }}"
