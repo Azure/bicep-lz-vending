@@ -37,25 +37,6 @@ jobs:
           enable-AzPSSession: true
           allow-no-subscriptions: true
 
-      - name: Vend Subscriptions & Networking Scenarios (What-If)
-        id: vend
-        uses: azure/powershell@v1
-        with:
-          inlineScript: |
-            $inputObject = @{
-              DeploymentName        = 'pr-${{ env.GH_PR_NUMBER }}-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
-              ManagementGroupId     = "bicep-lz-vending-automation"
-              Location              = "${{ env.ARM_LOCATION }}"
-              TemplateFile          = "./tests/lz-vending/full.test.bicep"
-              TemplateParameterObject =  @{
-                location = "${{ env.ARM_LOCATION }}"
-                prNumber = "${{ env.GH_PR_NUMBER }}"
-                subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
-              }
-            }
-            New-AzManagementGroupDeployment @inputObject -Whatif
-          azPSVersion: "latest"
-
       - name: Vend Subscriptions & Networking Scenarios (What-If & Validate)
         id: vend-whatif
         uses: azure/powershell@v1
