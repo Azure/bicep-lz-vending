@@ -73,7 +73,8 @@ jobs:
               }
             }
             $bicepDeployment = New-AzManagementGroupDeployment @inputObject
-            echo "createdSubId=$($bicepDeployment.Outputs.createdSubId.value)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            $outputValue = $bicepDeployment.properties.outputs.createdSubId.value
+            echo "SUBID=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           azPSVersion: "latest"
 
       - name: Pester Tests
@@ -81,11 +82,11 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
+            Import-Module Pester -Force
             $configuration = [PesterConfiguration]::Default
             $configuration.TestResult.Enabled = $true
             $configuration.Output.Verbosity = 'Detailed'
-            $configuration.TestResult.OutputPath = "$(Agent.BuildDirectory)/pr-test-output.xml"
-            $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "${{ needs.vend.outputs.createdSubId }}"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
+            $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "$env:SUBID"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
             $configuration.Run.Container = $container
             $configuration.Run.PassThru = $true
             $result = Invoke-Pester -Configuration $configuration
