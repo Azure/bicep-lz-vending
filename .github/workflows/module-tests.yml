@@ -79,16 +79,16 @@ jobs:
 
       - name: Pester Tests
         id: pester
-        shell: pwsh
-        run: |
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
             Import-Module Pester -Force
             $configuration = [PesterConfiguration]::Default
             $configuration.TestResult.Enabled = $true
             $configuration.Output.Verbosity = 'Detailed'
-            $configuration.TestResult.OutputPath = "$($PWD)/pr-test-output.xml"
             $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "${{ env.SUBID }}"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
             $configuration.Run.Container = $container
             $configuration.Run.PassThru = $true
             $result = Invoke-Pester -Configuration $configuration
             exit $result.FailedCount
-
+          azPSVersion: "latest"
