@@ -37,24 +37,24 @@ jobs:
           enable-AzPSSession: true
           allow-no-subscriptions: true
 
-      # - name: Vend Subscriptions & Networking Scenarios (What-If & Validate)
-      #   id: vend-whatif
-      #   uses: azure/powershell@v1
-      #   with:
-      #     inlineScript: |
-      #       $inputObject = @{
-      #         DeploymentName        = 'pr-${{ env.GH_PR_NUMBER }}-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
-      #         ManagementGroupId     = "bicep-lz-vending-automation"
-      #         Location              = "${{ env.ARM_LOCATION }}"
-      #         TemplateFile          = "./tests/lz-vending/full.test.bicep"
-      #         TemplateParameterObject =  @{
-      #           location = "${{ env.ARM_LOCATION }}"
-      #           prNumber = "${{ env.GH_PR_NUMBER }}"
-      #           subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
-      #         }
-      #       }
-      #       New-AzManagementGroupDeployment @inputObject -Whatif
-      #     azPSVersion: "latest"
+      - name: Vend Subscriptions & Networking Scenarios (What-If & Validate)
+        id: vend-whatif
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $inputObject = @{
+              DeploymentName        = 'pr-${{ env.GH_PR_NUMBER }}-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
+              ManagementGroupId     = "bicep-lz-vending-automation"
+              Location              = "${{ env.ARM_LOCATION }}"
+              TemplateFile          = "./tests/lz-vending/full.test.bicep"
+              TemplateParameterObject =  @{
+                location = "${{ env.ARM_LOCATION }}"
+                prNumber = "${{ env.GH_PR_NUMBER }}"
+                subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
+              }
+            }
+            New-AzManagementGroupDeployment @inputObject -Whatif
+          azPSVersion: "latest"
 
       - name: Vend Subscriptions & Networking Scenarios (Deploy)
         id: vend
@@ -72,32 +72,23 @@ jobs:
                 subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
               }
             }
-            write-host ""
             $bicepDeployment = New-AzManagementGroupDeployment @inputObject
             $outputValue = $bicepDeployment.Outputs.createdSubId.Value
-            $bicepDeployment
             "SUBID=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           azPSVersion: "latest"
 
-      - name: Var Console Output
-        id: var
-        run: |
-          write-host "SUBID 1a: ${{ env.SUBID }}"
-          write-host "SUBID 1b: $env:SUBID"
-          write-host "SUBID 1c: ${{ steps.vend.outputs.SUBID }}"
-        shell: pwsh
-
       - name: Pester Tests
         id: pester
-        uses: azure/powershell@v1
-        with:
-          inlineScript: |
+        shell: pwsh
+        run: |
             Import-Module Pester -Force
             $configuration = [PesterConfiguration]::Default
             $configuration.TestResult.Enabled = $true
             $configuration.Output.Verbosity = 'Detailed'
+            $configuration.TestResult.OutputPath = "$($PWD)/pr-test-output.xml"
             $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "${{ env.SUBID }}"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
             $configuration.Run.Container = $container
             $configuration.Run.PassThru = $true
-            Invoke-Pester -Configuration $configuration
-          azPSVersion: "latest"
+            $result = Invoke-Pester -Configuration $configuration
+            exit $result.FailedCount
+
