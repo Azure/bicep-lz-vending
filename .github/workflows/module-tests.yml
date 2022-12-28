@@ -44,13 +44,13 @@ jobs:
           inlineScript: |
             $inputObject = @{
               DeploymentName        = 'pr-$(${{ env.GH_PR_NUMBER }})-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
-              ManagementGroupId     = 'bicep-lz-vending-automation-child'
-              Location              = ${{ env.ARM_LOCATION }}
+              ManagementGroupId     = "bicep-lz-vending-automation-child"
+              Location              = "${{ env.ARM_LOCATION }}""
               TemplateFile          = "./tests/lz-vending/full.test.bicep"
               TemplateParameterObject =  @{
-                location = ${{ env.ARM_LOCATION }}
-                prNumber = ${{ env.GH_PR_NUMBER }}
-                subscriptionBillingScope = ${{ env.ARM_BILLING_SCOPE_RID }}
+                location = "${{ env.ARM_LOCATION }}"
+                prNumber = "${{ env.GH_PR_NUMBER }}"
+                subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
               }
             }
             $bicepDeployment = New-AzManagementGroupDeployment @inputObject
@@ -66,7 +66,7 @@ jobs:
             $configuration.TestResult.Enabled = $true
             $configuration.Output.Verbosity = 'Detailed'
             $configuration.TestResult.OutputPath = "$(Agent.BuildDirectory)/pr-test-output.xml"
-            $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = ${{ needs.vend.outputs.createdSubId }}; prNumber = ${{ env.GH_PR_NUMBER }}; location = ${{ env.ARM_LOCATION }} }
+            $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "${{ needs.vend.outputs.createdSubId }}"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
             $configuration.Run.Container = $container
             $configuration.Run.PassThru = $true
             $result = Invoke-Pester -Configuration $configuration
