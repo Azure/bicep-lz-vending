@@ -104,18 +104,19 @@ jobs:
             $rsgVwanName = "rsg-${{ env.ARM_LOCATION }}-net-vwan-pr-${{ env.GH_PR_NUMBER }}"
             $rsgNetworkWatcherName = "NetworkWatcherRG"
 
-            # Cleanup Vended Subscription Resources
+            Write-Host "Cleanup Vended Subscription Resources & Resource Groups..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUBID }}"
             Remove-AzResourceGroup -Name $rsgHsName -Force
             Remove-AzResourceGroup -Name $rsgVwanName -Force
             Remove-AzResourceGroup -Name $rsgNetworkWatcherName -Force
 
-            # Cleanup Hub Subscription Resources
+            Write-Host "Cleanup Hub Subscription Resources..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUB_HUB_ID }}"
 
             $vwanHubVhc = Get-AzVirtualHubVnetConnection -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualHubName "vhub-uksouth-blzv" -Name *
             Remove-AzVirtualHubVnetConnection -ResourceId $vwanHubVhc[0].Id -Force
 
             $hubVnetPeering = Get-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name *
-            Remove-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name "$hubVnetPeering.Name" -Force
+            Remove-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name "$($hubVnetPeering.Name)" -Force
+            Write-Host "Cleanup Hub Subscription Resources... Complete!" -ForegroundColor Green
           azPSVersion: "latest"
