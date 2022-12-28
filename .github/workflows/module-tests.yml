@@ -82,7 +82,6 @@ jobs:
         run: |
           write-host "SUBID 1: ${{ env.SUBID }}"
           write-host "SUBID 2:" ${{ env:SUBID }}
-          write-host "SUBID 3: $env:SUBID"
           write-host "SUBID 4: ${{ steps.vend.outputs.SUBID }}"
         shell: pwsh
 
