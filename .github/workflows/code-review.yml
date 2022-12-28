@@ -33,7 +33,7 @@ jobs:
           VALIDATE_POWERSHELL: true
           VALIDATE_YAML: true
           VALIDATE_EDITORCONFIG: true
-          FILTER_REGEX_EXCLUDE: "./tests/pester/*.tests.ps1"
+          FILTER_REGEX_EXCLUDE: ".tests/pester/*.tests.ps1"
 
   markdown-link-check:
     name: Markdown Link Check
