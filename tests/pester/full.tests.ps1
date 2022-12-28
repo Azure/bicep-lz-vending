@@ -80,11 +80,11 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
       $vnetHs = Get-AzVirtualNetwork -ResourceGroupName "rsg-$location-net-hs-pr-$prNumber" -Name "vnet-$location-hs-pr-$prNumber" -ErrorAction SilentlyContinue
     }
 
-    It "Should have a Virtual Network in the correct Resource Group" {
+    It "Should have a Virtual Network in the correct Resource Group (rsg-$location-net-hs-pr-$prNumber)" {
       $vnetHs.ResourceGroupName | Should -Be "rsg-$location-net-hs-pr-$prNumber"
     }
 
-    It "Should have a Virtual Network with the correct name" {
+    It "Should have a Virtual Network with the correct name (vnet-$location-hs-pr-$prNumber)" {
       $vnetHs.Name | Should -Be "vnet-$location-hs-pr-$prNumber"
     }
 
@@ -92,7 +92,7 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
       $vnetHs.Location | Should -Be $location
     }
 
-    It "Should have a Virtual Network with the correct address space" {
+    It "Should have a Virtual Network with the correct address space (10.100.0.0/16)" {
       $vnetHs.AddressSpace.AddressPrefixes | Should -Be "10.100.0.0/16"
     }
 
@@ -128,6 +128,68 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
     It "Should have a Virtual Network with a Virtual Network Peering to the Hub Virtual Network called 'vnet-uksouth-hub-blzv' that has AllowGatewayTransit set to $false" {
       $vnetHs.VirtualNetworkPeerings[0].RemoteVirtualNetwork.id | Should -Be "/subscriptions/e4e7395f-dc45-411e-b425-95f75e470e16/resourceGroups/rsg-blzv-perm-hubs-001/providers/Microsoft.Network/virtualNetworks/vnet-uksouth-hub-blzv"
       $vnetHs.VirtualNetworkPeerings[0].AllowGatewayTransit | Should -Be $false
+    }
+  }
+
+  Context "Networking - Virtual WAN Spoke Tests" {
+    BeforeAll {
+      $vnetVwan = Get-AzVirtualNetwork -ResourceGroupName "rsg-$location-net-vwan-pr-$prNumber" -Name "vnet-$location-vwan-pr-$prNumber" -ErrorAction SilentlyContinue
+    }
+
+    It "Should have a Virtual Network in the correct Resource Group (rsg-$location-net-vwan-pr-$prNumber)" {
+      $vnetVwan.ResourceGroupName | Should -Be "rsg-$location-net-vwan-pr-$prNumber"
+    }
+
+    It "Should have a Virtual Network with the correct name (vnet-$location-vwan-pr-$prNumber)" {
+      $vnetVwan.Name | Should -Be "vnet-$location-vwan-pr-$prNumber"
+    }
+
+    It "Should have a Virtual Network with the correct location" {
+      $vnetVwan.Location | Should -Be $location
+    }
+
+    It "Should have a Virtual Network with the correct address space (10.200.0.0/16)" {
+      $vnetVwan.AddressSpace.AddressPrefixes | Should -Be "10.200.0.0/16"
+    }
+
+    It "Should have a Virtual Network with DDoS protection disabled" {
+      $vnetVwan.EnableDdosProtection | Should -Be $false
+      $vnetVwan.ddosProtectionPlan | Should -BeNullOrEmpty
+    }
+
+    It "Should have a Virtual Network with a single Virtual Network Peer" {
+      $vnetVwan.VirtualNetworkPeerings.Count | Should -Be 1
+    }
+
+    It "Should have a Virtual Network with a Virtual Network Peering to the Hub Virtual Network called 'vnet-uksouth-hub-blzv'" {
+      $vnetVwan.VirtualNetworkPeerings[0].RemoteVirtualNetwork.id | Should -Be "/subscriptions/2b8681e7-7c7f-474a-b649-6377f4c1b74d/resourceGroups/RG_vhub-uksouth-blzv_73df07af-62ce-4aed-b15e-832d49d4984f/providers/Microsoft.Network/virtualNetworks/HV_vhub-uksouth-blzv_ed0b8a35-0235-4ada-9405-39530ef6c722"
+    }
+
+    It "Should have a Virtual Network with a Virtual Network Peering to the Hub Virtual Network called 'vnet-uksouth-hub-blzv' that is in the Connected state and FullyInSync" {
+      $vnetVwan.VirtualNetworkPeerings[0].RemoteVirtualNetwork.id | Should -Be "/subscriptions/2b8681e7-7c7f-474a-b649-6377f4c1b74d/resourceGroups/RG_vhub-uksouth-blzv_73df07af-62ce-4aed-b15e-832d49d4984f/providers/Microsoft.Network/virtualNetworks/HV_vhub-uksouth-blzv_ed0b8a35-0235-4ada-9405-39530ef6c722"
+      $vnetVwan.VirtualNetworkPeerings[0].PeeringState | Should -Be "Connected"
+      $vnetVwan.VirtualNetworkPeerings[0].PeeringSyncLevel | Should -Be "FullyInSync"
+    }
+  }
+
+  Context "Networking - Virtual WAN Hub Tests" {
+    BeforeAll {
+      Select-AzSubscription -SubscriptionId e4e7395f-dc45-411e-b425-95f75e470e16 -ErrorAction Stop
+      $vwanHub = $vwanHub = Get-AzVirtualHub -ResourceGroupName "rsg-blzv-perm-hubs-001" -Name "vhub-uksouth-blzv" -ErrorAction SilentlyContinue
+      $vwanHubVhc = Get-AzVirtualHubVnetConnection -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualHubName "vhub-uksouth-blzv" -Name *
+    }
+
+    It "The Virtual WAN Hub should be in the succeeded state" {
+      $vwanHub.ProvisioningState | Should -Be "Succeeded"
+    }
+
+    It "Should have a Virtual Hub Connection to the newly created spoke Virtual Network (vnet-$location-vwan-pr-$prNumber)" {
+      $vwanHubVhc.RemoteVirtualNetwork.Id | Should -Contain "/subscriptions/$subId/resourceGroups/rsg-$location-net-vwan-pr-$prNumber/providers/Microsoft.Network/virtualNetworks/vnet-$location-vwan-pr-$prNumber"
+    }
+
+    It "All Virtual Hub Connection should have the EnableInternetSecurity property set to $true" -ForEach $vwanHubVhc {
+      Write-Host "       Checking Virtual Hub Connection $($_.Name)..." -ForegroundColor Yellow
+      $_.EnableInternetSecurity | Should -Be $true
     }
   }
 }
