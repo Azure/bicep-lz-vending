@@ -33,9 +33,7 @@ jobs:
         id: login
         uses: azure/login@v1
         with:
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          client-secret: ${{ env.ARM_CLIENT_SECRET }}
+          creds: '{"clientId":"${{ env.ARM_CLIENT_ID }}","clientSecret":"${{ env.ARM_CLIENT_SECRET }}","tenantId":"${{ env.ARM_TENANT_ID }}"}'
           enable-AzPSSession: true
           allow-no-subscriptions: true
 
