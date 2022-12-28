@@ -74,22 +74,17 @@ jobs:
             }
             write-host ""
             $bicepDeployment = New-AzManagementGroupDeployment @inputObject
-            $outputValue = $bicepDeployment.properties.outputs.createdSubId.value
+            $outputValue = $bicepDeployment.Outputs.createdSubId.Value
             $bicepDeployment
-            write-host ""
-            "SUBID1=$outputValue" >> $GITHUB_ENV
-            "SUBID2=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            "SUBID=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           azPSVersion: "latest"
 
       - name: Var Console Output
         id: var
         run: |
-          write-host "SUBID 1a: ${{ env.SUBID1 }}"
-          write-host "SUBID 1b: $env:SUBID1"
-          write-host "SUBID 1c: ${{ steps.vend.outputs.SUBID1 }}"
-          write-host "SUBID 2a: ${{ env.SUBID2 }}"
-          write-host "SUBID 2b: $env:SUBID2"
-          write-host "SUBID 2c: ${{ steps.vend.outputs.SUBID2 }}"
+          write-host "SUBID 1a: ${{ env.SUBID }}"
+          write-host "SUBID 1b: $env:SUBID"
+          write-host "SUBID 1c: ${{ steps.vend.outputs.SUBID }}"
         shell: pwsh
 
       - name: Pester Tests
