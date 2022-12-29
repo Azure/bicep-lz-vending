@@ -72,7 +72,7 @@ jobs:
             Set-PSRepository PSGallery -InstallationPolicy Trusted
             Install-Module Az.Subscription -Force
             Update-AzConfig -DisplayBreakingChangeWarning $false
-            $subToCancel = Get-AzSubscription -SubscriptionName "sub-blzv-tests-pr-${{ inputs.subName }}"
+            $subToCancel = Get-AzSubscription -SubscriptionName "${{ inputs.subName }}"
             Write-Host "Subscription to Cancel: $($subToCancel.SubscriptionId)" -ForegroundColor Cyan
             Write-Host ""
             Write-Host "Moving Subscription to Management Group: bicep-lz-vending-automation-decom..." -ForegroundColor Yellow
