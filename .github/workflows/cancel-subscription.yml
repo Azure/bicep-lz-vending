@@ -4,15 +4,18 @@ on:
   pull_request:
     types:
       - closed
+    paths:
+      - "**.bicep"
+      - "tests/pester/**.ps1"
   workflow_dispatch:
     inputs:
       manualRun:
-        description: 'Manually Run'
+        description: "Manually Run"
         required: false
         default: false
         type: boolean
       subName:
-        description: 'Subscription Name to Cancel'
+        description: "Subscription Name to Cancel"
         required: false
 
 env:
@@ -78,4 +81,3 @@ jobs:
             Write-Host "Cancelling Subscription..." -ForegroundColor Yellow
             Update-AzSubscription -SubscriptionId "$($subToCancel.SubscriptionId)" -Action "Cancel"
           azPSVersion: "latest"
-
