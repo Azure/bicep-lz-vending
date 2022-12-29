@@ -36,6 +36,8 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
+            Set-PSRepository PSGallery -InstallationPolicy Trusted
+            Install-Module Az.Subscription -Force
             Update-AzConfig -DisplayBreakingChangeWarning $false
             $subToCancel = Get-AzSubscription -SubscriptionName "sub-blzv-tests-pr-${{ env.GH_PR_NUMBER }}"
             Write-Host "Subscription to Cancel: $($subToCancel.SubscriptionId)" -ForegroundColor Cyan
