@@ -1,0 +1,122 @@
+name: Module Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**.bicep"
+      - "tests/pester/**.ps1"
+  workflow_dispatch: {}
+
+env:
+  ARM_BILLING_SCOPE_RID: "${{ secrets.ARM_BILLING_SCOPE_RID }}"
+  ARM_LOCATION: "uksouth"
+  ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
+  ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
+  ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+  GH_PR_NUMBER: "${{ github.event.number }}"
+  SUB_HUB_ID: "${{ secrets.SUB_HUB_ID }}"
+
+jobs:
+  vending:
+    name: Vending Subscription for Tests and Networking Scenarios
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Azure Login
+        id: login
+        uses: azure/login@v1
+        with:
+          creds: '{"clientId":"${{ env.ARM_CLIENT_ID }}","clientSecret":"${{ env.ARM_CLIENT_SECRET }}","tenantId":"${{ env.ARM_TENANT_ID }}"}'
+          enable-AzPSSession: true
+          allow-no-subscriptions: true
+
+      - name: Vend Subscriptions & Networking Scenarios (What-If & Validate)
+        id: vend-whatif
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $inputObject = @{
+              DeploymentName        = 'pr-${{ env.GH_PR_NUMBER }}-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
+              ManagementGroupId     = "bicep-lz-vending-automation"
+              Location              = "${{ env.ARM_LOCATION }}"
+              TemplateFile          = "./tests/lz-vending/full.test.bicep"
+              TemplateParameterObject =  @{
+                location = "${{ env.ARM_LOCATION }}"
+                prNumber = "${{ env.GH_PR_NUMBER }}"
+                subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
+              }
+            }
+            New-AzManagementGroupDeployment @inputObject -Whatif
+          azPSVersion: "latest"
+
+      - name: Vend Subscriptions & Networking Scenarios (Deploy)
+        id: vend
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $inputObject = @{
+              DeploymentName        = 'pr-${{ env.GH_PR_NUMBER }}-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
+              ManagementGroupId     = "bicep-lz-vending-automation"
+              Location              = "${{ env.ARM_LOCATION }}"
+              TemplateFile          = "./tests/lz-vending/full.test.bicep"
+              TemplateParameterObject =  @{
+                location = "${{ env.ARM_LOCATION }}"
+                prNumber = "${{ env.GH_PR_NUMBER }}"
+                subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
+              }
+            }
+            $bicepDeployment = New-AzManagementGroupDeployment @inputObject
+            $outputValue = $bicepDeployment.Outputs.createdSubId.Value
+            "SUBID=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          azPSVersion: "latest"
+
+      - name: Pester Tests
+        id: pester
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Import-Module Pester -Force
+            $configuration = [PesterConfiguration]::Default
+            $configuration.TestResult.Enabled = $true
+            $configuration.Output.Verbosity = 'Detailed'
+            $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "${{ env.SUBID }}"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
+            $configuration.Run.Container = $container
+            $configuration.Run.PassThru = $true
+            $result = Invoke-Pester -Configuration $configuration
+            exit $result.FailedCount
+          azPSVersion: "latest"
+
+      - name: Cleanup Vended Subscription & Networking Scenarios
+        id: cleanup-vend
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            # Resource Group Names
+            $rsgHsName = "rsg-${{ env.ARM_LOCATION }}-net-hs-pr-${{ env.GH_PR_NUMBER }}"
+            $rsgVwanName = "rsg-${{ env.ARM_LOCATION }}-net-vwan-pr-${{ env.GH_PR_NUMBER }}"
+            $rsgNetworkWatcherName = "NetworkWatcherRG"
+
+            Write-Host "Cleanup Vended Subscription Resources & Resource Groups..." -ForegroundColor Yellow
+            Select-AzSubscription -SubscriptionId "${{ env.SUBID }}"
+            Remove-AzResourceGroup -Name $rsgHsName -Force
+            Remove-AzResourceGroup -Name $rsgVwanName -Force
+            Remove-AzResourceGroup -Name $rsgNetworkWatcherName -Force
+
+            Write-Host "Cleanup Hub Subscription Resources..." -ForegroundColor Yellow
+            Select-AzSubscription -SubscriptionId "${{ env.SUB_HUB_ID }}"
+
+            $vwanHubVhc = Get-AzVirtualHubVnetConnection -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualHubName "vhub-uksouth-blzv" -Name *
+            Remove-AzVirtualHubVnetConnection -ResourceId $vwanHubVhc[0].Id -Force
+
+            $hubVnetPeering = Get-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name *
+            Remove-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name "$($hubVnetPeering.Name)" -Force
+            Write-Host "Cleanup Hub Subscription Resources... Complete!" -ForegroundColor Green
+          azPSVersion: "latest"
