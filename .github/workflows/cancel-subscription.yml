@@ -45,7 +45,7 @@ jobs:
           allow-no-subscriptions: true
 
       - name: Cancel Subscription Via PR Close
-        if: ${{ inputs.manualRun }} == false
+        if: ${{ inputs.manualRun == false }}
         id: cancel-pr
         uses: azure/powershell@v1
         with:
@@ -64,7 +64,7 @@ jobs:
           azPSVersion: "latest"
 
       - name: Cancel Subscription Via Manual Run
-        if: ${{ inputs.manualRun }} == true
+        if: ${{ inputs.manualRun == true }}
         id: cancel-manual
         uses: azure/powershell@v1
         with:
