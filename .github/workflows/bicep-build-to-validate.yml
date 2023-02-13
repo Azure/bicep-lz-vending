@@ -28,7 +28,7 @@ jobs:
       - name: Install latest version of Bicep
         shell: sh
         run: |
-          # From https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#linux
+          # From https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#linux
           # Fetch the latest Bicep CLI binary
           curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
           # Mark it as executable

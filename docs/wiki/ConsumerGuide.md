@@ -21,10 +21,10 @@ There are various ways to consume the Bicep modules included in `bicep-lz-vendin
   - Git Repository
   - Private Bicep Module Registry
     - See:
-      - [Create private registry for Bicep modules](https://docs.microsoft.com/azure/azure-resource-manager/bicep/private-module-registry)
+      - [Create private registry for Bicep modules](https://learn.microsoft.com/azure/azure-resource-manager/bicep/private-module-registry)
   - Template Specs
     - See:
-      - [Azure Resource Manager template specs in Bicep](https://docs.microsoft.com/azure/azure-resource-manager/bicep/template-specs)
+      - [Azure Resource Manager template specs in Bicep](https://learn.microsoft.com/azure/azure-resource-manager/bicep/template-specs)
 
 The option to use will be different per consumer based on their experience and skill levels with the various pieces of technology and their features.
 

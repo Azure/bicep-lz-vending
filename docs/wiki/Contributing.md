@@ -25,13 +25,13 @@ Before you start contributing to the ALZ Bicep code, it is **highly recommended*
 
 ### Bicep
 
-- [Deploy and manage resources in Azure by using Bicep](https://docs.microsoft.com/learn/paths/bicep-deploy/)
-- [Structure your Bicep code for collaboration](https://docs.microsoft.com/learn/modules/structure-bicep-code-collaboration/)
-- [Manage changes to your Bicep code by using Git](https://docs.microsoft.com/learn/modules/manage-changes-bicep-code-git/)
+- [Deploy and manage resources in Azure by using Bicep](https://learn.microsoft.com/learn/paths/bicep-deploy/)
+- [Structure your Bicep code for collaboration](https://learn.microsoft.com/learn/modules/structure-bicep-code-collaboration/)
+- [Manage changes to your Bicep code by using Git](https://learn.microsoft.com/learn/modules/manage-changes-bicep-code-git/)
 
 ### Git
 
-- [Introduction to version control with Git](https://docs.microsoft.com/learn/paths/intro-to-vc-git/)
+- [Introduction to version control with Git](https://learn.microsoft.com/learn/paths/intro-to-vc-git/)
 
 ## Tooling
 
@@ -40,7 +40,7 @@ Before you start contributing to the ALZ Bicep code, it is **highly recommended*
 To contribute to this project the following tooling is required:
 
 - [Git](https://git-scm.com/downloads)
-- [Bicep](https://docs.microsoft.com/azure/azure-resource-manager/bicep/install#install-manually)
+- [Bicep](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install#install-manually)
 - [Visual Studio Code](https://code.visualstudio.com/download)
   - [Bicep extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-bicep)
 
@@ -62,7 +62,7 @@ The below guidelines should be adhered to whilst contributing to this projects B
 
 ### Bicep Best Practices
 
-Throughout the development of Bicep code you should follow the [Bicep Best Practices](https://docs.microsoft.com/azure/azure-resource-manager/bicep/best-practices).
+Throughout the development of Bicep code you should follow the [Bicep Best Practices](https://learn.microsoft.com/azure/azure-resource-manager/bicep/best-practices).
 
 > It is suggested to keep this page open whilst developing for easy reference
 
@@ -75,8 +75,8 @@ Throughout the development of Bicep code you should follow the [Bicep Best Pract
     - Resource
     - Modules
     - Outputs
-- Use [parameter decorators](https://docs.microsoft.com/azure/azure-resource-manager/bicep/parameters#decorators) to ensure integrity of user inputs are complete and therefore enable successful deployment
-  - Only use the [`@secure()` parameter decorator](https://docs.microsoft.com/azure/azure-resource-manager/bicep/parameters#secure-parameters) for inputs. Never for outputs as this is not stored securely and will be stored/shown as plain-text!
+- Use [parameter decorators](https://learn.microsoft.com/azure/azure-resource-manager/bicep/parameters#decorators) to ensure integrity of user inputs are complete and therefore enable successful deployment
+  - Only use the [`@secure()` parameter decorator](https://learn.microsoft.com/azure/azure-resource-manager/bicep/parameters#secure-parameters) for inputs. Never for outputs as this is not stored securely and will be stored/shown as plain-text!
 - Comments should be provided where additional information/description of what is happening is required, except when a decorator like `@sys.description('Example description')` is providing adequate coverage
   - Single-line `// <comment here>` and multi-line `/* <comment here> */` comments are both welcomed
   - Provide contextual public Microsoft documentation recommendation references/URLs in comments to help user understanding of code implementation
