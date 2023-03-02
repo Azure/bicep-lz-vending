@@ -240,6 +240,9 @@ module createLzRoleAssignmentsSub '../../carml/v0.6.0/Microsoft.Authorization/ro
 }]
 
 module createLzRoleAssignmentsRsgs '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = [for assignment in roleAssignmentsResourceGroups: if (roleAssignmentEnabled && !empty(roleAssignmentsResourceGroups)) {
+  dependsOn: [
+    createResourceGroupForLzNetworking
+  ]
   name: take('${deploymentNames.createLzRoleAssignmentsRsgs}-${uniqueString(assignment.principalId, assignment.definition, assignment.relativeScope)}', 64)
   params: {
     location: virtualNetworkLocation
