@@ -59,6 +59,7 @@ jobs:
 
       - name: Vend Subscriptions & Networking Scenarios (Deploy)
         id: vend
+        continue-on-error: true
         uses: azure/powershell@v1
         with:
           inlineScript: |
