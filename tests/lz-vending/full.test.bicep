@@ -46,6 +46,13 @@ module hubSpoke '../../main.bicep' = {
     virtualNetworkPeeringEnabled: true
     virtualNetworkUseRemoteGateways: false
     hubNetworkResourceId: '/subscriptions/e4e7395f-dc45-411e-b425-95f75e470e16/resourceGroups/rsg-blzv-perm-hubs-001/providers/Microsoft.Network/virtualNetworks/vnet-uksouth-hub-blzv'
+    roleAssignments: [
+      {
+        principalId: '7eca0dca-6701-46f1-b7b6-8b424dab50b3'
+        definition: 'Network Contributor'
+        relativeScope: '/resourceGroups/rsg-${location}-net-hs-pr-${prNumber}'
+      }
+    ]
   }
 }
 
