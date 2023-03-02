@@ -47,6 +47,19 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
     }
   }
 
+  Context "Role-Based Access Control Assignment Tests" {
+    BeforeAll {
+      $allRoleAssignments = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue
+    }
+
+    It "Should Have a Role Assignment for an known AAD Group with the Reader role directly upon the Subscription" {
+      $roleAssignment = $allRoleAssignments | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Reader" }
+      $roleAssignment.ObjectId | Should -Be "7eca0dca-6701-46f1-b7b6-8b424dab50b3"
+      $roleAssignment.RoleDefinitionName | Should -Be "Reader"
+      $roleAssignment.scope | Should -Be "/subscriptions/$subId"
+    }
+  }
+
   Context "Hub Spoke - Resource Group Tests" {
     BeforeAll {
       $rsg = Get-AzResourceGroup -Name "rsg-$location-net-hs-pr-$prNumber" -ErrorAction SilentlyContinue
