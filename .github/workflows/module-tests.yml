@@ -78,6 +78,28 @@ jobs:
             "SUBID=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           azPSVersion: "latest"
 
+      - name: Vend Subscriptions & Networking Scenarios (Deploy) - Retry
+        id: vend-retry
+        if: ${{ failure() }}
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            $inputObject = @{
+              DeploymentName        = 'pr-${{ env.GH_PR_NUMBER }}-lz-vend-{0}' -f (-join (Get-Date -Format 'yyyyMMddTHHMMssffffZ')[0..63])
+              ManagementGroupId     = "bicep-lz-vending-automation"
+              Location              = "${{ env.ARM_LOCATION }}"
+              TemplateFile          = "./tests/lz-vending/full.test.bicep"
+              TemplateParameterObject =  @{
+                location = "${{ env.ARM_LOCATION }}"
+                prNumber = "${{ env.GH_PR_NUMBER }}"
+                subscriptionBillingScope = "${{ env.ARM_BILLING_SCOPE_RID }}"
+              }
+            }
+            $bicepDeployment = New-AzManagementGroupDeployment @inputObject
+            $outputValue = $bicepDeployment.Outputs.createdSubId.Value
+            "SUBID=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          azPSVersion: "latest"
+
       - name: Pester Tests
         id: pester
         uses: azure/powershell@v1
