@@ -98,12 +98,15 @@ var deploymentNames = {
   createLzVnet: take('lz-vend-vnet-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, deployment().name)}', 64)
   createLzVirtualWanConnection: take('lz-vend-vhc-create-${uniqueString(subscriptionId, virtualNetworkResourceGroupName, virtualNetworkLocation, virtualNetworkName, virtualHubResourceIdChecked, deployment().name)}', 64)
   createLzRoleAssignmentsSub: take('lz-vend-rbac-sub-create-${uniqueString(subscriptionId, deployment().name)}', 64)
-  createLzRoleAssignmentsRsgs: take('lz-vend-rbac-rsg-create-${uniqueString(subscriptionId, deployment().name)}', 64)
+  createLzRoleAssignmentsRsgsSelf: take('lz-vend-rbac-rsg-self-create-${uniqueString(subscriptionId, deployment().name)}', 64)
+  createLzRoleAssignmentsRsgsNotSelf: take('lz-vend-rbac-rsg-nself-create-${uniqueString(subscriptionId, deployment().name)}', 64)
 }
 
 // Role Assignments filtering and splitting
 var roleAssignmentsSubscription = filter(roleAssignments, assignment => !contains(assignment.relativeScope, '/resourceGroups/'))
 var roleAssignmentsResourceGroups = filter(roleAssignments, assignment => contains(assignment.relativeScope, '/resourceGroups/'))
+var roleAssignmentsResourceGroupSelf = filter(roleAssignmentsResourceGroups, assignment => contains(assignment.relativeScope, '/resourceGroups/${virtualNetworkResourceGroupName}'))
+var roleAssignmentsResourceGroupNotSelf = filter(roleAssignmentsResourceGroups, assignment => !contains(assignment.relativeScope, '/resourceGroups/${virtualNetworkResourceGroupName}'))
 
 // Check hubNetworkResourceId to see if it's a virtual WAN connection instead of normal virtual network peering
 var virtualHubResourceIdChecked = (!empty(hubNetworkResourceId) && contains(hubNetworkResourceId, '/providers/Microsoft.Network/virtualHubs/') ? hubNetworkResourceId : '')
@@ -239,11 +242,23 @@ module createLzRoleAssignmentsSub '../../carml/v0.6.0/Microsoft.Authorization/ro
   }
 }]
 
-module createLzRoleAssignmentsRsgs '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = [for assignment in roleAssignmentsResourceGroups: if (roleAssignmentEnabled && !empty(roleAssignmentsResourceGroups)) {
+module createLzRoleAssignmentsRsgsSelf '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = [for assignment in roleAssignmentsResourceGroupSelf: if (roleAssignmentEnabled && !empty(roleAssignmentsResourceGroupSelf)) {
   dependsOn: [
     createResourceGroupForLzNetworking
   ]
-  name: take('${deploymentNames.createLzRoleAssignmentsRsgs}-${uniqueString(assignment.principalId, assignment.definition, assignment.relativeScope)}', 64)
+  name: take('${deploymentNames.createLzRoleAssignmentsRsgsSelf}-${uniqueString(assignment.principalId, assignment.definition, assignment.relativeScope)}', 64)
+  params: {
+    location: virtualNetworkLocation
+    principalId: assignment.principalId
+    roleDefinitionIdOrName: assignment.definition
+    subscriptionId: subscriptionId
+    resourceGroupName: split(assignment.relativeScope, '/')[2]
+    enableDefaultTelemetry: enableTelemetryForCarml
+  }
+}]
+
+module createLzRoleAssignmentsRsgsNotSelf '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = [for assignment in roleAssignmentsResourceGroupNotSelf: if (roleAssignmentEnabled && !empty(roleAssignmentsResourceGroupNotSelf)) {
+  name: take('${deploymentNames.createLzRoleAssignmentsRsgsNotSelf}-${uniqueString(assignment.principalId, assignment.definition, assignment.relativeScope)}', 64)
   params: {
     location: virtualNetworkLocation
     principalId: assignment.principalId
