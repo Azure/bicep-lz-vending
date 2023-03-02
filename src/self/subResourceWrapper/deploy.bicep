@@ -249,7 +249,7 @@ module createLzRoleAssignmentsRsgs '../../carml/v0.6.0/Microsoft.Authorization/r
     principalId: assignment.principalId
     roleDefinitionIdOrName: assignment.definition
     subscriptionId: subscriptionId
-    resourceGroupName: assignment.relativeScope
+    resourceGroupName: split(assignment.relativeScope, '/')[2]
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }]
