@@ -81,6 +81,7 @@ jobs:
 
       - name: Vend Subscriptions & Networking Scenarios (Deploy) - Retry
         id: vend-retry
+        continue-on-error: true
         if: ${{ failure() }}
         uses: azure/powershell@v1
         with:
