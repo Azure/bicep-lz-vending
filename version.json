@@ -1,6 +1,6 @@
 {
-  "version": "1.0.1",
-  "gitTag": "v1.0.1",
-  "releaseNotes": "https://github.com/Azure/bicep-lz-vending/releases/tag/v1.0.1",
-  "releaseDateTimeUTC": "20221031T1731292431Z"
+  "version": "1.2.2",
+  "gitTag": "v1.2.2",
+  "releaseNotes": "https://github.com/Azure/bicep-lz-vending/releases/tag/v1.2.2",
+  "releaseDateTimeUTC": "20230303T1611568711Z"
 }
