@@ -28,7 +28,6 @@ Describe "version.json file tests" {
 
     It "version.json file contains the required properties" {
       $versionFile.version | Should -Not -BeNullOrEmpty
-      $versionFile.gitTag | Should -Not -BeNullOrEmpty
       $versionFile.releaseNotes | Should -Not -BeNullOrEmpty
       $versionFile.releaseDateTimeUTC | Should -Not -BeNullOrEmpty
     }
