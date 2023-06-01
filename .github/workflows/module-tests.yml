@@ -84,13 +84,20 @@ jobs:
         with:
           inlineScript: |
             Import-Module Pester -Force
-            $configuration = [PesterConfiguration]::Default
-            $configuration.TestResult.Enabled = $true
-            $configuration.Output.Verbosity = 'Detailed'
-            $container = New-PesterContainer -Path "./tests/pester/*.tests.ps1" -Data @{ subId = "${{ env.SUBID }}"; prNumber = "${{ env.GH_PR_NUMBER }}"; location = "${{ env.ARM_LOCATION }}" }
-            $configuration.Run.Container = $container
-            $configuration.Run.PassThru = $true
-            $result = Invoke-Pester -Configuration $configuration
+            $pesterConfiguration = @{
+              Run    = @{
+                Container = New-PesterContainer -Path "./tests/pester/full.tests.ps1" -Data @{
+                  subId    = "${{ env.SUBID }}"
+                  prNumber = "${{ env.GH_PR_NUMBER }}"
+                  location = "${{ env.ARM_LOCATION }}"
+                }
+                PassThru  = $true
+              }
+              Output = @{
+                Verbosity = 'Detailed'
+              }
+            }
+            $result = Invoke-Pester -Configuration $pesterConfiguration
             exit $result.FailedCount
           azPSVersion: "latest"
 
