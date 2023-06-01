@@ -20,7 +20,7 @@ jobs:
 
       - name: Pester Tests
         id: pester
-        if: contains(github.ref, 'release')
+        if: contains(github.ref, 'ref/heads/release*')
         uses: azure/powershell@v1
         with:
           inlineScript: |
