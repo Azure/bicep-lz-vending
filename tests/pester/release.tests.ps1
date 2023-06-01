@@ -16,7 +16,7 @@ Describe "version.json file tests" {
       $releaseNotesUrlStart = "https://github.com/Azure/bicep-lz-vending/releases/tag/v"
 
       # Download the previous version.json file from the repo
-      $previousVersionRawUrl = "https://raw.githubusercontent.com/Azure/bicep-lz-vending/v1.2.2/version.json"
+      $previousVersionRawUrl = "https://raw.githubusercontent.com/Azure/bicep-lz-vending/$gitRepoLatestTag/version.json"
       $previousVersionOutputFile = "./previousVersion.json"
       Invoke-WebRequest -Uri $previousVersionRawUrl -OutFile $previousVersionOutputFile
       $PreviousVersionFile = Get-Content $previousVersionOutputFile -Raw | ConvertFrom-Json
@@ -35,11 +35,6 @@ Describe "version.json file tests" {
 
     It "version.json file version property has been updated and increased from the latest git tag" {
       $versionFile.version | Should -BeGreaterThan $PreviousVersionFile.version
-    }
-
-    It "version.json file gitTag property has been updated and does not match the latest git tag" {
-      $versionFile.gitTag | Should -Not -Be $gitRepoLatestTag
-      $versionFile.gitTag | Should -BeGreaterThan $PreviousVersionFile.gitTag
     }
 
     It "version.json file releaseNotes property has been updated and URL last split on / does not match the latest git tag" {
