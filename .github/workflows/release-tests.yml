@@ -1,4 +1,4 @@
-name: Release Tests
+name: Pre-Release Tests
 
 on:
   pull_request:
@@ -7,8 +7,8 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  vending:
-    name: Vending Subscription for Tests and Networking Scenarios
+  release-tests:
+    name: Pre-Release Tests
     runs-on: ubuntu-latest
 
     steps:
