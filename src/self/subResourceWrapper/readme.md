@@ -1,5 +1,7 @@
 # `/subResourcesWrapper/deploy.bicep` Parameters
 
+This module is used by the [`bicep-lz-vending`](https://aka.ms/sub-vending/bicep) module to help orchestrate the deployment
+
 These are the input parameters for the Bicep module: [`deploy.bicep`](./deploy.bicep)
 
 This is the sub-orchestration module that is used and called by the [`main.bicep`](../../../main.bicep)  module to deploy the resources into the subscription that has been created (or an existing one provided), based on the parameter input values that are provided to it at deployment time from the `main.bicep` orchestration module.
@@ -47,7 +49,11 @@ disableTelemetry | No       | Disable telemetry collection by this module. For m
 
 Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### subscriptionManagementGroupId
 
@@ -67,7 +73,11 @@ An object of tag key/value pairs to be appended to a subscription. NOTE: Tags wi
 
 Whether to create a virtual network or not.
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ### virtualNetworkResourceGroupName
 
@@ -81,7 +91,11 @@ The name of the resource group to create the virtual network in.
 
 Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### virtualNetworkResourceGroupTags
 
@@ -95,7 +109,11 @@ An object of tag key/value pairs to be appended to the Resource Group that the V
 
 The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.
 
-- Default value: `[deployment().location]`
+**Default value**
+
+```text
+[deployment().location]
+```
 
 ### virtualNetworkName
 
@@ -133,7 +151,11 @@ The resoruce ID of an existing DDoS Network Protection Plan that you wish to lin
 
 Whether to enable peering/connection with the supplied hub virtual network or virtual hub.
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ### hubNetworkResourceId
 
@@ -147,7 +169,11 @@ The resource ID of the virtual network or virtual wan hub in the hub to which th
 
 Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create. Set this to `false` for virtual wan hub connections.
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### virtualNetworkVwanEnableInternetSecurity
 
@@ -155,7 +181,11 @@ Enables the use of remote gateways in the spefcified hub virtual network. If no 
 
 Enables the ability for the Virtual WAN Hub Connection to learn the default route 0.0.0.0/0 from the Hub.
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### virtualNetworkVwanAssociatedRouteTableResourceId
 
@@ -181,7 +211,11 @@ An array of virtual hub route table labels to propogate routes to. If left blank
 
 Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ### roleAssignments
 
@@ -195,7 +229,11 @@ Supply an array of objects containing the details of the role assignments to cre
 
 Disable telemetry collection by this module. For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ## Snippets
 
@@ -206,7 +244,7 @@ Disable telemetry collection by this module. For more information on the telemet
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "metadata": {
-        "template": "src/self/subResourceWrapper/deploy.json"
+        "template": null
     },
     "parameters": {
         "subscriptionId": {
@@ -232,9 +270,6 @@ Disable telemetry collection by this module. For more information on the telemet
         },
         "virtualNetworkResourceGroupTags": {
             "value": {}
-        },
-        "virtualNetworkLocation": {
-            "value": "[deployment().location]"
         },
         "virtualNetworkName": {
             "value": ""

@@ -4,7 +4,9 @@ targetScope = 'managementGroup'
 
 metadata name = '`main.bicep` Parameters'
 
-metadata description = '''These are the input parameters for the Bicep module: [`main.bicep`](./main.bicep)
+metadata description = 'This module is designed to accelerate deployment of landing zones (aka Subscriptions) within an Azure AD Tenant.'
+
+metadata details = '''These are the input parameters for the Bicep module: [`main.bicep`](./main.bicep)
 
 This is the orchestration module that is used and called by a consumer of the module to deploy a Landing Zone Subscription and its associated resources, based on the parameter input values that are provided to it at deployment time.
 

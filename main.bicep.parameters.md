@@ -1,5 +1,7 @@
 # `main.bicep` Parameters
 
+This module is designed to accelerate deployment of landing zones (aka Subscriptions) within an Azure AD Tenant.
+
 These are the input parameters for the Bicep module: [`main.bicep`](./main.bicep)
 
 This is the orchestration module that is used and called by a consumer of the module to deploy a Landing Zone Subscription and its associated resources, based on the parameter input values that are provided to it at deployment time.
@@ -49,7 +51,11 @@ Whether to create a new Subscription using the Subscription Alias resource. If `
 - Type: Boolean
 
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### subscriptionDisplayName
 
@@ -108,9 +114,18 @@ The workload type can be either `Production` or `DevTest` and is case sensitive.
 - Type: String
 
 
-- Default value: `Production`
+**Default value**
 
-- Allowed values: `DevTest`, `Production`
+```text
+Production
+```
+
+**Allowed values**
+
+```text
+DevTest
+Production
+```
 
 ### existingSubscriptionId
 
@@ -131,7 +146,11 @@ Whether to move the Subscription to the specified Management Group supplied in t
 - Type: Boolean
 
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### subscriptionManagementGroupId
 
@@ -178,7 +197,11 @@ If set to `true` ensure you also provide values for the following parameters at 
 - Type: Boolean
 
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ### virtualNetworkResourceGroupName
 
@@ -211,7 +234,11 @@ Enables the deployment of a `CanNotDelete` resource locks to the Virtual Network
 - Type: Boolean
 
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### virtualNetworkLocation
 
@@ -222,7 +249,11 @@ The location of the virtual network. Use region shortnames e.g. `uksouth`, `east
 - Type: String
 
 
-- Default value: `[deployment().location]`
+**Default value**
+
+```text
+[deployment().location]
+```
 
 ### virtualNetworkName
 
@@ -289,7 +320,11 @@ Whether to enable peering/connection with the supplied hub Virtual Network or Vi
 - Type: Boolean
 
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ### hubNetworkResourceId
 
@@ -317,7 +352,11 @@ Enables the use of remote gateways in the specified hub virtual network.
 - Type: Boolean
 
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### virtualNetworkVwanEnableInternetSecurity
 
@@ -328,7 +367,11 @@ Enables the ability for the Virtual WAN Hub Connection to learn the default rout
 - Type: Boolean
 
 
-- Default value: `True`
+**Default value**
+
+```text
+True
+```
 
 ### virtualNetworkVwanAssociatedRouteTableResourceId
 
@@ -377,7 +420,11 @@ Whether to create role assignments or not. If true, supply the array of role ass
 - Type: Boolean
 
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ### roleAssignments
 
@@ -407,7 +454,11 @@ Disable telemetry collection by this module.
 For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
 
 
-- Default value: `False`
+**Default value**
+
+```text
+False
+```
 
 ## Outputs
 
@@ -425,7 +476,7 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "metadata": {
-        "template": "main.json"
+        "template": null
     },
     "parameters": {
         "subscriptionAliasEnabled": {
