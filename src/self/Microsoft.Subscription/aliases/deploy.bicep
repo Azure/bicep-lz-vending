@@ -42,5 +42,5 @@ resource subscriptionAlias 'Microsoft.Subscription/aliases@2021-10-01' = {
 
 output subscriptionId string = subscriptionAlias.properties.subscriptionId
 output subscriptionResourceId string = '/subscriptions/${subscriptionAlias.properties.subscriptionId}'
-output subscriptionAcceptOwnershipState string = subscriptionAlias.properties.acceptOwnershipState
-output subscriptionAcceptOwnershipUrl string = subscriptionAlias.properties.acceptOwnershipUrl
+output subscriptionAcceptOwnershipState string = (!empty(subscriptionTenantId) && !empty(subscriptionOwnerId)) ? subscriptionAlias.properties.acceptOwnershipState : 'N/A'
+output subscriptionAcceptOwnershipUrl string = (!empty(subscriptionTenantId) && !empty(subscriptionOwnerId)) ? subscriptionAlias.properties.acceptOwnershipUrl : 'N/A'

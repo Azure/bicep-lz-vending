@@ -518,3 +518,9 @@ output subscriptionId string = (subscriptionAliasEnabled && empty(existingSubscr
 
 @sys.description('The Subscription Resource ID that has been created or provided.')
 output subscriptionResourceId string = (subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionResourceId : contains(existingSubscriptionIDEmptyCheck, 'No Subscription ID Provided') ? existingSubscriptionIDEmptyCheck : '/subscriptions/${existingSubscriptionId}'
+
+@sys.description('The Subscription Owner State. Only used when creating MCA Subscriptions across tenants')
+output subscriptionAcceptOwnershipState string = (subscriptionAliasEnabled && empty(existingSubscriptionId) && !empty(subscriptionTenantId) && !empty(subscriptionOwnerId)) ? createSubscription.outputs.subscriptionAcceptOwnershipState : 'N/A'
+
+@sys.description('The Subscription Ownership URL. Only used when creating MCA Subscriptions across tenants')
+output subscriptionAcceptOwnershipUrl string = (subscriptionAliasEnabled && empty(existingSubscriptionId) && !empty(subscriptionTenantId) && !empty(subscriptionOwnerId)) ? createSubscription.outputs.subscriptionAcceptOwnershipUrl : 'N/A'
