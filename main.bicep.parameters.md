@@ -492,6 +492,8 @@ Name | Type | Description
 ---- | ---- | -----------
 subscriptionId | string | The Subscription ID that has been created or provided.
 subscriptionResourceId | string | The Subscription Resource ID that has been created or provided.
+subscriptionAcceptOwnershipState | string | The Subscription Owner State. Only used when creating MCA Subscriptions across tenants
+subscriptionAcceptOwnershipUrl | string | The Subscription Ownership URL. Only used when creating MCA Subscriptions across tenants
 
 ## Snippets
 
