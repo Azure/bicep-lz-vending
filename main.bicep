@@ -91,6 +91,32 @@ param subscriptionWorkload string = 'Production'
   example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 })
 @maxLength(36)
+@sys.description('''The Azure Active Directory Tenant ID (GUID) to which the Subscription should be attached to.
+
+> **Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).**
+
+- Type: String
+- Default value: `''` *(empty string)*
+''')
+param subscriptionTenantId string = ''
+
+@metadata({
+  example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+})
+@maxLength(36)
+@sys.description('''The Azure Active Directory principals object ID (GUID) to whom should be the Subscription Owner.
+
+> **Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).**
+
+- Type: String
+- Default value: `''` *(empty string)*
+''')
+param subscriptionOwnerId string = ''
+
+@metadata({
+  example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+})
+@maxLength(36)
 @sys.description('''An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
 
 - Type: String
@@ -450,6 +476,8 @@ module createSubscription 'src/self/Microsoft.Subscription/aliases/deploy.bicep'
     subscriptionAliasName: subscriptionAliasName
     subscriptionDisplayName: subscriptionDisplayName
     subscriptionWorkload: subscriptionWorkload
+    subscriptionTenantId: subscriptionTenantId
+    subscriptionOwnerId: subscriptionOwnerId
   }
 }
 

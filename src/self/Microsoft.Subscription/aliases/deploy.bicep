@@ -18,6 +18,14 @@ param subscriptionBillingScope string
 @description('The workload type can be either `Production` or `DevTest` and is case sensitive.')
 param subscriptionWorkload string = 'Production'
 
+@maxLength(36)
+@description('''The Azure Active Directory Tenant ID (GUID) to which the Subscription should be attached to. Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).''')
+param subscriptionTenantId string = ''
+
+@maxLength(36)
+@description('''The Azure Active Directory principals object ID (GUID) to whom should be the Subscription Owner. Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).''')
+param subscriptionOwnerId string = ''
+
 resource subscriptionAlias 'Microsoft.Subscription/aliases@2021-10-01' = {
   scope: tenant()
   name: subscriptionAliasName
@@ -25,8 +33,14 @@ resource subscriptionAlias 'Microsoft.Subscription/aliases@2021-10-01' = {
     workload: subscriptionWorkload
     displayName: subscriptionDisplayName
     billingScope: subscriptionBillingScope
+    additionalProperties: (!empty(subscriptionTenantId) && !empty(subscriptionOwnerId)) ? {
+      subscriptionTenantId: subscriptionTenantId
+      subscriptionOwnerId: subscriptionOwnerId
+    } : {}
   }
 }
 
 output subscriptionId string = subscriptionAlias.properties.subscriptionId
 output subscriptionResourceId string = '/subscriptions/${subscriptionAlias.properties.subscriptionId}'
+output subscriptionAcceptOwnershipState string = subscriptionAlias.properties.acceptOwnershipState
+output subscriptionAcceptOwnershipUrl string = subscriptionAlias.properties.acceptOwnershipUrl

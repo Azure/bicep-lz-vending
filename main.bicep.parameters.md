@@ -17,6 +17,8 @@ subscriptionDisplayName | No       | The name of the subscription alias. The str
 subscriptionAliasName | No       | The name of the Subscription Alias, that will be created by this module.  The string must be comprised of `a-z`, `A-Z`, `0-9`, `-`, `_` and ` ` (space). The maximum length is 63 characters.  > **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
 subscriptionBillingScope | No       | The Billing Scope for the new Subscription alias, that will be created by this module.  A valid Billing Scope starts with `/providers/Microsoft.Billing/billingAccounts/` and is case sensitive.  > See below [example in parameter file](#parameter-file) for an example  > **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**  - Type: String - Default value: `''` *(empty string)* 
 subscriptionWorkload | No       | The workload type can be either `Production` or `DevTest` and is case sensitive.  > **Not required when providing an existing Subscription ID via the parameter `existingSubscriptionId`**  - Type: String 
+subscriptionTenantId | No       | The Azure Active Directory Tenant ID (GUID) to which the Subscription should be attached to.  > **Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).**  - Type: String - Default value: `''` *(empty string)* 
+subscriptionOwnerId | No       | The Azure Active Directory principals object ID (GUID) to whom should be the Subscription Owner.  > **Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).**  - Type: String - Default value: `''` *(empty string)* 
 existingSubscriptionId | No       | An existing subscription ID. Use this when you do not want the module to create a new subscription. But do want to manage the management group membership. A subscription ID should be provided in the example format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.  - Type: String - Default value: `''` *(empty string)* 
 subscriptionManagementGroupAssociationEnabled | No       | Whether to move the Subscription to the specified Management Group supplied in the parameter `subscriptionManagementGroupId`.  - Type: Boolean 
 subscriptionManagementGroupId | No       | The destination Management Group ID for the new Subscription that will be created by this module (or the existing one provided in the parameter `existingSubscriptionId`).  **IMPORTANT:** Do not supply the display name of the Management Group. The Management Group ID forms part of the Azure Resource ID. e.g., `/providers/Microsoft.Management/managementGroups/{managementGroupId}`.  > See below [example in parameter file](#parameter-file) for an example  - Type: String - Default value: `''` *(empty string)* 
@@ -126,6 +128,30 @@ Production
 DevTest
 Production
 ```
+
+### subscriptionTenantId
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The Azure Active Directory Tenant ID (GUID) to which the Subscription should be attached to.
+
+> **Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).**
+
+- Type: String
+- Default value: `''` *(empty string)*
+
+
+### subscriptionOwnerId
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The Azure Active Directory principals object ID (GUID) to whom should be the Subscription Owner.
+
+> **Leave blank unless following this scenario only [Programmatically create MCA subscriptions across Azure Active Directory tenants](https://learn.microsoft.com/azure/cost-management-billing/manage/programmatically-create-subscription-microsoft-customer-agreement-across-tenants).**
+
+- Type: String
+- Default value: `''` *(empty string)*
+
 
 ### existingSubscriptionId
 
@@ -493,6 +519,12 @@ subscriptionResourceId | string | The Subscription Resource ID that has been cre
         },
         "subscriptionWorkload": {
             "value": "Production"
+        },
+        "subscriptionTenantId": {
+            "value": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        },
+        "subscriptionOwnerId": {
+            "value": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
         },
         "existingSubscriptionId": {
             "value": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
