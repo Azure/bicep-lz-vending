@@ -44,7 +44,7 @@ Get-AzDocTemplateFile -InputPath $docsToGenerate | ForEach-Object {
 
     # Generate markdown
     Write-Information -InformationAction Continue "====> Creating MD file using PSDocs.Azure for: $template"
-    Invoke-PSDocument -Module PSDocs.Azure -OutputPath $docOutputPath -InputObject $template.FullName -InstanceName $docName -Culture 'en-US'
+    Invoke-PSDocument -Module PSDocs.Azure -OutputPath $docOutputPath -InputObject $template.FullName -InstanceName $docName -Culture 'en-US' -Option (New-PSDocumentOption -Option @{ 'CONFIGURATION.AZURE_BICEP_REGISTRY_MODULES_METADATA_SCHEMA_ENABLED' = $True })
 }
 
 # Remove JSON files that were temporarily created
