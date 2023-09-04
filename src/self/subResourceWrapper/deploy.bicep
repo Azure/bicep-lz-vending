@@ -88,6 +88,23 @@ param roleAssignments array = []
 @sys.description('Disable telemetry collection by this module. For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)')
 param disableTelemetry bool = false
 
+@maxLength(90)
+@sys.description('The name of the resource group to create the deployment script for resource providers registration.')
+param deploymentScriptResourceGroupName string = ''
+
+@sys.description('The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.')
+param deploymentScriptLocation string = deployment().location
+
+@sys.description('The name of the deployment script to register resource providers')
+param deploymentScriptName string = 'alz-ds-rp-registration'
+
+@sys.description('Supply an array of resource providers to register.')
+param resourceProviders array = []
+
+@sys.description('The name of the user managed identity for the resource providers registration deployment script.')
+param deploymentScriptManagedIdentityName string = ''
+
+
 // VARIABLES
 
 // Deployment name variables
@@ -102,6 +119,10 @@ var deploymentNames = {
   createLzRoleAssignmentsSub: take('lz-vend-rbac-sub-create-${uniqueString(subscriptionId, deployment().name)}', 64)
   createLzRoleAssignmentsRsgsSelf: take('lz-vend-rbac-rsg-self-create-${uniqueString(subscriptionId, deployment().name)}', 64)
   createLzRoleAssignmentsRsgsNotSelf: take('lz-vend-rbac-rsg-nself-create-${uniqueString(subscriptionId, deployment().name)}', 64)
+  createResourceGroupForDeploymentScript: take('lz-vend-rsg-ds-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptLocation, deployment().name)}', 64)
+  registerResourceProviders: take('lz-vend-ds-create-${uniqueString(subscriptionId, deployment().name)}', 64)
+  createDeploymentScriptManagedIdentity: take('lz-vend-ds-msi-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
+  createRoleAssignmentsDeploymentScript: take('lz-vend-ds-rbac-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
 }
 
 // Role Assignments filtering and splitting
@@ -128,6 +149,12 @@ var virtualWanHubConnectionPropogatedLabels = !empty(virtualNetworkVwanPropagate
 
 // Telemetry for CARML flip
 var enableTelemetryForCarml = !disableTelemetry
+
+var resourceProvidersFormatted = replace(string(resourceProviders), '"', '\\"')
+
+var userManagedIdentityPermissions = [
+  for provider in resourceProviders: '${provider}/register/action'
+]
 
 // RESOURCES & MODULES
 
@@ -270,5 +297,80 @@ module createLzRoleAssignmentsRsgsNotSelf '../../carml/v0.6.0/Microsoft.Authoriz
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }]
+
+module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = {
+  scope: subscription(subscriptionId)
+  name: deploymentNames.createResourceGroupForDeploymentScript
+  params: {
+    name: deploymentScriptResourceGroupName
+    location: deploymentScriptLocation
+    lock: ''
+    enableDefaultTelemetry: enableTelemetryForCarml
+  }
+}
+
+module createDeploymentScriptManagedIdentity '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = {
+  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
+  name: deploymentNames.createDeploymentScriptManagedIdentity
+  params: {
+    location: deploymentScriptLocation
+    enableDefaultTelemetry: enableTelemetryForCarml
+  }
+}
+
+module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = [for permission in userManagedIdentityPermissions: if (!empty(userManagedIdentityPermissions)) {
+  dependsOn: [
+    createDeploymentScriptManagedIdentity
+  ]
+  name: take('${deploymentNames.createRoleAssignmentsDeploymentScript}-${uniqueString(permission)}', 64)
+  params: {
+    location: deploymentScriptLocation
+    principalId: createDeploymentScriptManagedIdentity.outputs.principalId
+    roleDefinitionIdOrName: 'Contributor'
+    subscriptionId: subscriptionId
+    enableDefaultTelemetry: enableTelemetryForCarml
+  }
+}]
+
+module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = {
+  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
+  name: deploymentNames.registerResourceProviders
+  params: {
+    name: deploymentScriptName
+    kind: 'AzurePowerShell'
+    azPowerShellVersion: '3.0'
+    cleanupPreference: 'Always'
+    enableDefaultTelemetry: enableTelemetryForCarml
+    location: deploymentScriptLocation
+    retentionInterval: 'P1D'
+    timeout: 'PT1H'
+    runOnce: true
+    userAssignedIdentities: {
+      '${createDeploymentScriptManagedIdentity.outputs.resourceId}': {}
+    }
+    arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -subscriptionId ${subscriptionId}}'
+    scriptContent: '''
+    param(
+      [string]$subscriptionId,
+      [string]$resourceProviders
+    )
+
+    Select-AzSubscription -SubscriptionId $subscriptionId
+    $providers = $resourceProviders | ConvertFrom-Json
+    foreach ($provider in $providers ){
+      $providerStatus= (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
+      if($providerStatus -ne 'Registered'){
+        try{
+          Write-Output "`n Registering the '$provider' provider"
+          Register-AzResourceProvider -ProviderNamespace $provider -AsJob
+        }
+        catch{
+          Write-Output "`n The '$provider' has not been registered successfully"
+        }
+      }
+    }
+    '''
+  }
+}
 
 // OUTPUTS
