@@ -90,20 +90,85 @@ param disableTelemetry bool = false
 
 @maxLength(90)
 @sys.description('The name of the resource group to create the deployment script for resource providers registration.')
-param deploymentScriptResourceGroupName string = ''
+param deploymentScriptResourceGroupName string
 
 @sys.description('The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.')
 param deploymentScriptLocation string = deployment().location
 
 @sys.description('The name of the deployment script to register resource providers')
-param deploymentScriptName string = 'alz-ds-rp-registration'
+param deploymentScriptName string
 
 @sys.description('Supply an array of resource providers to register.')
-param resourceProviders array = []
+param resourceProviders array = [
+  'Microsoft.ApiManagement'
+  'Microsoft.AppPlatform'
+  'Microsoft.Authorization'
+  'Microsoft.Automation'
+  'Microsoft.AVS'
+  'Microsoft.Blueprint'
+  'Microsoft.BotService'
+  'Microsoft.Cache'
+  'Microsoft.Cdn'
+  'Microsoft.CognitiveServices'
+  'Microsoft.Compute'
+  'Microsoft.ContainerInstance'
+  'Microsoft.ContainerRegistry'
+  'Microsoft.ContainerService'
+  'Microsoft.CostManagement'
+  'Microsoft.CustomProviders'
+  'Microsoft.Databricks'
+  'Microsoft.DataLakeAnalytics'
+  'Microsoft.DataLakeStore'
+  'Microsoft.DataMigration'
+  'Microsoft.DataProtection'
+  'Microsoft.DBforMariaDB'
+  'Microsoft.DBforMySQL'
+  'Microsoft.DBforPostgreSQL'
+  'Microsoft.DesktopVirtualization'
+  'Microsoft.Devices'
+  'Microsoft.DevTestLab'
+  'Microsoft.DocumentDB'
+  'Microsoft.EventGrid'
+  'Microsoft.EventHub'
+  'Microsoft.HDInsight'
+  'Microsoft.HealthcareApis'
+  'Microsoft.GuestConfiguration'
+  'Microsoft.KeyVault'
+  'Microsoft.Kusto'
+  'microsoft.insights'
+  'Microsoft.Logic'
+  'Microsoft.MachineLearningServices'
+  'Microsoft.Maintenance'
+  'Microsoft.ManagedIdentity'
+  'Microsoft.ManagedServices'
+  'Microsoft.Management'
+  'Microsoft.Maps'
+  'Microsoft.MarketplaceOrdering'
+  'Microsoft.Media'
+  'Microsoft.MixedReality'
+  'Microsoft.Network'
+  'Microsoft.NotificationHubs'
+  'Microsoft.OperationalInsights'
+  'Microsoft.OperationsManagement'
+  'Microsoft.PolicyInsights'
+  'Microsoft.PowerBIDedicated'
+  'Microsoft.Relay'
+  'Microsoft.RecoveryServices'
+  'Microsoft.Resources'
+  'Microsoft.Search'
+  'Microsoft.Security'
+  'Microsoft.SecurityInsights'
+  'Microsoft.ServiceBus'
+  'Microsoft.ServiceFabric'
+  'Microsoft.Sql'
+  'Microsoft.Storage'
+  'Microsoft.StreamAnalytics'
+  'Microsoft.TimeSeriesInsights'
+  'Microsoft.Web'
+]
 
 @sys.description('The name of the user managed identity for the resource providers registration deployment script.')
-param deploymentScriptManagedIdentityName string = ''
-
+param deploymentScriptManagedIdentityName string
 
 // VARIABLES
 
@@ -121,7 +186,7 @@ var deploymentNames = {
   createLzRoleAssignmentsRsgsNotSelf: take('lz-vend-rbac-rsg-nself-create-${uniqueString(subscriptionId, deployment().name)}', 64)
   createResourceGroupForDeploymentScript: take('lz-vend-rsg-ds-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptLocation, deployment().name)}', 64)
   registerResourceProviders: take('lz-vend-ds-create-${uniqueString(subscriptionId, deployment().name)}', 64)
-  createDeploymentScriptManagedIdentity: take('lz-vend-ds-msi-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
+  createDeploymentScriptManagedIdentity: take('lz-vend-ds-msi-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deployment().name)}', 64)
   createRoleAssignmentsDeploymentScript: take('lz-vend-ds-rbac-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
 }
 
@@ -151,10 +216,6 @@ var virtualWanHubConnectionPropogatedLabels = !empty(virtualNetworkVwanPropagate
 var enableTelemetryForCarml = !disableTelemetry
 
 var resourceProvidersFormatted = replace(string(resourceProviders), '"', '\\"')
-
-var userManagedIdentityPermissions = [
-  for provider in resourceProviders: '${provider}/register/action'
-]
 
 // RESOURCES & MODULES
 
@@ -311,18 +372,22 @@ module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Reso
 
 module createDeploymentScriptManagedIdentity '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
+  dependsOn: [
+    createResourceGroupForDeploymentScript
+  ]
   name: deploymentNames.createDeploymentScriptManagedIdentity
   params: {
     location: deploymentScriptLocation
+    name: deploymentScriptManagedIdentityName
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }
 
-module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = [for permission in userManagedIdentityPermissions: if (!empty(userManagedIdentityPermissions)) {
+module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = {
   dependsOn: [
     createDeploymentScriptManagedIdentity
   ]
-  name: take('${deploymentNames.createRoleAssignmentsDeploymentScript}-${uniqueString(permission)}', 64)
+  name: take('${deploymentNames.createRoleAssignmentsDeploymentScript}', 64)
   params: {
     location: deploymentScriptLocation
     principalId: createDeploymentScriptManagedIdentity.outputs.principalId
@@ -330,7 +395,7 @@ module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Autho
     subscriptionId: subscriptionId
     enableDefaultTelemetry: enableTelemetryForCarml
   }
-}]
+}
 
 module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
@@ -348,7 +413,7 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
     userAssignedIdentities: {
       '${createDeploymentScriptManagedIdentity.outputs.resourceId}': {}
     }
-    arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -subscriptionId ${subscriptionId}}'
+    arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -subscriptionId ${subscriptionId}'
     scriptContent: '''
     param(
       [string]$subscriptionId,
@@ -357,20 +422,32 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
 
     Select-AzSubscription -SubscriptionId $subscriptionId
     $providers = $resourceProviders | ConvertFrom-Json
-    foreach ($provider in $providers ){
-      $providerStatus= (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
-      if($providerStatus -ne 'Registered'){
-        try{
-          Write-Output "`n Registering the '$provider' provider"
-          Register-AzResourceProvider -ProviderNamespace $provider -AsJob
+    $failedProviders = ""
+    $DeploymentScriptOutputs = @{}
+    foreach ($provider in $providers ) {
+      $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
+      if ($providerStatus -ne 'Registered') {
+        Write-Output "`n Registering the '$provider' provider"
+        if (Register-AzResourceProvider -ProviderNamespace $provider -ErrorAction SilentlyContinue) {
+          Write-Output "`n The '$provider' has been registered successfully"
         }
-        catch{
-          Write-Output "`n The '$provider' has not been registered successfully"
-        }
+      else {
+            Write-Output "`n The '$provider' has not been registered successfully"
+            $failedProviders += ",$provider"
       }
     }
+    if($failedProviders.length -gt 0){
+      $output = $failedProviders.substring(1)
+    }
+    else{
+      $output = "N/A"
+    }
+    $DeploymentScriptOutputs["failedRegistrations"] = $output
+  }
     '''
   }
 }
 
 // OUTPUTS
+
+output failedProviders string = registerResourceProviders.outputs.outputs['failedRegistrations']

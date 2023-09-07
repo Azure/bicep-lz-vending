@@ -441,6 +441,18 @@ For more information on the telemetry collected by this module, that is controll
 ''')
 param disableTelemetry bool = false
 
+@sys.description('Random guid for the resources names.')
+param guid string = substring(newGuid(),0,4)
+
+@sys.description('The name of the resource group to create the deployment script for resource providers registration.')
+param deploymentScriptResourceGroupName string = 'rsg-${deployment().location}-ds-${guid}'
+
+@sys.description('The name of the deployment script to register resource providers')
+param deploymentScriptName string = 'ds-${deployment().location}-${guid}'
+
+@sys.description('The name of the user managed identity for the resource providers registration deployment script.')
+param deploymentScriptManagedIdentityName string = 'id-${deployment().location}-${guid}'
+
 // VARIABLES
 
 var existingSubscriptionIDEmptyCheck = empty(existingSubscriptionId) ? 'No Subscription ID Provided' : existingSubscriptionId
@@ -508,6 +520,9 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     roleAssignmentEnabled: roleAssignmentEnabled
     roleAssignments: roleAssignments
     disableTelemetry: disableTelemetry
+    deploymentScriptResourceGroupName: deploymentScriptResourceGroupName
+    deploymentScriptName: deploymentScriptName
+    deploymentScriptManagedIdentityName: deploymentScriptManagedIdentityName
   }
 }
 
@@ -524,3 +539,6 @@ output subscriptionAcceptOwnershipState string = (subscriptionAliasEnabled && em
 
 @sys.description('The Subscription Ownership URL. Only used when creating MCA Subscriptions across tenants')
 output subscriptionAcceptOwnershipUrl string = (subscriptionAliasEnabled && empty(existingSubscriptionId) && !empty(subscriptionTenantId) && !empty(subscriptionOwnerId)) ? createSubscription.outputs.subscriptionAcceptOwnershipUrl : 'N/A'
+
+@sys.description('The resource providers that filed to register')
+output failedResourceProviders string = createSubscriptionResources.outputs.failedProviders
