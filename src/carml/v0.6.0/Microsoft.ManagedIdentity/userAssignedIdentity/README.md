@@ -4,23 +4,28 @@ This module deploys a User Assigned Identity.
 
 ## Navigation
 
-- [Resource types](#Resource-types)
-- [Parameters](#Parameters)
-- [Outputs](#Outputs)
-- [Cross-referenced modules](#Cross-referenced-modules)
-- [Deployment examples](#Deployment-examples)
+- [User Assigned Identities `[Microsoft.ManagedIdentity/userAssignedIdentities]`](#user-assigned-identities-microsoftmanagedidentityuserassignedidentities)
+  - [Navigation](#navigation)
+  - [Resource types](#resource-types)
+  - [Parameters](#parameters)
+    - [Optional parameters](#optional-parameters)
+    - [Parameter Usage: `roleAssignments`](#parameter-usage-roleassignments)
+    - [Parameter Usage: `tags`](#parameter-usage-tags)
+  - [Outputs](#outputs)
+  - [Cross-referenced modules](#cross-referenced-modules)
+  - [Deployment examples](#deployment-examples)
 
 ## Resource types
 
 | Resource Type | API Version |
 | :-- | :-- |
-| `Microsoft.Authorization/locks` | [2020-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks) |
-| `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
-| `Microsoft.ManagedIdentity/userAssignedIdentities` | [2018-11-30](https://learn.microsoft.com/en-us/azure/templates/Microsoft.ManagedIdentity/2018-11-30/userAssignedIdentities) |
+| `Microsoft.Authorization/locks` | [2020-05-01](https://learn.microsoft.com/azure/templates/Microsoft.Authorization/2020-05-01/locks) |
+| `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://learn.microsoft.com/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
+| `Microsoft.ManagedIdentity/userAssignedIdentities` | [2018-11-30](https://learn.microsoft.com/azure/templates/Microsoft.ManagedIdentity/2018-11-30/userAssignedIdentities) |
 
 ## Parameters
 
-**Optional parameters**
+### Optional parameters
 
 | Parameter Name | Type | Default Value | Allowed Values | Description |
 | :-- | :-- | :-- | :-- | :-- |
@@ -30,7 +35,6 @@ This module deploys a User Assigned Identity.
 | `name` | string | `[guid(resourceGroup().id)]` |  | Name of the User Assigned Identity. |
 | `roleAssignments` | array | `[]` |  | Array of role assignment objects that contain the 'roleDefinitionIdOrName' and 'principalId' to define RBAC role assignments on this resource. In the roleDefinitionIdOrName attribute, you can provide either the display name of the role definition, or its fully qualified ID in the following format: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11'. |
 | `tags` | object | `{object}` |  | Tags of the resource. |
-
 
 ### Parameter Usage: `roleAssignments`
 
