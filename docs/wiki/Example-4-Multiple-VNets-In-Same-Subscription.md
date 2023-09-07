@@ -37,7 +37,7 @@ module createSubAndFirstVnet 'br/public:lz/sub-vending:1.4.1' = {
   }
 }
 
-module createSubAndFirstVnet 'br/public:lz/sub-vending:1.4.1' = {
+module createSubAndSecondVnet 'br/public:lz/sub-vending:1.4.1' = {
   name: 'additional-vnet'
   params: {
     subscriptionAliasEnabled: false
