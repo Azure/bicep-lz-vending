@@ -489,7 +489,7 @@ Supply an array of strings containing the resource providers to register on the 
 
 Supply an array of strings containing the resource providers features to register on the subscription, e.g. `["AzureServicesVm","InGuestHotPatchVMPreview"]`
 
-> A resoure group gets created in the subscription with a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers features registration process.
+> A resoure group gets created in the subscription with the format "rsg-<location>-ds-<xxxx>" hosting a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers features registration process.
 
 > After a preview feature is registered in your subscription, you'll see one of two states: Registered or Pending.
 > - For a preview feature that doesn't require approval, the state is Registered.
