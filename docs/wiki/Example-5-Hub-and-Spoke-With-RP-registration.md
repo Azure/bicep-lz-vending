@@ -1,5 +1,5 @@
 <!-- markdownlint-disable MD041 -->
-## Example 5 - Landing Zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network and resource providers registration
+## Example 5 - Landing Zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network and resource providers and features registration
 
 ### Bicep Module Registry
 
