@@ -4,12 +4,16 @@ This module deploys a Deployment Script.
 
 ## Navigation
 
-- [Resource types](#Resource-types)
-- [Parameters](#Parameters)
-- [Outputs](#Outputs)
-- [Considerations](#Considerations)
-- [Cross-referenced modules](#Cross-referenced-modules)
-- [Deployment examples](#Deployment-examples)
+- [Deployment Scripts `[Microsoft.Resources/deploymentScripts]`](#deployment-scripts-microsoftresourcesdeploymentscripts)
+  - [Navigation](#navigation)
+  - [Resource types](#resource-types)
+  - [Parameters](#parameters)
+    - [Parameter Usage: `tags`](#parameter-usage-tags)
+    - [Parameter Usage: `userAssignedIdentities`](#parameter-usage-userassignedidentities)
+  - [Outputs](#outputs)
+  - [Considerations](#considerations)
+  - [Cross-referenced modules](#cross-referenced-modules)
+  - [Deployment examples](#deployment-examples)
 
 ## Resource types
 
