@@ -453,6 +453,165 @@ param deploymentScriptName string = 'ds-${deployment().location}-${guid}'
 @sys.description('The name of the user managed identity for the resource providers registration deployment script.')
 param deploymentScriptManagedIdentityName string = 'id-${deployment().location}-${guid}'
 
+
+@metadata({
+  example: [
+    'Microsoft.Compute'
+    'Microsoft.Storage'
+  ]
+})
+@sys.description('''An array of resource providers features to register. If left blank/empty, the default resource providers will be registered.
+- Type: `[]` Array
+- Default value: `[
+  'Microsoft.ApiManagement'
+  'Microsoft.AppPlatform'
+  'Microsoft.Authorization'
+  'Microsoft.Automation'
+  'Microsoft.AVS'
+  'Microsoft.Blueprint'
+  'Microsoft.BotService'
+  'Microsoft.Cache'
+  'Microsoft.Cdn'
+  'Microsoft.CognitiveServices'
+  'Microsoft.Compute'
+  'Microsoft.ContainerInstance'
+  'Microsoft.ContainerRegistry'
+  'Microsoft.ContainerService'
+  'Microsoft.CostManagement'
+  'Microsoft.CustomProviders'
+  'Microsoft.Databricks'
+  'Microsoft.DataLakeAnalytics'
+  'Microsoft.DataLakeStore'
+  'Microsoft.DataMigration'
+  'Microsoft.DataProtection'
+  'Microsoft.DBforMariaDB'
+  'Microsoft.DBforMySQL'
+  'Microsoft.DBforPostgreSQL'
+  'Microsoft.DesktopVirtualization'
+  'Microsoft.Devices'
+  'Microsoft.DevTestLab'
+  'Microsoft.DocumentDB'
+  'Microsoft.EventGrid'
+  'Microsoft.EventHub'
+  'Microsoft.HDInsight'
+  'Microsoft.HealthcareApis'
+  'Microsoft.GuestConfiguration'
+  'Microsoft.KeyVault'
+  'Microsoft.Kusto'
+  'microsoft.insights'
+  'Microsoft.Logic'
+  'Microsoft.MachineLearningServices'
+  'Microsoft.Maintenance'
+  'Microsoft.ManagedIdentity'
+  'Microsoft.ManagedServices'
+  'Microsoft.Management'
+  'Microsoft.Maps'
+  'Microsoft.MarketplaceOrdering'
+  'Microsoft.Media'
+  'Microsoft.MixedReality'
+  'Microsoft.Network'
+  'Microsoft.NotificationHubs'
+  'Microsoft.OperationalInsights'
+  'Microsoft.OperationsManagement'
+  'Microsoft.PolicyInsights'
+  'Microsoft.PowerBIDedicated'
+  'Microsoft.Relay'
+  'Microsoft.RecoveryServices'
+  'Microsoft.Resources'
+  'Microsoft.Search'
+  'Microsoft.Security'
+  'Microsoft.SecurityInsights'
+  'Microsoft.ServiceBus'
+  'Microsoft.ServiceFabric'
+  'Microsoft.Sql'
+  'Microsoft.Storage'
+  'Microsoft.StreamAnalytics'
+  'Microsoft.TimeSeriesInsights'
+  'Microsoft.Web'
+]`
+''')
+@sys.description('Supply an array of resource providers to register.')
+param resourceProviders array = [
+  'Microsoft.ApiManagement'
+  'Microsoft.AppPlatform'
+  'Microsoft.Authorization'
+  'Microsoft.Automation'
+  'Microsoft.AVS'
+  'Microsoft.Blueprint'
+  'Microsoft.BotService'
+  'Microsoft.Cache'
+  'Microsoft.Cdn'
+  'Microsoft.CognitiveServices'
+  'Microsoft.Compute'
+  'Microsoft.ContainerInstance'
+  'Microsoft.ContainerRegistry'
+  'Microsoft.ContainerService'
+  'Microsoft.CostManagement'
+  'Microsoft.CustomProviders'
+  'Microsoft.Databricks'
+  'Microsoft.DataLakeAnalytics'
+  'Microsoft.DataLakeStore'
+  'Microsoft.DataMigration'
+  'Microsoft.DataProtection'
+  'Microsoft.DBforMariaDB'
+  'Microsoft.DBforMySQL'
+  'Microsoft.DBforPostgreSQL'
+  'Microsoft.DesktopVirtualization'
+  'Microsoft.Devices'
+  'Microsoft.DevTestLab'
+  'Microsoft.DocumentDB'
+  'Microsoft.EventGrid'
+  'Microsoft.EventHub'
+  'Microsoft.HDInsight'
+  'Microsoft.HealthcareApis'
+  'Microsoft.GuestConfiguration'
+  'Microsoft.KeyVault'
+  'Microsoft.Kusto'
+  'microsoft.insights'
+  'Microsoft.Logic'
+  'Microsoft.MachineLearningServices'
+  'Microsoft.Maintenance'
+  'Microsoft.ManagedIdentity'
+  'Microsoft.ManagedServices'
+  'Microsoft.Management'
+  'Microsoft.Maps'
+  'Microsoft.MarketplaceOrdering'
+  'Microsoft.Media'
+  'Microsoft.MixedReality'
+  'Microsoft.Network'
+  'Microsoft.NotificationHubs'
+  'Microsoft.OperationalInsights'
+  'Microsoft.OperationsManagement'
+  'Microsoft.PolicyInsights'
+  'Microsoft.PowerBIDedicated'
+  'Microsoft.Relay'
+  'Microsoft.RecoveryServices'
+  'Microsoft.Resources'
+  'Microsoft.Search'
+  'Microsoft.Security'
+  'Microsoft.SecurityInsights'
+  'Microsoft.ServiceBus'
+  'Microsoft.ServiceFabric'
+  'Microsoft.Sql'
+  'Microsoft.Storage'
+  'Microsoft.StreamAnalytics'
+  'Microsoft.TimeSeriesInsights'
+  'Microsoft.Web'
+]
+
+
+@metadata({
+  example: [
+    'InGuestPatchVMPreview'
+    'LiveResize'
+  ]
+})
+@sys.description('''An array of resource providers features to register. If left blank/empty, no features will be registered.
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
+''')
+param resourceProvidersFeatures array = []
+
 // VARIABLES
 
 var existingSubscriptionIDEmptyCheck = empty(existingSubscriptionId) ? 'No Subscription ID Provided' : existingSubscriptionId
@@ -523,6 +682,8 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     deploymentScriptResourceGroupName: deploymentScriptResourceGroupName
     deploymentScriptName: deploymentScriptName
     deploymentScriptManagedIdentityName: deploymentScriptManagedIdentityName
+    resourceProviders: resourceProviders
+    resourceProvidersFeatures: resourceProvidersFeatures
   }
 }
 
@@ -542,3 +703,6 @@ output subscriptionAcceptOwnershipUrl string = (subscriptionAliasEnabled && empt
 
 @sys.description('The resource providers that filed to register')
 output failedResourceProviders string = createSubscriptionResources.outputs.failedProviders
+
+@sys.description('The resource providers features that filed to register')
+output failedResourceProvidersFeatures string = createSubscriptionResources.outputs.failedFeatures

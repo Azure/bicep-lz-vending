@@ -99,73 +99,10 @@ param deploymentScriptLocation string = deployment().location
 param deploymentScriptName string
 
 @sys.description('Supply an array of resource providers to register.')
-param resourceProviders array = [
-  'Microsoft.ApiManagement'
-  'Microsoft.AppPlatform'
-  'Microsoft.Authorization'
-  'Microsoft.Automation'
-  'Microsoft.AVS'
-  'Microsoft.Blueprint'
-  'Microsoft.BotService'
-  'Microsoft.Cache'
-  'Microsoft.Cdn'
-  'Microsoft.CognitiveServices'
-  'Microsoft.Compute'
-  'Microsoft.ContainerInstance'
-  'Microsoft.ContainerRegistry'
-  'Microsoft.ContainerService'
-  'Microsoft.CostManagement'
-  'Microsoft.CustomProviders'
-  'Microsoft.Databricks'
-  'Microsoft.DataLakeAnalytics'
-  'Microsoft.DataLakeStore'
-  'Microsoft.DataMigration'
-  'Microsoft.DataProtection'
-  'Microsoft.DBforMariaDB'
-  'Microsoft.DBforMySQL'
-  'Microsoft.DBforPostgreSQL'
-  'Microsoft.DesktopVirtualization'
-  'Microsoft.Devices'
-  'Microsoft.DevTestLab'
-  'Microsoft.DocumentDB'
-  'Microsoft.EventGrid'
-  'Microsoft.EventHub'
-  'Microsoft.HDInsight'
-  'Microsoft.HealthcareApis'
-  'Microsoft.GuestConfiguration'
-  'Microsoft.KeyVault'
-  'Microsoft.Kusto'
-  'microsoft.insights'
-  'Microsoft.Logic'
-  'Microsoft.MachineLearningServices'
-  'Microsoft.Maintenance'
-  'Microsoft.ManagedIdentity'
-  'Microsoft.ManagedServices'
-  'Microsoft.Management'
-  'Microsoft.Maps'
-  'Microsoft.MarketplaceOrdering'
-  'Microsoft.Media'
-  'Microsoft.MixedReality'
-  'Microsoft.Network'
-  'Microsoft.NotificationHubs'
-  'Microsoft.OperationalInsights'
-  'Microsoft.OperationsManagement'
-  'Microsoft.PolicyInsights'
-  'Microsoft.PowerBIDedicated'
-  'Microsoft.Relay'
-  'Microsoft.RecoveryServices'
-  'Microsoft.Resources'
-  'Microsoft.Search'
-  'Microsoft.Security'
-  'Microsoft.SecurityInsights'
-  'Microsoft.ServiceBus'
-  'Microsoft.ServiceFabric'
-  'Microsoft.Sql'
-  'Microsoft.Storage'
-  'Microsoft.StreamAnalytics'
-  'Microsoft.TimeSeriesInsights'
-  'Microsoft.Web'
-]
+param resourceProviders array =[]
+
+@sys.description('Supply an array of resource providers features to register.')
+param resourceProvidersFeatures array =[]
 
 @sys.description('The name of the user managed identity for the resource providers registration deployment script.')
 param deploymentScriptManagedIdentityName string
@@ -216,6 +153,8 @@ var virtualWanHubConnectionPropogatedLabels = !empty(virtualNetworkVwanPropagate
 var enableTelemetryForCarml = !disableTelemetry
 
 var resourceProvidersFormatted = replace(string(resourceProviders), '"', '\\"')
+
+var resourceProvidersFeaturesFormatted = replace(string(resourceProvidersFeatures), '"', '\\"')
 
 // RESOURCES & MODULES
 
@@ -413,41 +352,13 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
     userAssignedIdentities: {
       '${createDeploymentScriptManagedIdentity.outputs.resourceId}': {}
     }
-    arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -subscriptionId ${subscriptionId}'
-    scriptContent: '''
-    param(
-      [string]$subscriptionId,
-      [string]$resourceProviders
-    )
-
-    Select-AzSubscription -SubscriptionId $subscriptionId
-    $providers = $resourceProviders | ConvertFrom-Json
-    $failedProviders = ""
-    $DeploymentScriptOutputs = @{}
-    foreach ($provider in $providers ) {
-      $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
-      if ($providerStatus -ne 'Registered') {
-        Write-Output "`n Registering the '$provider' provider"
-        if (Register-AzResourceProvider -ProviderNamespace $provider -ErrorAction SilentlyContinue) {
-          Write-Output "`n The '$provider' has been registered successfully"
-        }
-      else {
-            Write-Output "`n The '$provider' has not been registered successfully"
-            $failedProviders += ",$provider"
-      }
-    }
-    if($failedProviders.length -gt 0){
-      $output = $failedProviders.substring(1)
-    }
-    else{
-      $output = "N/A"
-    }
-    $DeploymentScriptOutputs["failedRegistrations"] = $output
-  }
-    '''
+    arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -resourceProvidersFeatures \'${resourceProvidersFeaturesFormatted}\' -subscriptionId ${subscriptionId}'
+    scriptContent: loadTextContent('../../../.github/scripts/Register-SubResourceProviders.ps1')
   }
 }
 
 // OUTPUTS
 
-output failedProviders string = registerResourceProviders.outputs.outputs['failedRegistrations']
+output failedProviders string = registerResourceProviders.outputs.outputs['failedProviderRegistrations']
+output failedFeatures string = registerResourceProviders.outputs.outputs['failedFeaturesRegistrations']
+
