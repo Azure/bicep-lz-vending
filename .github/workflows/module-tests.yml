@@ -14,9 +14,12 @@ env:
   ARM_LOCATION: "uksouth"
   ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
   ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
-  ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
   GH_PR_NUMBER: "${{ github.event.number }}"
   SUB_HUB_ID: "${{ secrets.SUB_HUB_ID }}"
+
+permissions:
+      id-token: write
+      contents: read
 
 jobs:
   vending:
@@ -34,7 +37,8 @@ jobs:
         id: login
         uses: azure/login@v1
         with:
-          creds: '{"clientId":"${{ env.ARM_CLIENT_ID }}","clientSecret":"${{ env.ARM_CLIENT_SECRET }}","tenantId":"${{ env.ARM_TENANT_ID }}"}'
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
           enable-AzPSSession: true
           allow-no-subscriptions: true
 
