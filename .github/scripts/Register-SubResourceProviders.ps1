@@ -37,7 +37,7 @@ foreach ($provider in $providers ) {
       $output = $failedProviders.substring(1)
     }
     else {
-      $output = "N/A"
+      $output = "No failures"
     }
     $DeploymentScriptOutputs["failedProviderRegistrations"] = $output
   }
@@ -78,7 +78,7 @@ if ($features.length -gt 0) {
         $output = $failedFeatures.substring(1)
       }
       else {
-        $output = "N/A"
+        $output = "No failures"
       }
       $DeploymentScriptOutputs["failedFeaturesRegistrations"] = $output
     }
