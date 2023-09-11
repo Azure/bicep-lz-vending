@@ -25,6 +25,7 @@ This is currently split logically into the following capabilities:
   - Specify Custom DNS Servers
 - Role assignments
 - Tags
+- Resource providers and resource providers features registration
 
 > When creating Virtual Network peerings, be aware of the [limit of peerings per Virtual Network.](https://learn.microsoft.com/azure/azure-resource-manager/management/azure-subscription-service-limits?toc=%2Fazure%2Fvirtual-network%2Ftoc.json#azure-resource-manager-virtual-networking-limits)
 

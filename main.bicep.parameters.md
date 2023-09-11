@@ -42,6 +42,8 @@ virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of o
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.  - Type: Boolean 
 roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+resourceProviders | No      | Supply an array of strings containing the resource providers to register on the subscription, e.g. `["Microsoft.Compute","Microsoft.Storage"]`  - Type: `[]` Array - Default value: `['Microsoft.ApiManagement','Microsoft.AppPlatform','Microsoft.Authorization','Microsoft.Automation','Microsoft.AVS','Microsoft.Blueprint','Microsoft.BotService','Microsoft.Cache','Microsoft.Cdn','Microsoft.CognitiveServices','Microsoft.Compute','Microsoft.ContainerInstance','Microsoft.ContainerRegistry','Microsoft.ContainerService','Microsoft.CostManagement','Microsoft.CustomProviders','Microsoft.Databricks','Microsoft.DataLakeAnalytics','Microsoft.DataLakeStore','Microsoft.DataMigration','Microsoft.DataProtection','Microsoft.DBforMariaDB','Microsoft.DBforMySQL','Microsoft.DBforPostgreSQL','Microsoft.DesktopVirtualization','Microsoft.Devices','Microsoft.DevTestLab','Microsoft.DocumentDB','Microsoft.EventGrid','Microsoft.EventHub','Microsoft.HDInsight','Microsoft.HealthcareApis','Microsoft.GuestConfiguration','Microsoft.KeyVault','Microsoft.Kusto','microsoft.insights','Microsoft.Logic','Microsoft.MachineLearningServices','Microsoft.Maintenance','Microsoft.ManagedIdentity','Microsoft.ManagedServices','Microsoft.Management','Microsoft.Maps','Microsoft.MarketplaceOrdering','Microsoft.Media','Microsoft.MixedReality','Microsoft.Network','Microsoft.NotificationHubs','Microsoft.OperationalInsights','Microsoft.OperationsManagement','Microsoft.PolicyInsights','Microsoft.PowerBIDedicated','Microsoft.Relay','Microsoft.RecoveryServices','Microsoft.Resources','Microsoft.Search','Microsoft.Security','Microsoft.SecurityInsights','Microsoft.ServiceBus','Microsoft.ServiceFabric','Microsoft.Sql','Microsoft.Storage','Microsoft.StreamAnalytics','Microsoft.TimeSeriesInsights','Microsoft.Web']` 
+resourceProvidersFeatures | No      | Supply an array of strings containing the resource providers features to register on the subscription, e.g. `["AzureServicesVm","InGuestHotPatchVMPreview"]` - Type: `[]` Array - Default value: `[]` *(empty array)* 
 disableTelemetry | No       | Disable telemetry collection by this module.  For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry) 
 
 ### subscriptionAliasEnabled
@@ -470,6 +472,31 @@ Each object must contain the following `keys`:
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
 
+### resourceProviders
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Supply an array of strings containing the resource providers to register on the subscription, e.g. `["Microsoft.Compute","Microsoft.Storage"]`
+
+> A resource group gets created in the subscription with a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers registration process.
+
+- Type: `[]` Array
+- Default value: `['Microsoft.ApiManagement','Microsoft.AppPlatform','Microsoft.Authorization','Microsoft.Automation','Microsoft.AVS','Microsoft.Blueprint','Microsoft.BotService','Microsoft.Cache','Microsoft.Cdn','Microsoft.CognitiveServices','Microsoft.Compute','Microsoft.ContainerInstance','Microsoft.ContainerRegistry','Microsoft.ContainerService','Microsoft.CostManagement','Microsoft.CustomProviders','Microsoft.Databricks','Microsoft.DataLakeAnalytics','Microsoft.DataLakeStore','Microsoft.DataMigration','Microsoft.DataProtection','Microsoft.DBforMariaDB','Microsoft.DBforMySQL','Microsoft.DBforPostgreSQL','Microsoft.DesktopVirtualization','Microsoft.Devices','Microsoft.DevTestLab','Microsoft.DocumentDB','Microsoft.EventGrid','Microsoft.EventHub','Microsoft.HDInsight','Microsoft.HealthcareApis','Microsoft.GuestConfiguration','Microsoft.KeyVault','Microsoft.Kusto','microsoft.insights','Microsoft.Logic','Microsoft.MachineLearningServices','Microsoft.Maintenance','Microsoft.ManagedIdentity','Microsoft.ManagedServices','Microsoft.Management','Microsoft.Maps','Microsoft.MarketplaceOrdering','Microsoft.Media','Microsoft.MixedReality','Microsoft.Network','Microsoft.NotificationHubs','Microsoft.OperationalInsights','Microsoft.OperationsManagement','Microsoft.PolicyInsights','Microsoft.PowerBIDedicated','Microsoft.Relay','Microsoft.RecoveryServices','Microsoft.Resources','Microsoft.Search','Microsoft.Security','Microsoft.SecurityInsights','Microsoft.ServiceBus','Microsoft.ServiceFabric','Microsoft.Sql','Microsoft.Storage','Microsoft.StreamAnalytics','Microsoft.TimeSeriesInsights','Microsoft.Web']`
+
+### resourceProvidersFeatures
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Supply an array of strings containing the resource providers features to register on the subscription, e.g. `["AzureServicesVm","InGuestHotPatchVMPreview"]`
+
+> A resoure group gets created in the subscription with the format "rsg-<location>-ds-<xxxx>" hosting a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers features registration process.
+
+> After a preview feature is registered in your subscription, you'll see one of two states: Registered or Pending.
+> - For a preview feature that doesn't require approval, the state is Registered.
+> - If a preview feature requires approval, the registration state is Pending. You must request approval from the Azure service offering the preview feature. Usually, you request access through a support ticket.
+
+- Type: `[]` Array
+- Default value: `[]` *(empty array)*
 
 ### disableTelemetry
 
@@ -640,6 +667,18 @@ subscriptionAcceptOwnershipUrl | string | The Subscription Ownership URL. Only u
                     "definition": "/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
                     "relativeScope": "/resourceGroups/rsg-networking-001"
                 }
+            ]
+        },
+        "resourceProviders": {
+            "value": [
+                "Microsoft.Compute",
+                "Microsoft.Storage"
+            ]
+        },
+        "resourceProvidersFeatures": {
+            "value": [
+                "AzureServicesVm",
+                "InGuestHotPatchVMPreview"
             ]
         },
         "disableTelemetry": {
