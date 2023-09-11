@@ -361,4 +361,3 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
 
 output failedProviders string = registerResourceProviders.outputs.outputs['failedProviderRegistrations']
 output failedFeatures string = registerResourceProviders.outputs.outputs['failedFeaturesRegistrations']
-
