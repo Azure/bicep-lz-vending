@@ -441,17 +441,17 @@ For more information on the telemetry collected by this module, that is controll
 ''')
 param disableTelemetry bool = false
 
-@sys.description('Random guid for the resources names.')
-param guid string = substring(newGuid(),0,4)
+@sys.description('guid for the resources names based on subscription Id.')
+var guid = substring((subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : existingSubscriptionId,0,8)
 
 @sys.description('The name of the resource group to create the deployment script for resource providers registration.')
-param deploymentScriptResourceGroupName string = 'rsg-${deployment().location}-ds-${guid}'
+param deploymentScriptResourceGroupName string = 'rsg-${deployment().location}-ds'
 
 @sys.description('The name of the deployment script to register resource providers')
-param deploymentScriptName string = 'ds-${deployment().location}-${guid}'
+param deploymentScriptName string = 'ds-${deployment().location}'
 
 @sys.description('The name of the user managed identity for the resource providers registration deployment script.')
-param deploymentScriptManagedIdentityName string = 'id-${deployment().location}-${guid}'
+param deploymentScriptManagedIdentityName string = 'id-${deployment().location}'
 
 
 @metadata({
@@ -679,9 +679,9 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     roleAssignmentEnabled: roleAssignmentEnabled
     roleAssignments: roleAssignments
     disableTelemetry: disableTelemetry
-    deploymentScriptResourceGroupName: deploymentScriptResourceGroupName
-    deploymentScriptName: deploymentScriptName
-    deploymentScriptManagedIdentityName: deploymentScriptManagedIdentityName
+    deploymentScriptResourceGroupName: '${deploymentScriptResourceGroupName}-${guid}'
+    deploymentScriptName: '${deploymentScriptName}-${guid}'
+    deploymentScriptManagedIdentityName: '${deploymentScriptManagedIdentityName}-${guid}'
     resourceProviders: resourceProviders
     resourceProvidersFeatures: resourceProvidersFeatures
   }
