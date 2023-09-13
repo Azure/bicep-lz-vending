@@ -19,6 +19,9 @@ module createSub '../../main.bicep' = {
     subscriptionWorkload: 'Production'
     subscriptionManagementGroupAssociationEnabled: true
     subscriptionManagementGroupId: 'bicep-lz-vending-automation-child'
+    deploymentScriptResourceGroupName: 'rsg-${location}-ds-pr-${prNumber}'
+    deploymentScriptManagedIdentityName: 'id-${location}-pr-${prNumber}'
+    deploymentScriptName: 'ds-${location}-pr-${prNumber}'
     virtualNetworkEnabled: false
     roleAssignmentEnabled: true
     roleAssignments: [

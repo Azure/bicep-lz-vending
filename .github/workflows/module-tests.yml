@@ -114,12 +114,14 @@ jobs:
             $rsgHsName = "rsg-${{ env.ARM_LOCATION }}-net-hs-pr-${{ env.GH_PR_NUMBER }}"
             $rsgVwanName = "rsg-${{ env.ARM_LOCATION }}-net-vwan-pr-${{ env.GH_PR_NUMBER }}"
             $rsgNetworkWatcherName = "NetworkWatcherRG"
+            $rsgDeploymentScriptName = "rsg-${{ env.ARM_LOCATION }}-ds-pr-${{ env.GH_PR_NUMBER }}"
 
             Write-Host "Cleanup Vended Subscription Resources & Resource Groups..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUBID }}"
             Remove-AzResourceGroup -Name $rsgHsName -Force
             Remove-AzResourceGroup -Name $rsgVwanName -Force
             Remove-AzResourceGroup -Name $rsgNetworkWatcherName -Force
+            Remove-AzResourceGroup -Name $rsgDeploymentScriptName -Force
 
             Write-Host "Cleanup Hub Subscription Resources..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUB_HUB_ID }}"
