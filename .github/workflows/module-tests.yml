@@ -115,7 +115,7 @@ jobs:
             $rsgVwanName = "rsg-${{ env.ARM_LOCATION }}-net-vwan-pr-${{ env.GH_PR_NUMBER }}"
             $rsgNetworkWatcherName = "NetworkWatcherRG"
             $guid = substring(${{ env.SUBID }},0,8)
-            $rsgDeploymentScriptName = "rsg-${{ env.ARM_LOCATION }}-ds-$guid-pr-${{ env.GH_PR_NUMBER }}"
+            $rsgDeploymentScriptName = "rsg-${{ env.ARM_LOCATION }}-ds-pr-${{ env.GH_PR_NUMBER }}-$guid"
 
             Write-Host "Cleanup Vended Subscription Resources & Resource Groups..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUBID }}"
