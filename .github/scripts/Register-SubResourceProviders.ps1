@@ -39,7 +39,7 @@ foreach ($provider in $providers ) {
     else {
       $output = "No failures"
     }
-    $DeploymentScriptOutputs["failedProviderRegistrations"] = $output
+    $DeploymentScriptOutputs["failedProvidersRegistrations"] = $output
   }
   catch {
     Write-Output "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
