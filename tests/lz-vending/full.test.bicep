@@ -13,6 +13,7 @@ module createSub '../../main.bicep' = {
     subscriptionBillingScope: subscriptionBillingScope
     subscriptionAliasName: 'sub-blzv-tests-pr-${prNumber}'
     subscriptionDisplayName: 'sub-blzv-tests-pr-${prNumber}'
+    deploymentScriptResourceGroupName: 'rsg-${location}-ds-$guid-pr-${prNumber}'
     subscriptionTags: {
       prNumber: prNumber
     }
@@ -47,6 +48,7 @@ module hubSpoke '../../main.bicep' = {
     virtualNetworkEnabled: true
     virtualNetworkLocation: location
     virtualNetworkResourceGroupName: 'rsg-${location}-net-hs-pr-${prNumber}'
+    deploymentScriptResourceGroupName: 'rsg-${location}-ds-$guid-pr-${prNumber}'
     virtualNetworkName: 'vnet-${location}-hs-pr-${prNumber}'
     virtualNetworkAddressSpace: [
       '10.100.0.0/16'
@@ -82,6 +84,7 @@ module vwanSpoke '../../main.bicep' = {
     virtualNetworkEnabled: true
     virtualNetworkLocation: location
     virtualNetworkResourceGroupName: 'rsg-${location}-net-vwan-pr-${prNumber}'
+    deploymentScriptResourceGroupName: 'rsg-${location}-ds-$guid-pr-${prNumber}'
     virtualNetworkName: 'vnet-${location}-vwan-pr-${prNumber}'
     virtualNetworkAddressSpace: [
       '10.200.0.0/16'
