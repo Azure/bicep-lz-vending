@@ -298,7 +298,7 @@ module createLzRoleAssignmentsRsgsNotSelf '../../carml/v0.6.0/Microsoft.Authoriz
   }
 }]
 
-module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = {
+module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (!empty(resourceProviders) || !empty(resourceProvidersFeatures)) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForDeploymentScript
   params: {
@@ -309,7 +309,7 @@ module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Reso
   }
 }
 
-module createDeploymentScriptManagedIdentity '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = if (!empty(resourceProviders) && !empty(resourceProvidersFeatures)) {
+module createDeploymentScriptManagedIdentity '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = if (!empty(resourceProviders) || !empty(resourceProvidersFeatures)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   dependsOn: [
     createResourceGroupForDeploymentScript
@@ -322,7 +322,7 @@ module createDeploymentScriptManagedIdentity '../../carml/v0.6.0/Microsoft.Manag
   }
 }
 
-module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = if (!empty(resourceProviders) && !empty(resourceProvidersFeatures)) {
+module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = if (!empty(resourceProviders) || !empty(resourceProvidersFeatures)) {
   dependsOn: [
     createDeploymentScriptManagedIdentity
   ]
@@ -336,7 +336,7 @@ module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Autho
   }
 }
 
-module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = if (!empty(resourceProviders) && !empty(resourceProvidersFeatures)) {
+module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = if (!empty(resourceProviders) || !empty(resourceProvidersFeatures)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.registerResourceProviders
   params: {
