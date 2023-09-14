@@ -99,7 +99,73 @@ param deploymentScriptLocation string = deployment().location
 param deploymentScriptName string
 
 @sys.description('Supply an array of resource providers to register.')
-param resourceProviders array =[]
+param resourceProviders array = [
+  'Microsoft.ApiManagement'
+  'Microsoft.AppPlatform'
+  'Microsoft.Authorization'
+  'Microsoft.Automation'
+  'Microsoft.AVS'
+  'Microsoft.Blueprint'
+  'Microsoft.BotService'
+  'Microsoft.Cache'
+  'Microsoft.Cdn'
+  'Microsoft.CognitiveServices'
+  'Microsoft.Compute'
+  'Microsoft.ContainerInstance'
+  'Microsoft.ContainerRegistry'
+  'Microsoft.ContainerService'
+  'Microsoft.CostManagement'
+  'Microsoft.CustomProviders'
+  'Microsoft.Databricks'
+  'Microsoft.DataLakeAnalytics'
+  'Microsoft.DataLakeStore'
+  'Microsoft.DataMigration'
+  'Microsoft.DataProtection'
+  'Microsoft.DBforMariaDB'
+  'Microsoft.DBforMySQL'
+  'Microsoft.DBforPostgreSQL'
+  'Microsoft.DesktopVirtualization'
+  'Microsoft.Devices'
+  'Microsoft.DevTestLab'
+  'Microsoft.DocumentDB'
+  'Microsoft.EventGrid'
+  'Microsoft.EventHub'
+  'Microsoft.HDInsight'
+  'Microsoft.HealthcareApis'
+  'Microsoft.GuestConfiguration'
+  'Microsoft.KeyVault'
+  'Microsoft.Kusto'
+  'microsoft.insights'
+  'Microsoft.Logic'
+  'Microsoft.MachineLearningServices'
+  'Microsoft.Maintenance'
+  'Microsoft.ManagedIdentity'
+  'Microsoft.ManagedServices'
+  'Microsoft.Management'
+  'Microsoft.Maps'
+  'Microsoft.MarketplaceOrdering'
+  'Microsoft.Media'
+  'Microsoft.MixedReality'
+  'Microsoft.Network'
+  'Microsoft.NotificationHubs'
+  'Microsoft.OperationalInsights'
+  'Microsoft.OperationsManagement'
+  'Microsoft.PolicyInsights'
+  'Microsoft.PowerBIDedicated'
+  'Microsoft.Relay'
+  'Microsoft.RecoveryServices'
+  'Microsoft.Resources'
+  'Microsoft.Search'
+  'Microsoft.Security'
+  'Microsoft.SecurityInsights'
+  'Microsoft.ServiceBus'
+  'Microsoft.ServiceFabric'
+  'Microsoft.Sql'
+  'Microsoft.Storage'
+  'Microsoft.StreamAnalytics'
+  'Microsoft.TimeSeriesInsights'
+  'Microsoft.Web'
+]
 
 @sys.description('Supply an array of resource providers features to register.')
 param resourceProvidersFeatures array =[]
@@ -359,5 +425,6 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
 
 // OUTPUTS
 
-output failedProviders string = registerResourceProviders.outputs.outputs['failedProvidersRegistrations']
-output failedFeatures string = registerResourceProviders.outputs.outputs['failedFeaturesRegistrations']
+output failedProviders string = !empty(resourceProviders) || !empty(resourceProvidersFeatures) ? registerResourceProviders.outputs.outputs['failedProvidersRegistrations'] : ''
+output failedFeatures string = !empty(resourceProviders) || !empty(resourceProvidersFeatures) ? registerResourceProviders.outputs.outputs['failedFeaturesRegistrations'] : ''
+
