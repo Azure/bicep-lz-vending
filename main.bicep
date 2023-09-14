@@ -702,7 +702,8 @@ output subscriptionAcceptOwnershipState string = (subscriptionAliasEnabled && em
 output subscriptionAcceptOwnershipUrl string = (subscriptionAliasEnabled && empty(existingSubscriptionId) && !empty(subscriptionTenantId) && !empty(subscriptionOwnerId)) ? createSubscription.outputs.subscriptionAcceptOwnershipUrl : 'N/A'
 
 @sys.description('The resource providers that filed to register')
-output failedResourceProviders string = createSubscriptionResources.outputs.failedProviders
+output failedResourceProviders string = !empty(resourceProviders) || !empty(resourceProvidersFeatures) ? createSubscriptionResources.outputs.failedProviders : ''
 
 @sys.description('The resource providers features that filed to register')
-output failedResourceProvidersFeatures string = createSubscriptionResources.outputs.failedFeatures
+output failedResourceProvidersFeatures string = !empty(resourceProviders) || !empty(resourceProvidersFeatures) ? createSubscriptionResources.outputs.failedFeatures : ''
+
