@@ -45,6 +45,8 @@ if ($providers.length -gt 0) {
       Write-Output "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
     }
   }
+}else{
+  Write-Output "`n No providers to register"
 }
 ##################################################
 ## Registering the resource providers features
@@ -86,4 +88,6 @@ if ($features.length -gt 0) {
       Write-Output "`n There was a problem registering the '$featureName' feature. Please make sure this feature name is valid"
     }
   }
+}else{
+  Write-Output "`n No features to register"
 }
