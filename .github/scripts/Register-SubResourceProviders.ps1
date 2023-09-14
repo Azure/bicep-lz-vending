@@ -18,34 +18,34 @@ $DeploymentScriptOutputs = @{}
 #########################################
 ## Registering the resource providers
 #########################################
-
-foreach ($provider in $providers ) {
-  try {
-    $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
-    # Check if the providered is registered
-    if ($providerStatus -ne 'Registered') {
-      Write-Output "`n Registering the '$provider' provider"
-      if (Register-AzResourceProvider -ProviderNamespace $provider) {
-        Write-Output "`n The '$provider' has been registered successfully"
+if ($providers.length -gt 0) {
+  foreach ($provider in $providers ) {
+    try {
+      $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
+      # Check if the providered is registered
+      if ($providerStatus -ne 'Registered') {
+        Write-Output "`n Registering the '$provider' provider"
+        if (Register-AzResourceProvider -ProviderNamespace $provider) {
+          Write-Output "`n The '$provider' has been registered successfully"
+        }
+        else {
+          Write-Output "`n The '$provider' provider has not been registered successfully"
+          $failedProviders += ",$provider"
+        }
+      }
+      if ($failedProviders.length -gt 0) {
+        $output = $failedProviders.substring(1)
       }
       else {
-        Write-Output "`n The '$provider' provider has not been registered successfully"
-        $failedProviders += ",$provider"
+        $output = "No failures"
       }
+      $DeploymentScriptOutputs["failedProvidersRegistrations"] = $output
     }
-    if ($failedProviders.length -gt 0) {
-      $output = $failedProviders.substring(1)
+    catch {
+      Write-Output "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
     }
-    else {
-      $output = "No failures"
-    }
-    $DeploymentScriptOutputs["failedProvidersRegistrations"] = $output
-  }
-  catch {
-    Write-Output "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
   }
 }
-
 ##################################################
 ## Registering the resource providers features
 ##################################################
