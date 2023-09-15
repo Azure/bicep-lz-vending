@@ -111,7 +111,7 @@ jobs:
         with:
           inlineScript: |
             # Resource Group Names
-            $subId = ${{ env.SUBID }}
+            $subId = "${{ env.SUBID }}"
             $rsgHsName = "rsg-${{ env.ARM_LOCATION }}-net-hs-pr-${{ env.GH_PR_NUMBER }}"
             $rsgVwanName = "rsg-${{ env.ARM_LOCATION }}-net-vwan-pr-${{ env.GH_PR_NUMBER }}"
             $rsgNetworkWatcherName = "NetworkWatcherRG"
