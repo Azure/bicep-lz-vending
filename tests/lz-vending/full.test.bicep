@@ -31,14 +31,8 @@ module createSub '../../main.bicep' = {
         relativeScope: ''
       }
     ]
-    resourceProviders : [
-      'Microsoft.Compute'
-      'Microsoft.AVS'
-    ]
-    resourceProvidersFeatures: [
-      'AzureServicesVm'
-      'InGuestHotPatchVMPreview'
-    ]
+    resourceProviders : []
+    resourceProvidersFeatures: []
   }
 }
 
