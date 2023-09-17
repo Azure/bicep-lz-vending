@@ -442,7 +442,7 @@ module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Reso
   }
 }
 
-module createDeploymentScriptManagedIdentity '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = if (!empty(resourceProviders)) {
+module createManagedIdentityForDeploymentScript '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   dependsOn: [
     createResourceGroupForDeploymentScript
@@ -452,17 +452,18 @@ module createDeploymentScriptManagedIdentity '../../carml/v0.6.0/Microsoft.Manag
     location: deploymentScriptLocation
     name: deploymentScriptManagedIdentityName
     enableDefaultTelemetry: enableTelemetryForCarml
+    lock: ''
   }
 }
 
 module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = if (!empty(resourceProviders)) {
   dependsOn: [
-    createDeploymentScriptManagedIdentity
+    createManagedIdentityForDeploymentScript
   ]
   name: take('${deploymentNames.createRoleAssignmentsDeploymentScript}', 64)
   params: {
     location: deploymentScriptLocation
-    principalId: createDeploymentScriptManagedIdentity.outputs.principalId
+    principalId: createManagedIdentityForDeploymentScript.outputs.principalId
     roleDefinitionIdOrName: 'Contributor'
     subscriptionId: subscriptionId
     enableDefaultTelemetry: enableTelemetryForCarml
@@ -483,7 +484,7 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
     timeout: 'PT1H'
     runOnce: true
     userAssignedIdentities: {
-      '${createDeploymentScriptManagedIdentity.outputs.resourceId}': {}
+      '${createManagedIdentityForDeploymentScript.outputs.resourceId}': {}
     }
     arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -resourceProvidersFeatures -subscriptionId ${subscriptionId}'
     scriptContent: loadTextContent('../../scripts/Invoke-RegisterSubscriptionResourceProviders.ps1')
