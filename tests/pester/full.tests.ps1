@@ -47,8 +47,8 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
     }
 
     It "Should have the 'Microsoft.Compute', 'Microsoft.AVS' resource providers and the 'AzureServicesVm', 'InGuestHotPatchVMPreview' resource providers features registered" {
-      $resourceProviders = @( "Microsoft.Compute", "Microsoft.AVS" )
-      $resourceProvidersFeatures = @( "AzureServicesVm", "InGuestHotPatchVMPreview" )
+      $resourceProviders = @( "Microsoft.HybridCompute", "Microsoft.AVS" )
+      $resourceProvidersFeatures = @( "AzureServicesVm", "ArcServerPrivateLinkPreview" )
       ForEach ($provider in $resourceProviders) {
         $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
         $providerStatus | Should -BeIn @('Registered', 'Registering')
