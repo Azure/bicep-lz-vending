@@ -608,6 +608,7 @@ param resourceProviders array = [
   ]
 })
 @sys.description('''An array of resource providers features to register. If left blank/empty, no features will be registered.
+
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
 ''')
