@@ -461,6 +461,7 @@ param deploymentScriptManagedIdentityName string = 'id-${deployment().location}'
   ]
 })
 @sys.description('''An array of resource providers features to register. If left blank/empty,no resource providers will be registered.
+
 - Type: `[]` Array
 - Default value: `[
   'Microsoft.ApiManagement'
