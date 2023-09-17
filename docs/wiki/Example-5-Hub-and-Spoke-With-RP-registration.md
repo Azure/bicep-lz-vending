@@ -11,7 +11,7 @@ targetScope = 'managementGroup'
 @description('Specifies the location for resources.')
 param location string = 'uksouth'
 
-module sub003 'br/public:lz/sub-vending:1.4.1' = {
+module sub003 'br/public:lz/sub-vending:1.51.' = {
   name: 'sub-bicep-lz-vending-example-001'
   params: {
     subscriptionAliasEnabled: true
@@ -34,14 +34,10 @@ module sub003 'br/public:lz/sub-vending:1.4.1' = {
     virtualNetworkResourceGroupLockEnabled: false
     virtualNetworkPeeringEnabled: true
     hubNetworkResourceId: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rsg-uks-net-hub-001/providers/Microsoft.Network/virtualNetworks/vnet-uks-hub-001'
-    resourceProviders : [
-      'Microsoft.Compute'
-      'Microsoft.AVS'
-    ]
-    resourceProvidersFeatures: [
-      'AzureServicesVm'
-      'InGuestHotPatchVMPreview'
-    ]
+    resourceProviders : {
+      'Microsoft.Compute' : ['InGuestHotPatchVMPreview']
+      'Microsoft.AVS'     : ['AzureServicesVm']
+    }
   }
 }
 ```
@@ -169,16 +165,10 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
       ]
     },
     "resourceProviders":{
-      "value":[
-        "Microsoft.Compute",
-        "Microsoft.AVS"
-      ]
-    },
-    "resourceProvidersFeatures":{
-      "value":[
-        "AzureServicesVm",
-        "InGuestHotPatchVMPreview"
-      ]
+      "value":{
+        "Microsoft.Compute": "[InGuestHotPatchVMPreview]",
+        "Microsoft.AVS" : "[AzureServicesVm]"
+      }
     },
     "disableTelemetry": {
       "value": false

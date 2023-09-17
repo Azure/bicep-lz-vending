@@ -472,32 +472,6 @@ Each object must contain the following `keys`:
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
 
-### resourceProviders
-
-![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
-
-Supply an array of strings containing the resource providers to register on the subscription, e.g. `["Microsoft.Compute","Microsoft.Storage"]`
-
-> A resource group gets created in the subscription with a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers' registration process. Leave the value empty to not register any resource providers.
-
-- Type: `[]` Array
-- Default value: `['Microsoft.ApiManagement','Microsoft.AppPlatform','Microsoft.Authorization','Microsoft.Automation','Microsoft.AVS','Microsoft.Blueprint','Microsoft.BotService','Microsoft.Cache','Microsoft.Cdn','Microsoft.CognitiveServices','Microsoft.Compute','Microsoft.ContainerInstance','Microsoft.ContainerRegistry','Microsoft.ContainerService','Microsoft.CostManagement','Microsoft.CustomProviders','Microsoft.Databricks','Microsoft.DataLakeAnalytics','Microsoft.DataLakeStore','Microsoft.DataMigration','Microsoft.DataProtection','Microsoft.DBforMariaDB','Microsoft.DBforMySQL','Microsoft.DBforPostgreSQL','Microsoft.DesktopVirtualization','Microsoft.Devices','Microsoft.DevTestLab','Microsoft.DocumentDB','Microsoft.EventGrid','Microsoft.EventHub','Microsoft.HDInsight','Microsoft.HealthcareApis','Microsoft.GuestConfiguration','Microsoft.KeyVault','Microsoft.Kusto','microsoft.insights','Microsoft.Logic','Microsoft.MachineLearningServices','Microsoft.Maintenance','Microsoft.ManagedIdentity','Microsoft.ManagedServices','Microsoft.Management','Microsoft.Maps','Microsoft.MarketplaceOrdering','Microsoft.Media','Microsoft.MixedReality','Microsoft.Network','Microsoft.NotificationHubs','Microsoft.OperationalInsights','Microsoft.OperationsManagement','Microsoft.PolicyInsights','Microsoft.PowerBIDedicated','Microsoft.Relay','Microsoft.RecoveryServices','Microsoft.Resources','Microsoft.Search','Microsoft.Security','Microsoft.SecurityInsights','Microsoft.ServiceBus','Microsoft.ServiceFabric','Microsoft.Sql','Microsoft.Storage','Microsoft.StreamAnalytics','Microsoft.TimeSeriesInsights','Microsoft.Web']`
-
-### resourceProvidersFeatures
-
-![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
-
-Supply an array of strings containing the resource providers features to register on the subscription, e.g. `["AzureServicesVm","InGuestHotPatchVMPreview"]`
-
-> A resoure group gets created in the subscription with the format "rsg-<location>-ds-<xxxx>" hosting a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers features registration process. Leave the value empty to not register any resource provider features.
-
-> After a preview feature is registered in your subscription, you'll see one of two states: Registered or Pending.
-> - For a preview feature that doesn't require approval, the state is Registered.
-> - If a preview feature requires approval, the registration state is Pending. You must request approval from the Azure service offering the preview feature. Usually, you request access through a support ticket.
-
-- Type: `[]` Array
-- Default value: `[]` *(empty array)*
-
 ### disableTelemetry
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
