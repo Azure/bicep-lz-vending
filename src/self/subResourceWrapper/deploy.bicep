@@ -488,6 +488,7 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
     }
     arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -resourceProvidersFeatures -subscriptionId ${subscriptionId}'
     scriptContent: loadTextContent('../../scripts/Invoke-RegisterSubscriptionResourceProviders.ps1')
+    lock: ''
   }
 }
 
