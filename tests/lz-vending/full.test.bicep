@@ -32,7 +32,7 @@ module createSub '../../main.bicep' = {
       }
     ]
     resourceProviders : {
-      'Microsoft.Compute' : ['InGuestHotPatchVMPreview']
+      'Microsoft.HybridCompute' : ['ArcServerPrivateLinkPreview']
       'Microsoft.AVS'     : ['AzureServicesVm']
     }
   }
@@ -66,7 +66,7 @@ module hubSpoke '../../main.bicep' = {
       }
     ]
     resourceProviders : {
-      'Microsoft.Compute' : ['InGuestHotPatchVMPreview']
+      'Microsoft.HybridCompute' : ['ArcServerPrivateLinkPreview']
       'Microsoft.AVS'     : ['AzureServicesVm']
     }
   }
