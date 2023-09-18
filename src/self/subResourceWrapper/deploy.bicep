@@ -442,12 +442,12 @@ module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Reso
 }
 
 module createManagedIdentityForDeploymentScript '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = if (!empty(resourceProviders)) {
-  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
+  scope: resourceGroup(subscriptionId,deploymentScriptResourceGroupName)
+  name: deploymentNames.createDeploymentScriptManagedIdentity
   dependsOn: [
     createResourceGroupForDeploymentScript
   ]
-  name: deploymentNames.createDeploymentScriptManagedIdentity
-  params: {
+  params:{
     location: deploymentScriptLocation
     name: deploymentScriptManagedIdentityName
     enableDefaultTelemetry: enableTelemetryForCarml
@@ -461,7 +461,7 @@ module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Autho
   name: take('${deploymentNames.createRoleAssignmentsDeploymentScript}', 64)
   params: {
     location: deploymentScriptLocation
-    principalId: createManagedIdentityForDeploymentScript.outputs.principalId
+    principalId: !empty(resourceProviders) ? createManagedIdentityForDeploymentScript.outputs.principalId : ''
     roleDefinitionIdOrName: 'Contributor'
     subscriptionId: subscriptionId
     enableDefaultTelemetry: enableTelemetryForCarml
@@ -481,9 +481,7 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
     retentionInterval: 'P1D'
     timeout: 'PT1H'
     runOnce: true
-    userAssignedIdentities: {
-      '${createManagedIdentityForDeploymentScript.outputs.resourceId}': {}
-    }
+    userAssignedIdentities: !(empty(resourceProviders)) ? {'${createManagedIdentityForDeploymentScript.outputs.resourceId}': {}} : {}
     arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -resourceProvidersFeatures -subscriptionId ${subscriptionId}'
     scriptContent: loadTextContent('../../scripts/Invoke-RegisterSubscriptionResourceProviders.ps1')
   }
