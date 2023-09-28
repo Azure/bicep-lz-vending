@@ -125,7 +125,7 @@ jobs:
             Remove-AzResourceGroup -Name $rsgNetworkWatcherName -Force
             Remove-AzResourceGroup -Name $rsgDeploymentScriptName -Force
 
-            Write-Host "Cleanup registered providers and features..." -ForegroundColor Yellow
+            Write-Host "Cleanup registered resource providers and features..." -ForegroundColor Yellow
             Unregister-AzProviderFeature -FeatureName "ArcServerPrivateLinkPreview" -ProviderNamespace "Microsoft.HybridCompute"
             Unregister-AzProviderFeature -FeatureName "AzureServicesVm" -ProviderNamespace "Microsoft.AVS"
             Unregister-AzResourceProvider -ProviderNamespace "Microsoft.HybridCompute"
