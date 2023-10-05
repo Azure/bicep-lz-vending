@@ -384,6 +384,15 @@ param virtualNetworkVwanPropagatedRouteTablesResourceIds array = []
 param virtualNetworkVwanPropagatedLabels array = []
 
 @metadata({
+  example: false
+})
+@sys.description('''Indicates whether routing intent is enabled on the Virtual HUB within the virtual WAN.
+
+- Type: Boolean
+''')
+param vHubRoutingIntentEnabled bool = false
+
+@metadata({
   example: true
 })
 @sys.description('''Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
@@ -505,6 +514,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     virtualNetworkVwanAssociatedRouteTableResourceId: virtualNetworkVwanAssociatedRouteTableResourceId
     virtualNetworkVwanPropagatedRouteTablesResourceIds: virtualNetworkVwanPropagatedRouteTablesResourceIds
     virtualNetworkVwanPropagatedLabels: virtualNetworkVwanPropagatedLabels
+    vHubRoutingIntentEnabled: vHubRoutingIntentEnabled
     roleAssignmentEnabled: roleAssignmentEnabled
     roleAssignments: roleAssignments
     disableTelemetry: disableTelemetry
