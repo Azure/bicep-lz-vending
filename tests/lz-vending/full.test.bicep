@@ -32,8 +32,8 @@ module createSub '../../main.bicep' = {
       }
     ]
     resourceProviders : {
-      'Microsoft.HybridCompute' : ['ArcServerPrivateLinkPreview']
-      'Microsoft.AVS'     : ['AzureServicesVm']
+      'Microsoft.HybridCompute': ['ArcServerPrivateLinkPreview']
+      'Microsoft.AVS': ['AzureServicesVm']
     }
   }
 }
@@ -66,8 +66,8 @@ module hubSpoke '../../main.bicep' = {
       }
     ]
     resourceProviders : {
-      'Microsoft.HybridCompute' : ['ArcServerPrivateLinkPreview']
-      'Microsoft.AVS'     : ['AzureServicesVm']
+      'Microsoft.HybridCompute': ['ArcServerPrivateLinkPreview']
+      'Microsoft.AVS': ['AzureServicesVm']
     }
   }
 }
@@ -91,8 +91,8 @@ module vwanSpoke '../../main.bicep' = {
     virtualNetworkPeeringEnabled: true
     hubNetworkResourceId: '/subscriptions/e4e7395f-dc45-411e-b425-95f75e470e16/resourceGroups/rsg-blzv-perm-hubs-001/providers/Microsoft.Network/virtualHubs/vhub-uksouth-blzv'
     resourceProviders :{
-      'Microsoft.HybridCompute' : ['ArcServerPrivateLinkPreview']
-      'Microsoft.AVS'     : ['AzureServicesVm']
+      'Microsoft.HybridCompute': ['ArcServerPrivateLinkPreview']
+      'Microsoft.AVS': ['AzureServicesVm']
     }
   }
 }
