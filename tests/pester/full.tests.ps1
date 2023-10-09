@@ -46,7 +46,7 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
       $mgAssociation.Id | Should -Be "/providers/Microsoft.Management/managementGroups/bicep-lz-vending-automation-child/subscriptions/$subId"
     }
 
-    It "Should have the 'Microsoft.Compute', 'Microsoft.AVS' resource providers and the 'AzureServicesVm', 'InGuestHotPatchVMPreview' resource providers features registered" {
+    It "Should have the 'Microsoft.HybridCompute', 'Microsoft.AVS' resource providers and the 'AzureServicesVm', 'ArcServerPrivateLinkPreview' resource providers features registered" {
       $resourceProviders = @( "Microsoft.HybridCompute", "Microsoft.AVS" )
       $resourceProvidersFeatures = @( "AzureServicesVm", "ArcServerPrivateLinkPreview" )
       ForEach ($provider in $resourceProviders) {
