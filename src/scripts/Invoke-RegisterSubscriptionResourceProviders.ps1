@@ -24,17 +24,17 @@ if ($providers.Count -gt 0) {
       $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
       # Check if the providered is registered
       if ($providerStatus -eq 'NotRegistered') {
-        Write-Host "`n Registering the '$provider' provider"
+        Write-Output "`n Registering the '$provider' provider"
         if (Register-AzResourceProvider -ProviderNamespace $provider) {
-          Write-Host "`n The '$provider' has been registered successfully"
+          Write-Output "`n The '$provider' has been registered successfully"
         }
         else {
-          Write-Host "`n The '$provider' provider has not been registered successfully"
+          Write-Output "`n The '$provider' provider has not been registered successfully"
           $failedProviders += ",$provider"
         }
       }
       elseif ($providerStatus -eq 'Registering') {
-        Write-Host "`n The '$provider' provider is in registering state"
+        Write-Output "`n The '$provider' provider is in registering state"
         $failedProviders += ",$provider"
       }
 
@@ -47,7 +47,7 @@ if ($providers.Count -gt 0) {
       $DeploymentScriptOutputs["failedProvidersRegistrations"] = $output
     }
     catch {
-      Write-Host "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
+      Write-Output "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
       $failedProviders += ",$provider"
       if ($failedProviders.length -gt 0) {
         $output = $failedProviders.substring(1)
@@ -63,17 +63,17 @@ if ($providers.Count -gt 0) {
           $featureStatus = (Get-AzProviderFeature -ListAvailable | Where-Object FeatureName -eq $feature).RegistrationState
           # Check if the feature is registered
           if ($featureStatus -eq 'NotRegistered') {
-            Write-Host "`n Registering the '$feature' feature"
+            Write-Output "`n Registering the '$feature' feature"
             if (Register-AzProviderFeature -FeatureName $feature -ProviderNamespace $provider) {
-              Write-Host "`n The '$feature' has been registered successfully"
+              Write-Output "`n The '$feature' has been registered successfully"
             }
             else {
-              Write-Host "`n The '$feature' feature has not been registered successfully"
+              Write-Output "`n The '$feature' feature has not been registered successfully"
               $failedFeatures += ",$feature"
             }
           }
           elseif ($null -eq $featureStatus) {
-            Write-Host "`n The '$feature' feature doesn't exist."
+            Write-Output "`n The '$feature' feature doesn't exist."
             $failedFeatures += ",$feature"
           }
           if ($failedFeatures.length -gt 0) {
@@ -85,7 +85,7 @@ if ($providers.Count -gt 0) {
           $DeploymentScriptOutputs["failedFeaturesRegistrations"] = $output
         }
         catch {
-          Write-Host "`n There was a problem registering the '$feature' feature. Please make sure this feature name is valid"
+          Write-Output "`n There was a problem registering the '$feature' feature. Please make sure this feature name is valid"
           $failedFeatures += ",$feature"
           if ($failedFeatures.length -gt 0) {
             $output = $failedFeatures.substring(1)
@@ -97,5 +97,5 @@ if ($providers.Count -gt 0) {
   }
 }
 else {
-  Write-Host "`n No providers or features to register"
+  Write-Output "`n No providers or features to register"
 }
