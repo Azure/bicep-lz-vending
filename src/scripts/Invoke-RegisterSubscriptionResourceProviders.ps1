@@ -43,6 +43,11 @@ if ($providers.Count -gt 0) {
     }
     catch {
       Write-Output "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
+      $failedProviders += ",$provider"
+      if ($failedProviders.length -gt 0) {
+        $output = $failedProviders.substring(1)
+      }
+      $DeploymentScriptOutputs["failedProvidersRegistrations"] = $output
     }
     # Registering resource providers features
     $features = $providers[$provider]
@@ -75,6 +80,11 @@ if ($providers.Count -gt 0) {
         }
         catch {
           Write-Output "`n There was a problem registering the '$feature' feature. Please make sure this feature name is valid"
+          $failedFeatures += ",$feature"
+          if ($failedFeatures.length -gt 0) {
+            $output = $failedFeatures.substring(1)
+          }
+          $DeploymentScriptOutputs["failedFeaturesRegistrations"] = $output
         }
       }
     }
