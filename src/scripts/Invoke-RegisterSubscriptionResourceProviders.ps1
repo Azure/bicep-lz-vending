@@ -17,9 +17,6 @@ $DeploymentScriptOutputs = @{}
 ## Registering resource providers and features
 ##############################################
 
-write-host "Starting script"
-Start-Sleep -Seconds 30
-
 if ($providers.Count -gt 0) {
   foreach ($provider in $providers.keys) {
     try {
