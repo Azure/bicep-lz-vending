@@ -26,7 +26,7 @@ if ($providers.Count -gt 0) {
       if ($providerStatus -eq 'NotRegistered') {
         Write-Output "`n Registering the '$provider' provider"
         if (Register-AzResourceProvider -ProviderNamespace $provider) {
-          Write-Output "`n The '$provider' has been registered successfully"
+          Write-Output "`n The registration for provider'$provider' has started successfully"
         }
         else {
           Write-Output "`n The '$provider' provider has not been registered successfully"
@@ -62,10 +62,10 @@ if ($providers.Count -gt 0) {
           # Define variables
           $featureStatus = (Get-AzProviderFeature -ListAvailable | Where-Object FeatureName -eq $feature).RegistrationState
           # Check if the feature is registered
-          if ($featureStatus -eq 'NotRegistered') {
+          if ($featureStatus -eq 'NotRegistered' -or $featureStatus -eq 'Unregistered') {
             Write-Output "`n Registering the '$feature' feature"
             if (Register-AzProviderFeature -FeatureName $feature -ProviderNamespace $provider) {
-              Write-Output "`n The '$feature' has been registered successfully"
+              Write-Output "`n The The registration for feature '$feature' has started successfully"
             }
             else {
               Write-Output "`n The '$feature' feature has not been registered successfully"
