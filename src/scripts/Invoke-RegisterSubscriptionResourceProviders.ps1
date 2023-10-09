@@ -23,7 +23,7 @@ if ($providers.Count -gt 0) {
       # Registering resource providers
       $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
       # Check if the providered is registered
-      if ($providerStatus -ne 'Registered') {
+      if ($providerStatus -eq 'NotRegistered') {
         Write-Output "`n Registering the '$provider' provider"
         if (Register-AzResourceProvider -ProviderNamespace $provider) {
           Write-Output "`n The '$provider' has been registered successfully"
@@ -33,6 +33,11 @@ if ($providers.Count -gt 0) {
           $failedProviders += ",$provider"
         }
       }
+      elseif ($providerStatus -eq 'Registering') {
+        Write-Output "`n The '$provider' provider is in registering state"
+        $failedProviders += ",$provider"
+      }
+
       if ($failedProviders.length -gt 0) {
         $output = $failedProviders.substring(1)
       }
@@ -66,7 +71,8 @@ if ($providers.Count -gt 0) {
               Write-Output "`n The '$feature' feature has not been registered successfully"
               $failedFeatures += ",$feature"
             }
-          }elseif ($null -eq $featureStatus) {
+          }
+          elseif ($null -eq $featureStatus) {
             Write-Output "`n The '$feature' feature doesn't exist."
             $failedFeatures += ",$feature"
           }
@@ -89,6 +95,7 @@ if ($providers.Count -gt 0) {
       }
     }
   }
-}else {
+}
+else {
   Write-Output "`n No providers or features to register"
 }
