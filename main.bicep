@@ -386,7 +386,7 @@ param virtualNetworkVwanPropagatedLabels array = []
 @metadata({
   example: false
 })
-@sys.description('''Indicates whether routing intent is enabled on the Virtual HUB within the virtual WAN.
+@sys.description('''Indicates whether routing intent is enabled on the Virtual Hub within the Virtual WAN.
 
 - Type: Boolean
 ''')
