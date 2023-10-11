@@ -20,7 +20,7 @@ targetScope = 'managementGroup'
 @description('Specifies the location for resources.')
 param location string = 'uksouth'
 
-module sub003 'br/public:lz/sub-vending:1.51.' = {
+module sub003 'br/public:lz/sub-vending:1.5.1' = {
   name: 'sub-bicep-lz-vending-example-001'
   params: {
     subscriptionAliasEnabled: true

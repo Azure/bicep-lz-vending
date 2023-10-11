@@ -11,7 +11,7 @@ targetScope = 'managementGroup'
 @description('Specifies the location for resources.')
 param location string = 'uksouth'
 
-module createSubAndFirstVnet 'br/public:lz/sub-vending:1.51.' = {
+module createSubAndFirstVnet 'br/public:lz/sub-vending:1.5.1' = {
   name: 'sub-with-multiple-vnets'
   params: {
     subscriptionAliasEnabled: true
@@ -37,7 +37,7 @@ module createSubAndFirstVnet 'br/public:lz/sub-vending:1.51.' = {
   }
 }
 
-module createSubAndSecondVnet 'br/public:lz/sub-vending:1.51.' = {
+module createSubAndSecondVnet 'br/public:lz/sub-vending:1.5.1' = {
   name: 'additional-vnet'
   params: {
     subscriptionAliasEnabled: false
