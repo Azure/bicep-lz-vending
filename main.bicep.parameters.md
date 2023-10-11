@@ -34,6 +34,7 @@ virtualNetworkVwanEnableInternetSecurity | No       | Enables the ability for th
 virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.  - Type: String - Default value: `''` *(empty string)* = Which means if the parameter `virtualNetworkPeeringEnabled` is `true` and also the parameter `hubNetworkResourceId` is not empty then the `defaultRouteTable` will be associated of the provided Virtual Hub in the parameter `hubNetworkResourceId`.     - e.g. `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable` 
 virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of objects of virtual hub route table resource IDs to propagate routes to. If left blank/empty the `defaultRouteTable` will be propagated to only.  Each object must contain the following `key`: - `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propagate too  > See below [example in parameter file](#parameter-file)  > **IMPORTANT:** If you provide any Route Tables in this array of objects you must ensure you include also the `defaultRouteTable` Resource ID as an object in the array as it is not added by default when a value is provided for this parameter.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+vHubRoutingIntentEnabled | No       | Indicates whether routing intent is enabled on the Virtual Hub within the Virtual WAN.  - Type: Boolean
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.  - Type: Boolean 
 roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 disableTelemetry | No       | Disable telemetry collection by this module.  For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry) 
@@ -393,6 +394,19 @@ An array of virtual hub route table labels to propagate routes to. If left blank
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
 
+### vHubRoutingIntentEnabled 
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Indicates whether routing intent is enabled in the virtual hub. If it is enabled and this is not set the deployment will fail.
+
+- Type: Boolean
+
+**Default value**
+
+```text
+False
+```
 
 ### roleAssignmentEnabled
 
