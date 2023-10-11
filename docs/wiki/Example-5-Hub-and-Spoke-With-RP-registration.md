@@ -10,8 +10,8 @@ Here is a simple example Bicep file for deploying a landing zone (Subscription) 
 > The resource providers registration process is asyncronous as it might take extended periods of time to register.
 > After a preview feature is registered in your subscription, you'll see one of two states: Registered or Pending.
 >
-> - For a preview feature that doesn't require approval, the state is Registered.
-> - If a preview feature requires approval, the registration state is Pending. You must request approval from the Azure service offering the preview feature. Usually, you request access through a support ticket.
+>- For a preview feature that doesn't require approval, the state is Registered.
+>- If a preview feature requires approval, the registration state is Pending. You must request approval from the Azure service offering the preview feature. Usually, you request access through a support ticket.
 
 ```bicep
 targetScope = 'managementGroup'
