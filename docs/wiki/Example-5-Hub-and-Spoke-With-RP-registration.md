@@ -45,7 +45,7 @@ module sub003 'br/public:lz/sub-vending:1.5.1' = {
     hubNetworkResourceId: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rsg-uks-net-hub-001/providers/Microsoft.Network/virtualNetworks/vnet-uks-hub-001'
     resourceProviders : {
       'Microsoft.Compute' : ['InGuestHotPatchVMPreview']
-      'Microsoft.AVS'     : ['AzureServicesVm']
+      'Microsoft.AVS'     : ['AzureServicesVm','ArcAutomatedOnboarding']
     }
   }
 }
@@ -175,8 +175,8 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
     },
     "resourceProviders":{
       "value":{
-        "Microsoft.Compute": "[InGuestHotPatchVMPreview]",
-        "Microsoft.AVS" : "[AzureServicesVm]"
+        "Microsoft.Compute": ["InGuestHotPatchVMPreview"],
+        "Microsoft.AVS" : ["AzureServicesVm","ArcAutomatedOnboarding"]
       }
     },
     "disableTelemetry": {
