@@ -21,6 +21,7 @@ This is currently split logically into the following capabilities:
 - Networking - deploy a Virtual Network with, optional:
   - Hub & spoke connectivity (peering to a hub Virtual Network)
   - Virtual WAN connectivity (peering to a Virtual Hub via a Virtual Hub Connection)
+      - Including support for connections to Virtual WAN Hubs with Routing Intent configured
   - Link to existing DDoS Network Protection Plan
   - Specify Custom DNS Servers
 - Role assignments
