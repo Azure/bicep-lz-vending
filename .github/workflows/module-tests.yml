@@ -118,6 +118,8 @@ jobs:
             $rsgNetworkWatcherName = "NetworkWatcherRG"
             $guid = $subId.substring(0,8)
             $rsgDeploymentScriptName = "rsg-${{ env.ARM_LOCATION }}-ds-pr-${{ env.GH_PR_NUMBER }}-$guid"
+            $allRoleAssignmentsSub = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue
+            $rbacIdentitiyNotFoundToCleanupContributor = $allRoleAssignmentsSub | Where-Object { $_.ObjectType -eq "Unknown" -and $_.RoleDefinitionName -eq "Contributor" }
 
             Write-Host "Cleanup Vended Subscription Resources & Resource Groups..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUBID }}"
@@ -141,4 +143,10 @@ jobs:
             $hubVnetPeering = Get-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name *
             Remove-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name "$($hubVnetPeering.Name)" -Force
             Write-Host "Cleanup Hub Subscription Resources... Complete!" -ForegroundColor Green
+
+            Write-Host "Cleanup Unknown Contributor RBAC Assignments on Sub Scope..." -ForegroundColor Yellow
+            foreach ($assignment in $rbacIdentitiyNotFoundToCleanupContributor) {
+              Remove-AzRoleAssignment -objectId $assignment.ObjectId -Scope $assignment.Scope -RoleDefinitionName $assignment.RoleDefinitionName
+            }
+            Write-Host "Cleanup Unknown Contributor RBAC Assignments on Sub Scope... Complete!" -ForegroundColor Green
           azPSVersion: "latest"

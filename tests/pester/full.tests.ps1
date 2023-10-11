@@ -62,20 +62,39 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
   }
 
   Context "Role-Based Access Control Assignment Tests" {
-    BeforeAll {
-      $allRoleAssignmentsSub = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue
-      $allRoleAssignmentsRsg = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -ErrorAction SilentlyContinue
-    }
-
     It "Should Have a Role Assignment for an known AAD Group with the Reader role directly upon the Subscription" {
-      $roleAssignment = $allRoleAssignmentsSub | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Reader" }
+      $iterationCount = 0
+      do {
+        $allRoleAssignmentsSub = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue
+        $roleAssignment = $allRoleAssignmentsSub | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Reader" }
+        if ($null -eq $roleAssignment) {
+          Write-Host "Waiting for Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
+          Start-Sleep -Seconds 15
+          $iterationCount++
+        }
+      } until (
+        $roleAssignment -ne $null -or $iterationCount -ge 10
+      )
+
       $roleAssignment.ObjectId | Should -Be "7eca0dca-6701-46f1-b7b6-8b424dab50b3"
       $roleAssignment.RoleDefinitionName | Should -Be "Reader"
       $roleAssignment.scope | Should -Be "/subscriptions/$subId"
     }
 
     It "Should Have a Role Assignment for an known AAD Group with the Network Contributor role directly upon the Resource Group" {
-      $roleAssignment = $allRoleAssignmentsRsg | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Network Contributor" }
+      $iterationCount = 0
+      do {
+        $allRoleAssignmentsRsg = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -ErrorAction SilentlyContinue
+        $roleAssignment = $allRoleAssignmentsRsg | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Network Contributor" }
+        if ($null -eq $roleAssignment) {
+          Write-Host "Waiting for Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
+          Start-Sleep -Seconds 15
+          $iterationCount++
+        }
+      } until (
+        $roleAssignment -ne $null -or $iterationCount -ge 10
+      )
+
       $roleAssignment.ObjectId | Should -Be "7eca0dca-6701-46f1-b7b6-8b424dab50b3"
       $roleAssignment.RoleDefinitionName | Should -Be "Network Contributor"
       $roleAssignment.scope | Should -Be "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber"
