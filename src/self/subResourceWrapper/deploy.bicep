@@ -223,7 +223,7 @@ module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtua
     virtualHubName: virtualWanHubName
     remoteVirtualNetworkId: '/subscriptions/${subscriptionId}/resourceGroups/${virtualNetworkResourceGroupName}/providers/Microsoft.Network/virtualNetworks/${virtualNetworkName}'
     enableInternetSecurity: virtualNetworkVwanEnableInternetSecurity
-    routingConfiguration: !vHubRoutingIntentEnabled ? { 
+    routingConfiguration: !vHubRoutingIntentEnabled ? {
       associatedRouteTable: {
         id: virtualWanHubConnectionAssociatedRouteTable
       }
@@ -231,7 +231,6 @@ module createLzVirtualWanConnection '../../carml/v0.6.0/Microsoft.Network/virtua
         ids: virtualWanHubConnectionPropogatedRouteTables
         labels: virtualWanHubConnectionPropogatedLabels
         }
-    
     } : {}
     enableDefaultTelemetry: enableTelemetryForCarml
   }
