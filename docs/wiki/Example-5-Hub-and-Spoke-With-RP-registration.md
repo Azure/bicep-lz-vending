@@ -6,8 +6,8 @@
 Here is a simple example Bicep file for deploying a landing zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network, resource providers and features registration using the [Bicep Module Registry](https://github.com/Azure/bicep-registry-modules):
 
 > A resoure group gets created in the subscription with the format "rsg-<location>-ds-<xxxx>" hosting a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers features registration process.
-
-> The resource providers registration process is asyncronous as it might take extended periods of time to register.
+>
+> The resource providers registration process is asynchronous as it might take extended periods of time to register.
 > After a preview feature is registered in your subscription, you'll see one of two states: Registered or Pending.
 >
 >- For a preview feature that doesn't require approval, the state is Registered.
