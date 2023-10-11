@@ -471,7 +471,7 @@ param deploymentScriptManagedIdentityName string = 'id-${deployment().location}'
 
 })
 @sys.description('''
-An object of resource providers and resource providers features to register. If left blank/empty, no resource providers or features will be registered.
+An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.
 
 - Type: `{}` Object
 - Default value: `{

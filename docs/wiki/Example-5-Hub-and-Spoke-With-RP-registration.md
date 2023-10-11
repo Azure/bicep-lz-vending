@@ -8,11 +8,10 @@ Here is a simple example Bicep file for deploying a landing zone (Subscription) 
 > A resoure group gets created in the subscription with the format "rsg-<location>-ds-<xxxx>" hosting a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers features registration process.
 
 > The resource providers registration process is asyncronous as it might take extended periods of time to register.
-
 > After a preview feature is registered in your subscription, you'll see one of two states: Registered or Pending.
 >
-> - For a preview feature that doesn't require approval, the state is Registered.
-> - If a preview feature requires approval, the registration state is Pending. You must request approval from the Azure service offering the preview feature. Usually, you request access through a support ticket.
+>- For a preview feature that doesn't require approval, the state is Registered.
+>- If a preview feature requires approval, the registration state is Pending. You must request approval from the Azure service offering the preview feature. Usually, you request access through a support ticket.
 
 ```bicep
 targetScope = 'managementGroup'
@@ -20,7 +19,7 @@ targetScope = 'managementGroup'
 @description('Specifies the location for resources.')
 param location string = 'uksouth'
 
-module sub003 'br/public:lz/sub-vending:1.51.' = {
+module sub003 'br/public:lz/sub-vending:1.4.1' = {
   name: 'sub-bicep-lz-vending-example-001'
   params: {
     subscriptionAliasEnabled: true
@@ -45,7 +44,7 @@ module sub003 'br/public:lz/sub-vending:1.51.' = {
     hubNetworkResourceId: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rsg-uks-net-hub-001/providers/Microsoft.Network/virtualNetworks/vnet-uks-hub-001'
     resourceProviders : {
       'Microsoft.Compute' : ['InGuestHotPatchVMPreview']
-      'Microsoft.AVS'     : ['AzureServicesVm']
+      'Microsoft.AVS'     : ['AzureServicesVm','ArcAutomatedOnboarding']
     }
   }
 }
@@ -175,8 +174,8 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
     },
     "resourceProviders":{
       "value":{
-        "Microsoft.Compute": "[InGuestHotPatchVMPreview]",
-        "Microsoft.AVS" : "[AzureServicesVm]"
+        "Microsoft.Compute": ["InGuestHotPatchVMPreview"],
+        "Microsoft.AVS" : ["AzureServicesVm","ArcAutomatedOnboarding"]
       }
     },
     "disableTelemetry": {
