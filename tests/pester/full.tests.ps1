@@ -67,6 +67,8 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
       do {
         $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -RoleDefinitionName "Reader" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b5" -ErrorAction SilentlyContinue
         Write-Host "Role assignment iteration $iterationCount : $roleAssignment"
+        $test = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -RoleDefinitionName "Reader" | Where-Object {$_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b5"}
+        Write-Host "Role assignment test $test"
         if ($null -eq $roleAssignment) {
           Write-Host "Waiting for Subscription Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
           Start-Sleep -Seconds 15
