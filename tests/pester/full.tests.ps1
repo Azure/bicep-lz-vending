@@ -45,23 +45,54 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
       $mgAssociation = Get-AzManagementGroupSubscription -SubscriptionId $subId -GroupId "bicep-lz-vending-automation-child" -ErrorAction SilentlyContinue
       $mgAssociation.Id | Should -Be "/providers/Microsoft.Management/managementGroups/bicep-lz-vending-automation-child/subscriptions/$subId"
     }
+
+    It "Should have the 'Microsoft.HybridCompute', 'Microsoft.AVS' resource providers and the 'AzureServicesVm', 'ArcServerPrivateLinkPreview' resource providers features registered" {
+      $resourceProviders = @( "Microsoft.HybridCompute", "Microsoft.AVS" )
+      $resourceProvidersFeatures = @( "AzureServicesVm", "ArcServerPrivateLinkPreview" )
+      ForEach ($provider in $resourceProviders) {
+        $providerStatus = (Get-AzResourceProvider -ListAvailable | Where-Object ProviderNamespace -eq $provider).registrationState
+        $providerStatus | Should -BeIn @('Registered', 'Registering')
+      }
+
+      ForEach ($feature in $resourceProvidersFeatures) {
+        $providerFeatureStatus = (Get-AzProviderFeature -ListAvailable | Where-Object FeatureName -eq $feature).registrationState
+        $providerFeatureStatus | Should -BeIn @('Registered', 'Registering', 'Pending')
+      }
+    }
   }
 
   Context "Role-Based Access Control Assignment Tests" {
-    BeforeAll {
-      $allRoleAssignmentsSub = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue
-      $allRoleAssignmentsRsg = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -ErrorAction SilentlyContinue
-    }
-
     It "Should Have a Role Assignment for an known AAD Group with the Reader role directly upon the Subscription" {
-      $roleAssignment = $allRoleAssignmentsSub | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Reader" }
+      $iterationCount = 0
+      do {
+        $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -RoleDefinitionName "Reader" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -ErrorAction SilentlyContinue
+        if ($null -eq $roleAssignment) {
+          Write-Host "Waiting for Subscription Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
+          Start-Sleep -Seconds 30
+          $iterationCount++
+        }
+      } until (
+        $roleAssignment -ne $null -or $iterationCount -ge 10
+      )
+
       $roleAssignment.ObjectId | Should -Be "7eca0dca-6701-46f1-b7b6-8b424dab50b3"
       $roleAssignment.RoleDefinitionName | Should -Be "Reader"
       $roleAssignment.scope | Should -Be "/subscriptions/$subId"
     }
 
     It "Should Have a Role Assignment for an known AAD Group with the Network Contributor role directly upon the Resource Group" {
-      $roleAssignment = $allRoleAssignmentsRsg | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Network Contributor" }
+      $iterationCount = 0
+      do {
+        $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -RoleDefinitionName "Network Contributor" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -ErrorAction SilentlyContinue
+        if ($null -eq $roleAssignment) {
+          Write-Host "Waiting for Resource Group Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
+          Start-Sleep -Seconds 30
+          $iterationCount++
+        }
+      } until (
+        $roleAssignment -ne $null -or $iterationCount -ge 10
+      )
+
       $roleAssignment.ObjectId | Should -Be "7eca0dca-6701-46f1-b7b6-8b424dab50b3"
       $roleAssignment.RoleDefinitionName | Should -Be "Network Contributor"
       $roleAssignment.scope | Should -Be "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber"
@@ -195,7 +226,7 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
 
   Context "Networking - Virtual WAN Hub Tests" {
     BeforeAll {
-      Select-AzSubscription -SubscriptionId e4e7395f-dc45-411e-b425-95f75e470e16 -ErrorAction Stop
+      Select-AzSubscription -SubscriptionId "e4e7395f-dc45-411e-b425-95f75e470e16" -ErrorAction Stop
       $vwanHub = $vwanHub = Get-AzVirtualHub -ResourceGroupName "rsg-blzv-perm-hubs-001" -Name "vhub-uksouth-blzv" -ErrorAction SilentlyContinue
       $vwanHubVhc = Get-AzVirtualHubVnetConnection -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualHubName "vhub-uksouth-blzv" -Name *
     }

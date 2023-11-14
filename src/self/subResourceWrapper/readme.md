@@ -2,12 +2,6 @@
 
 This module is used by the [`bicep-lz-vending`](https://aka.ms/sub-vending/bicep) module to help orchestrate the deployment
 
-These are the input parameters for the Bicep module: [`deploy.bicep`](./deploy.bicep)
-
-This is the sub-orchestration module that is used and called by the [`main.bicep`](../../../main.bicep)  module to deploy the resources into the subscription that has been created (or an existing one provided), based on the parameter input values that are provided to it at deployment time from the `main.bicep` orchestration module.
-
-> ⚠️ It is not intended for this module to be called outside of being a sub-orchestration module for the `main.bicep` module ⚠️
-
 ## Parameters
 
 Parameter name | Required | Description
@@ -36,6 +30,11 @@ virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route ta
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
 roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.
 disableTelemetry | No       | Disable telemetry collection by this module. For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
+deploymentScriptResourceGroupName | Yes      | The name of the resource group to create the deployment script for resource providers registration.
+deploymentScriptLocation | No       | The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.
+deploymentScriptName | Yes      | The name of the deployment script to register resource providers
+resourceProviders | No       | An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.  - Type: `{}` Object - Default value: `{   'Microsoft.ApiManagement'             : []     'Microsoft.AppPlatform'             : []     'Microsoft.Authorization'           : []     'Microsoft.Automation'              : []     'Microsoft.AVS'                     : []     'Microsoft.Blueprint'               : []     'Microsoft.BotService'              : []     'Microsoft.Cache'                   : []     'Microsoft.Cdn'                     : []     'Microsoft.CognitiveServices'       : []     'Microsoft.Compute'                 : []     'Microsoft.ContainerInstance'       : []     'Microsoft.ContainerRegistry'       : []     'Microsoft.ContainerService'        : []     'Microsoft.CostManagement'          : []     'Microsoft.CustomProviders'         : []     'Microsoft.Databricks'              : []     'Microsoft.DataLakeAnalytics'       : []     'Microsoft.DataLakeStore'           : []     'Microsoft.DataMigration'           : []     'Microsoft.DataProtection'          : []     'Microsoft.DBforMariaDB'            : []     'Microsoft.DBforMySQL'              : []     'Microsoft.DBforPostgreSQL'         : []     'Microsoft.DesktopVirtualization'   : []     'Microsoft.Devices'                 : []     'Microsoft.DevTestLab'              : []     'Microsoft.DocumentDB'              : []     'Microsoft.EventGrid'               : []     'Microsoft.EventHub'                : []     'Microsoft.HDInsight'               : []     'Microsoft.HealthcareApis'          : []     'Microsoft.GuestConfiguration'      : []     'Microsoft.KeyVault'                : []     'Microsoft.Kusto'                   : []     'microsoft.insights'                : []     'Microsoft.Logic'                   : []     'Microsoft.MachineLearningServices' : []     'Microsoft.Maintenance'             : []     'Microsoft.ManagedIdentity'         : []     'Microsoft.ManagedServices'         : []     'Microsoft.Management'              : []     'Microsoft.Maps'                    : []     'Microsoft.MarketplaceOrdering'     : []     'Microsoft.Media'                   : []     'Microsoft.MixedReality'            : []     'Microsoft.Network'                 : []     'Microsoft.NotificationHubs'        : []     'Microsoft.OperationalInsights'     : []     'Microsoft.OperationsManagement'    : []     'Microsoft.PolicyInsights'          : []     'Microsoft.PowerBIDedicated'        : []     'Microsoft.Relay'                   : []     'Microsoft.RecoveryServices'        : []     'Microsoft.Resources'               : []     'Microsoft.Search'                  : []     'Microsoft.Security'                : []     'Microsoft.SecurityInsights'        : []     'Microsoft.ServiceBus'              : []     'Microsoft.ServiceFabric'           : []     'Microsoft.Sql'                     : []     'Microsoft.Storage'                 : []     'Microsoft.StreamAnalytics'         : []     'Microsoft.TimeSeriesInsights'      : []     'Microsoft.Web'                     : [] }`
+deploymentScriptManagedIdentityName | Yes      | The name of the user managed identity for the resource providers registration deployment script.
 
 ### subscriptionId
 
@@ -49,11 +48,7 @@ disableTelemetry | No       | Disable telemetry collection by this module. For m
 
 Whether to move the subscription to the specified management group supplied in the pararmeter subscriptionManagementGroupId.
 
-**Default value**
-
-```text
-True
-```
+- Default value: `True`
 
 ### subscriptionManagementGroupId
 
@@ -73,11 +68,7 @@ An object of tag key/value pairs to be appended to a subscription. NOTE: Tags wi
 
 Whether to create a virtual network or not.
 
-**Default value**
-
-```text
-False
-```
+- Default value: `False`
 
 ### virtualNetworkResourceGroupName
 
@@ -91,11 +82,7 @@ The name of the resource group to create the virtual network in.
 
 Enables the deployment of a `CanNotDelete` resource locks to the virtual networks resource group.
 
-**Default value**
-
-```text
-True
-```
+- Default value: `True`
 
 ### virtualNetworkResourceGroupTags
 
@@ -109,11 +96,7 @@ An object of tag key/value pairs to be appended to the Resource Group that the V
 
 The location of the virtual network. Use region shortnames e.g. uksouth, eastus, etc.
 
-**Default value**
-
-```text
-[deployment().location]
-```
+- Default value: `[deployment().location]`
 
 ### virtualNetworkName
 
@@ -151,11 +134,7 @@ The resoruce ID of an existing DDoS Network Protection Plan that you wish to lin
 
 Whether to enable peering/connection with the supplied hub virtual network or virtual hub.
 
-**Default value**
-
-```text
-False
-```
+- Default value: `False`
 
 ### hubNetworkResourceId
 
@@ -169,11 +148,7 @@ The resource ID of the virtual network or virtual wan hub in the hub to which th
 
 Enables the use of remote gateways in the spefcified hub virtual network. If no gateways exsit in the hub virtual network, set this to `false`, otherwise peering will fail to create. Set this to `false` for virtual wan hub connections.
 
-**Default value**
-
-```text
-True
-```
+- Default value: `True`
 
 ### virtualNetworkVwanEnableInternetSecurity
 
@@ -181,11 +156,7 @@ True
 
 Enables the ability for the Virtual WAN Hub Connection to learn the default route 0.0.0.0/0 from the Hub.
 
-**Default value**
-
-```text
-True
-```
+- Default value: `True`
 
 ### virtualNetworkVwanAssociatedRouteTableResourceId
 
@@ -211,11 +182,7 @@ An array of virtual hub route table labels to propogate routes to. If left blank
 
 Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
 
-**Default value**
-
-```text
-False
-```
+- Default value: `False`
 
 ### roleAssignments
 
@@ -229,11 +196,118 @@ Supply an array of objects containing the details of the role assignments to cre
 
 Disable telemetry collection by this module. For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
 
-**Default value**
+- Default value: `False`
 
-```text
-False
-```
+### deploymentScriptResourceGroupName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+
+The name of the resource group to create the deployment script for resource providers registration.
+
+### deploymentScriptLocation
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.
+
+- Default value: `[deployment().location]`
+
+### deploymentScriptName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+
+The name of the deployment script to register resource providers
+
+### resourceProviders
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.will be registered.
+
+- Type: `{}` Object
+- Default value: `{
+  'Microsoft.ApiManagement'             : []
+    'Microsoft.AppPlatform'             : []
+    'Microsoft.Authorization'           : []
+    'Microsoft.Automation'              : []
+    'Microsoft.AVS'                     : []
+    'Microsoft.Blueprint'               : []
+    'Microsoft.BotService'              : []
+    'Microsoft.Cache'                   : []
+    'Microsoft.Cdn'                     : []
+    'Microsoft.CognitiveServices'       : []
+    'Microsoft.Compute'                 : []
+    'Microsoft.ContainerInstance'       : []
+    'Microsoft.ContainerRegistry'       : []
+    'Microsoft.ContainerService'        : []
+    'Microsoft.CostManagement'          : []
+    'Microsoft.CustomProviders'         : []
+    'Microsoft.Databricks'              : []
+    'Microsoft.DataLakeAnalytics'       : []
+    'Microsoft.DataLakeStore'           : []
+    'Microsoft.DataMigration'           : []
+    'Microsoft.DataProtection'          : []
+    'Microsoft.DBforMariaDB'            : []
+    'Microsoft.DBforMySQL'              : []
+    'Microsoft.DBforPostgreSQL'         : []
+    'Microsoft.DesktopVirtualization'   : []
+    'Microsoft.Devices'                 : []
+    'Microsoft.DevTestLab'              : []
+    'Microsoft.DocumentDB'              : []
+    'Microsoft.EventGrid'               : []
+    'Microsoft.EventHub'                : []
+    'Microsoft.HDInsight'               : []
+    'Microsoft.HealthcareApis'          : []
+    'Microsoft.GuestConfiguration'      : []
+    'Microsoft.KeyVault'                : []
+    'Microsoft.Kusto'                   : []
+    'microsoft.insights'                : []
+    'Microsoft.Logic'                   : []
+    'Microsoft.MachineLearningServices' : []
+    'Microsoft.Maintenance'             : []
+    'Microsoft.ManagedIdentity'         : []
+    'Microsoft.ManagedServices'         : []
+    'Microsoft.Management'              : []
+    'Microsoft.Maps'                    : []
+    'Microsoft.MarketplaceOrdering'     : []
+    'Microsoft.Media'                   : []
+    'Microsoft.MixedReality'            : []
+    'Microsoft.Network'                 : []
+    'Microsoft.NotificationHubs'        : []
+    'Microsoft.OperationalInsights'     : []
+    'Microsoft.OperationsManagement'    : []
+    'Microsoft.PolicyInsights'          : []
+    'Microsoft.PowerBIDedicated'        : []
+    'Microsoft.Relay'                   : []
+    'Microsoft.RecoveryServices'        : []
+    'Microsoft.Resources'               : []
+    'Microsoft.Search'                  : []
+    'Microsoft.Security'                : []
+    'Microsoft.SecurityInsights'        : []
+    'Microsoft.ServiceBus'              : []
+    'Microsoft.ServiceFabric'           : []
+    'Microsoft.Sql'                     : []
+    'Microsoft.Storage'                 : []
+    'Microsoft.StreamAnalytics'         : []
+    'Microsoft.TimeSeriesInsights'      : []
+    'Microsoft.Web'                     : []
+}`
+
+
+- Default value: `@{Microsoft.ApiManagement=System.Object[]; Microsoft.AppPlatform=System.Object[]; Microsoft.Authorization=System.Object[]; Microsoft.Automation=System.Object[]; Microsoft.AVS=System.Object[]; Microsoft.Blueprint=System.Object[]; Microsoft.BotService=System.Object[]; Microsoft.Cache=System.Object[]; Microsoft.Cdn=System.Object[]; Microsoft.CognitiveServices=System.Object[]; Microsoft.Compute=System.Object[]; Microsoft.ContainerInstance=System.Object[]; Microsoft.ContainerRegistry=System.Object[]; Microsoft.ContainerService=System.Object[]; Microsoft.CostManagement=System.Object[]; Microsoft.CustomProviders=System.Object[]; Microsoft.Databricks=System.Object[]; Microsoft.DataLakeAnalytics=System.Object[]; Microsoft.DataLakeStore=System.Object[]; Microsoft.DataMigration=System.Object[]; Microsoft.DataProtection=System.Object[]; Microsoft.DBforMariaDB=System.Object[]; Microsoft.DBforMySQL=System.Object[]; Microsoft.DBforPostgreSQL=System.Object[]; Microsoft.DesktopVirtualization=System.Object[]; Microsoft.Devices=System.Object[]; Microsoft.DevTestLab=System.Object[]; Microsoft.DocumentDB=System.Object[]; Microsoft.EventGrid=System.Object[]; Microsoft.EventHub=System.Object[]; Microsoft.HDInsight=System.Object[]; Microsoft.HealthcareApis=System.Object[]; Microsoft.GuestConfiguration=System.Object[]; Microsoft.KeyVault=System.Object[]; Microsoft.Kusto=System.Object[]; microsoft.insights=System.Object[]; Microsoft.Logic=System.Object[]; Microsoft.MachineLearningServices=System.Object[]; Microsoft.Maintenance=System.Object[]; Microsoft.ManagedIdentity=System.Object[]; Microsoft.ManagedServices=System.Object[]; Microsoft.Management=System.Object[]; Microsoft.Maps=System.Object[]; Microsoft.MarketplaceOrdering=System.Object[]; Microsoft.Media=System.Object[]; Microsoft.MixedReality=System.Object[]; Microsoft.Network=System.Object[]; Microsoft.NotificationHubs=System.Object[]; Microsoft.OperationalInsights=System.Object[]; Microsoft.OperationsManagement=System.Object[]; Microsoft.PolicyInsights=System.Object[]; Microsoft.PowerBIDedicated=System.Object[]; Microsoft.Relay=System.Object[]; Microsoft.RecoveryServices=System.Object[]; Microsoft.Resources=System.Object[]; Microsoft.Search=System.Object[]; Microsoft.Security=System.Object[]; Microsoft.SecurityInsights=System.Object[]; Microsoft.ServiceBus=System.Object[]; Microsoft.ServiceFabric=System.Object[]; Microsoft.Sql=System.Object[]; Microsoft.Storage=System.Object[]; Microsoft.StreamAnalytics=System.Object[]; Microsoft.TimeSeriesInsights=System.Object[]; Microsoft.Web=System.Object[]}`
+
+### deploymentScriptManagedIdentityName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+
+The name of the user managed identity for the resource providers registration deployment script.
+
+## Outputs
+
+Name | Type | Description
+---- | ---- | -----------
+failedProviders | string |
+failedFeatures | string |
 
 ## Snippets
 
@@ -244,7 +318,7 @@ False
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "metadata": {
-        "template": null
+        "template": "src/self/subResourceWrapper/deploy.json"
     },
     "parameters": {
         "subscriptionId": {
@@ -270,6 +344,9 @@ False
         },
         "virtualNetworkResourceGroupTags": {
             "value": {}
+        },
+        "virtualNetworkLocation": {
+            "value": "[deployment().location]"
         },
         "virtualNetworkName": {
             "value": ""
@@ -315,6 +392,87 @@ False
         },
         "disableTelemetry": {
             "value": false
+        },
+        "deploymentScriptResourceGroupName": {
+            "value": ""
+        },
+        "deploymentScriptLocation": {
+            "value": "[deployment().location]"
+        },
+        "deploymentScriptName": {
+            "value": ""
+        },
+        "resourceProviders": {
+            "value": {
+                "Microsoft.ApiManagement": [],
+                "Microsoft.AppPlatform": [],
+                "Microsoft.Authorization": [],
+                "Microsoft.Automation": [],
+                "Microsoft.AVS": [],
+                "Microsoft.Blueprint": [],
+                "Microsoft.BotService": [],
+                "Microsoft.Cache": [],
+                "Microsoft.Cdn": [],
+                "Microsoft.CognitiveServices": [],
+                "Microsoft.Compute": [],
+                "Microsoft.ContainerInstance": [],
+                "Microsoft.ContainerRegistry": [],
+                "Microsoft.ContainerService": [],
+                "Microsoft.CostManagement": [],
+                "Microsoft.CustomProviders": [],
+                "Microsoft.Databricks": [],
+                "Microsoft.DataLakeAnalytics": [],
+                "Microsoft.DataLakeStore": [],
+                "Microsoft.DataMigration": [],
+                "Microsoft.DataProtection": [],
+                "Microsoft.DBforMariaDB": [],
+                "Microsoft.DBforMySQL": [],
+                "Microsoft.DBforPostgreSQL": [],
+                "Microsoft.DesktopVirtualization": [],
+                "Microsoft.Devices": [],
+                "Microsoft.DevTestLab": [],
+                "Microsoft.DocumentDB": [],
+                "Microsoft.EventGrid": [],
+                "Microsoft.EventHub": [],
+                "Microsoft.HDInsight": [],
+                "Microsoft.HealthcareApis": [],
+                "Microsoft.GuestConfiguration": [],
+                "Microsoft.KeyVault": [],
+                "Microsoft.Kusto": [],
+                "microsoft.insights": [],
+                "Microsoft.Logic": [],
+                "Microsoft.MachineLearningServices": [],
+                "Microsoft.Maintenance": [],
+                "Microsoft.ManagedIdentity": [],
+                "Microsoft.ManagedServices": [],
+                "Microsoft.Management": [],
+                "Microsoft.Maps": [],
+                "Microsoft.MarketplaceOrdering": [],
+                "Microsoft.Media": [],
+                "Microsoft.MixedReality": [],
+                "Microsoft.Network": [],
+                "Microsoft.NotificationHubs": [],
+                "Microsoft.OperationalInsights": [],
+                "Microsoft.OperationsManagement": [],
+                "Microsoft.PolicyInsights": [],
+                "Microsoft.PowerBIDedicated": [],
+                "Microsoft.Relay": [],
+                "Microsoft.RecoveryServices": [],
+                "Microsoft.Resources": [],
+                "Microsoft.Search": [],
+                "Microsoft.Security": [],
+                "Microsoft.SecurityInsights": [],
+                "Microsoft.ServiceBus": [],
+                "Microsoft.ServiceFabric": [],
+                "Microsoft.Sql": [],
+                "Microsoft.Storage": [],
+                "Microsoft.StreamAnalytics": [],
+                "Microsoft.TimeSeriesInsights": [],
+                "Microsoft.Web": []
+            }
+        },
+        "deploymentScriptManagedIdentityName": {
+            "value": ""
         }
     }
 }

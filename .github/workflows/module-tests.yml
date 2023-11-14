@@ -59,7 +59,7 @@ jobs:
               }
             }
             New-AzManagementGroupDeployment @inputObject -Whatif
-          azPSVersion: "latest"
+          azPSVersion: "10.4.1"
 
       - name: Vend Subscriptions & Networking Scenarios (Deploy)
         id: vend
@@ -80,7 +80,7 @@ jobs:
             $bicepDeployment = New-AzManagementGroupDeployment @inputObject
             $outputValue = $bicepDeployment.Outputs.createdSubId.Value
             "SUBID=$outputValue" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          azPSVersion: "latest"
+          azPSVersion: "10.4.1"
 
       - name: Pester Tests
         id: pester
@@ -103,23 +103,36 @@ jobs:
             }
             $result = Invoke-Pester -Configuration $pesterConfiguration
             exit $result.FailedCount
-          azPSVersion: "latest"
+          azPSVersion: "10.4.1"
 
       - name: Cleanup Vended Subscription & Networking Scenarios
         id: cleanup-vend
+        if: always()
         uses: azure/powershell@v1
         with:
           inlineScript: |
             # Resource Group Names
+            $subId = "${{ env.SUBID }}"
             $rsgHsName = "rsg-${{ env.ARM_LOCATION }}-net-hs-pr-${{ env.GH_PR_NUMBER }}"
             $rsgVwanName = "rsg-${{ env.ARM_LOCATION }}-net-vwan-pr-${{ env.GH_PR_NUMBER }}"
             $rsgNetworkWatcherName = "NetworkWatcherRG"
+            $guid = $subId.substring(0,8)
+            $rsgDeploymentScriptName = "rsg-${{ env.ARM_LOCATION }}-ds-pr-${{ env.GH_PR_NUMBER }}-$guid"
+            $allRoleAssignmentsSub = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue
+            $rbacIdentitiyNotFoundToCleanupContributor = $allRoleAssignmentsSub | Where-Object { $_.ObjectType -eq "Unknown" -and $_.RoleDefinitionName -eq "Contributor" }
 
             Write-Host "Cleanup Vended Subscription Resources & Resource Groups..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUBID }}"
             Remove-AzResourceGroup -Name $rsgHsName -Force
             Remove-AzResourceGroup -Name $rsgVwanName -Force
             Remove-AzResourceGroup -Name $rsgNetworkWatcherName -Force
+            Remove-AzResourceGroup -Name $rsgDeploymentScriptName -Force
+
+            Write-Host "Cleanup registered resource providers and features..." -ForegroundColor Yellow
+            Unregister-AzProviderFeature -FeatureName "ArcServerPrivateLinkPreview" -ProviderNamespace "Microsoft.HybridCompute"
+            Unregister-AzProviderFeature -FeatureName "AzureServicesVm" -ProviderNamespace "Microsoft.AVS"
+            Unregister-AzResourceProvider -ProviderNamespace "Microsoft.HybridCompute"
+            Unregister-AzResourceProvider -ProviderNamespace "Microsoft.AVS"
 
             Write-Host "Cleanup Hub Subscription Resources..." -ForegroundColor Yellow
             Select-AzSubscription -SubscriptionId "${{ env.SUB_HUB_ID }}"
@@ -130,4 +143,10 @@ jobs:
             $hubVnetPeering = Get-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name *
             Remove-AzVirtualNetworkPeering -ResourceGroupName "rsg-blzv-perm-hubs-001" -VirtualNetworkName "vnet-uksouth-hub-blzv" -Name "$($hubVnetPeering.Name)" -Force
             Write-Host "Cleanup Hub Subscription Resources... Complete!" -ForegroundColor Green
-          azPSVersion: "latest"
+
+            Write-Host "Cleanup Unknown Contributor RBAC Assignments on Sub Scope..." -ForegroundColor Yellow
+            foreach ($assignment in $rbacIdentitiyNotFoundToCleanupContributor) {
+              Remove-AzRoleAssignment -objectId $assignment.ObjectId -Scope $assignment.Scope -RoleDefinitionName $assignment.RoleDefinitionName
+            }
+            Write-Host "Cleanup Unknown Contributor RBAC Assignments on Sub Scope... Complete!" -ForegroundColor Green
+          azPSVersion: "10.4.1"

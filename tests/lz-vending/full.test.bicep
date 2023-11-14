@@ -19,6 +19,9 @@ module createSub '../../main.bicep' = {
     subscriptionWorkload: 'Production'
     subscriptionManagementGroupAssociationEnabled: true
     subscriptionManagementGroupId: 'bicep-lz-vending-automation-child'
+    deploymentScriptResourceGroupName: 'rsg-${location}-ds-pr-${prNumber}'
+    deploymentScriptManagedIdentityName: 'id-${location}-pr-${prNumber}'
+    deploymentScriptName: 'ds-${location}-pr-${prNumber}'
     virtualNetworkEnabled: false
     roleAssignmentEnabled: true
     roleAssignments: [
@@ -28,6 +31,10 @@ module createSub '../../main.bicep' = {
         relativeScope: ''
       }
     ]
+    resourceProviders : {
+      'Microsoft.HybridCompute': ['ArcServerPrivateLinkPreview']
+      'Microsoft.AVS': ['AzureServicesVm']
+    }
   }
 }
 
@@ -39,6 +46,9 @@ module hubSpoke '../../main.bicep' = {
     virtualNetworkEnabled: true
     virtualNetworkLocation: location
     virtualNetworkResourceGroupName: 'rsg-${location}-net-hs-pr-${prNumber}'
+    deploymentScriptResourceGroupName: 'rsg-${location}-ds-pr-${prNumber}'
+    deploymentScriptManagedIdentityName: 'id-${location}-pr-${prNumber}'
+    deploymentScriptName: 'ds-${location}-pr-${prNumber}'
     virtualNetworkName: 'vnet-${location}-hs-pr-${prNumber}'
     virtualNetworkAddressSpace: [
       '10.100.0.0/16'
@@ -55,6 +65,10 @@ module hubSpoke '../../main.bicep' = {
         relativeScope: '/resourceGroups/rsg-${location}-net-hs-pr-${prNumber}'
       }
     ]
+    resourceProviders : {
+      'Microsoft.HybridCompute': ['ArcServerPrivateLinkPreview']
+      'Microsoft.AVS': ['AzureServicesVm']
+    }
   }
 }
 
@@ -66,6 +80,9 @@ module vwanSpoke '../../main.bicep' = {
     virtualNetworkEnabled: true
     virtualNetworkLocation: location
     virtualNetworkResourceGroupName: 'rsg-${location}-net-vwan-pr-${prNumber}'
+    deploymentScriptResourceGroupName: 'rsg-${location}-ds-pr-${prNumber}'
+    deploymentScriptManagedIdentityName: 'id-${location}-pr-${prNumber}'
+    deploymentScriptName: 'ds-${location}-pr-${prNumber}'
     virtualNetworkName: 'vnet-${location}-vwan-pr-${prNumber}'
     virtualNetworkAddressSpace: [
       '10.200.0.0/16'
@@ -73,6 +90,10 @@ module vwanSpoke '../../main.bicep' = {
     virtualNetworkResourceGroupLockEnabled: false
     virtualNetworkPeeringEnabled: true
     hubNetworkResourceId: '/subscriptions/e4e7395f-dc45-411e-b425-95f75e470e16/resourceGroups/rsg-blzv-perm-hubs-001/providers/Microsoft.Network/virtualHubs/vhub-uksouth-blzv'
+    resourceProviders :{
+      'Microsoft.HybridCompute': ['ArcServerPrivateLinkPreview']
+      'Microsoft.AVS': ['AzureServicesVm']
+    }
   }
 }
 
