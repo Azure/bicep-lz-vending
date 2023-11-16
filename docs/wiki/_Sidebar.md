@@ -11,6 +11,7 @@
   - [Example 2 - Virtual WAN](https://github.com/azure/bicep-lz-vending/wiki/Example-2-Virtual-WAN)
   - [Example 3 - Use with Existing Subscription](https://github.com/azure/bicep-lz-vending/wiki/Example-3-Use-With-Existing-Subscriptions)
   - [Example 4 - Landing Zone (Subscription) with Multiple VNets](https://github.com/azure/bicep-lz-vending/wiki/Example-4-Multiple-VNets-In-Same-Subscription)
+  - [Example 5 - Hub & Spoke with resource providers and resource providers features registration](https://github.com/azure/bicep-lz-vending/wiki/Example-5-Hub-and-Spoke-With-RP-registration)
 
 ---
 
