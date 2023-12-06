@@ -6,7 +6,7 @@ This module deploys a Private Endpoint.
 
 ## Navigation
 
-- [Resource Types](#resource-Types)
+- [Resource Types](#resource-types)
 - [Usage examples](#usage-examples)
 - [Parameters](#parameters)
 - [Outputs](#outputs)
