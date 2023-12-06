@@ -4,10 +4,10 @@ This template deploys a virtual network (vNet).
 
 ## Navigation
 
-- [Resource types](#Resource-types)
-- [Parameters](#Parameters)
+- [Resource types](#resource-types)
+- [Parameters](#parameters)
 - [Considerations](#Considerations)
-- [Outputs](#Outputs)
+- [Outputs](#outputs)
 - [Deployment examples](#Deployment-examples)
 
 ## Resource types
