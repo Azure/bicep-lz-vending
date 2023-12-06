@@ -27,14 +27,19 @@ virtualNetworkVwanEnableInternetSecurity | No       | Enables the ability for th
 virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty default route table will be associated.
 virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of virtual hub route table resource IDs to propogate routes to. If left blank/empty default route table will be propogated to only.
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
+vHubRoutingIntentEnabled | No       | Indicates whether routing intent is enabled on the Virtual HUB within the virtual WAN.
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.
 roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.
 disableTelemetry | No       | Disable telemetry collection by this module. For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry)
 deploymentScriptResourceGroupName | Yes      | The name of the resource group to create the deployment script for resource providers registration.
 deploymentScriptLocation | No       | The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.
 deploymentScriptName | Yes      | The name of the deployment script to register resource providers
-resourceProviders | No       | An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.  - Type: `{}` Object - Default value: `{   'Microsoft.ApiManagement'             : []     'Microsoft.AppPlatform'             : []     'Microsoft.Authorization'           : []     'Microsoft.Automation'              : []     'Microsoft.AVS'                     : []     'Microsoft.Blueprint'               : []     'Microsoft.BotService'              : []     'Microsoft.Cache'                   : []     'Microsoft.Cdn'                     : []     'Microsoft.CognitiveServices'       : []     'Microsoft.Compute'                 : []     'Microsoft.ContainerInstance'       : []     'Microsoft.ContainerRegistry'       : []     'Microsoft.ContainerService'        : []     'Microsoft.CostManagement'          : []     'Microsoft.CustomProviders'         : []     'Microsoft.Databricks'              : []     'Microsoft.DataLakeAnalytics'       : []     'Microsoft.DataLakeStore'           : []     'Microsoft.DataMigration'           : []     'Microsoft.DataProtection'          : []     'Microsoft.DBforMariaDB'            : []     'Microsoft.DBforMySQL'              : []     'Microsoft.DBforPostgreSQL'         : []     'Microsoft.DesktopVirtualization'   : []     'Microsoft.Devices'                 : []     'Microsoft.DevTestLab'              : []     'Microsoft.DocumentDB'              : []     'Microsoft.EventGrid'               : []     'Microsoft.EventHub'                : []     'Microsoft.HDInsight'               : []     'Microsoft.HealthcareApis'          : []     'Microsoft.GuestConfiguration'      : []     'Microsoft.KeyVault'                : []     'Microsoft.Kusto'                   : []     'microsoft.insights'                : []     'Microsoft.Logic'                   : []     'Microsoft.MachineLearningServices' : []     'Microsoft.Maintenance'             : []     'Microsoft.ManagedIdentity'         : []     'Microsoft.ManagedServices'         : []     'Microsoft.Management'              : []     'Microsoft.Maps'                    : []     'Microsoft.MarketplaceOrdering'     : []     'Microsoft.Media'                   : []     'Microsoft.MixedReality'            : []     'Microsoft.Network'                 : []     'Microsoft.NotificationHubs'        : []     'Microsoft.OperationalInsights'     : []     'Microsoft.OperationsManagement'    : []     'Microsoft.PolicyInsights'          : []     'Microsoft.PowerBIDedicated'        : []     'Microsoft.Relay'                   : []     'Microsoft.RecoveryServices'        : []     'Microsoft.Resources'               : []     'Microsoft.Search'                  : []     'Microsoft.Security'                : []     'Microsoft.SecurityInsights'        : []     'Microsoft.ServiceBus'              : []     'Microsoft.ServiceFabric'           : []     'Microsoft.Sql'                     : []     'Microsoft.Storage'                 : []     'Microsoft.StreamAnalytics'         : []     'Microsoft.TimeSeriesInsights'      : []     'Microsoft.Web'                     : [] }`
+deploymentScriptVirtualNetworkName | No       | The name of the private virtual network for the deployment script. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
+deploymentScriptNetworkSecurityGroupName | No       | The name of the network security group for the deployment script private subnet.
+virtualNetworkDeploymentScriptAddressPrefix | No       | The address prefix of the private virtual network for the deployment script.
+resourceProviders | No       | An object of resource providers and resource providers features to register. If left blank/empty, no resource providers will be registered.  - Type: `{}` Object - Default value: `{   'Microsoft.ApiManagement'             : []     'Microsoft.AppPlatform'             : []     'Microsoft.Authorization'           : []     'Microsoft.Automation'              : []     'Microsoft.AVS'                     : []     'Microsoft.Blueprint'               : []     'Microsoft.BotService'              : []     'Microsoft.Cache'                   : []     'Microsoft.Cdn'                     : []     'Microsoft.CognitiveServices'       : []     'Microsoft.Compute'                 : []     'Microsoft.ContainerInstance'       : []     'Microsoft.ContainerRegistry'       : []     'Microsoft.ContainerService'        : []     'Microsoft.CostManagement'          : []     'Microsoft.CustomProviders'         : []     'Microsoft.Databricks'              : []     'Microsoft.DataLakeAnalytics'       : []     'Microsoft.DataLakeStore'           : []     'Microsoft.DataMigration'           : []     'Microsoft.DataProtection'          : []     'Microsoft.DBforMariaDB'            : []     'Microsoft.DBforMySQL'              : []     'Microsoft.DBforPostgreSQL'         : []     'Microsoft.DesktopVirtualization'   : []     'Microsoft.Devices'                 : []     'Microsoft.DevTestLab'              : []     'Microsoft.DocumentDB'              : []     'Microsoft.EventGrid'               : []     'Microsoft.EventHub'                : []     'Microsoft.HDInsight'               : []     'Microsoft.HealthcareApis'          : []     'Microsoft.GuestConfiguration'      : []     'Microsoft.KeyVault'                : []     'Microsoft.Kusto'                   : []     'microsoft.insights'                : []     'Microsoft.Logic'                   : []     'Microsoft.MachineLearningServices' : []     'Microsoft.Maintenance'             : []     'Microsoft.ManagedIdentity'         : []     'Microsoft.ManagedServices'         : []     'Microsoft.Management'              : []     'Microsoft.Maps'                    : []     'Microsoft.MarketplaceOrdering'     : []     'Microsoft.Media'                   : []     'Microsoft.MixedReality'            : []     'Microsoft.Network'                 : []     'Microsoft.NotificationHubs'        : []     'Microsoft.OperationalInsights'     : []     'Microsoft.OperationsManagement'    : []     'Microsoft.PolicyInsights'          : []     'Microsoft.PowerBIDedicated'        : []     'Microsoft.Relay'                   : []     'Microsoft.RecoveryServices'        : []     'Microsoft.Resources'               : []     'Microsoft.Search'                  : []     'Microsoft.Security'                : []     'Microsoft.SecurityInsights'        : []     'Microsoft.ServiceBus'              : []     'Microsoft.ServiceFabric'           : []     'Microsoft.Sql'                     : []     'Microsoft.Storage'                 : []     'Microsoft.StreamAnalytics'         : []     'Microsoft.TimeSeriesInsights'      : []     'Microsoft.Web'                     : [] }` 
 deploymentScriptManagedIdentityName | Yes      | The name of the user managed identity for the resource providers registration deployment script.
+deploymentScriptStorageAccountName | Yes      | The name of the storage account for the deployment script.
 
 ### subscriptionId
 
@@ -176,6 +181,14 @@ An array of virtual hub route table resource IDs to propogate routes to. If left
 
 An array of virtual hub route table labels to propogate routes to. If left blank/empty default label will be propogated to only.
 
+### vHubRoutingIntentEnabled
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+Indicates whether routing intent is enabled on the Virtual HUB within the virtual WAN.
+
+- Default value: `False`
+
 ### roleAssignmentEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
@@ -218,11 +231,29 @@ The location of the deployment script. Use region shortnames e.g. uksouth, eastu
 
 The name of the deployment script to register resource providers
 
+### deploymentScriptVirtualNetworkName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The name of the private virtual network for the deployment script. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
+
+### deploymentScriptNetworkSecurityGroupName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The name of the network security group for the deployment script private subnet.
+
+### virtualNetworkDeploymentScriptAddressPrefix
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The address prefix of the private virtual network for the deployment script.
+
 ### resourceProviders
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.will be registered.
+An object of resource providers and resource providers features to register. If left blank/empty, no resource providers will be registered.
 
 - Type: `{}` Object
 - Default value: `{
@@ -301,6 +332,12 @@ An object of resource providers and resource providers features to register. If 
 ![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
 
 The name of the user managed identity for the resource providers registration deployment script.
+
+### deploymentScriptStorageAccountName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-required-orange?style=flat-square)
+
+The name of the storage account for the deployment script.
 
 ## Outputs
 
@@ -384,6 +421,9 @@ failedFeatures | string |
         "virtualNetworkVwanPropagatedLabels": {
             "value": []
         },
+        "vHubRoutingIntentEnabled": {
+            "value": false
+        },
         "roleAssignmentEnabled": {
             "value": false
         },
@@ -400,6 +440,15 @@ failedFeatures | string |
             "value": "[deployment().location]"
         },
         "deploymentScriptName": {
+            "value": ""
+        },
+        "deploymentScriptVirtualNetworkName": {
+            "value": ""
+        },
+        "deploymentScriptNetworkSecurityGroupName": {
+            "value": ""
+        },
+        "virtualNetworkDeploymentScriptAddressPrefix": {
             "value": ""
         },
         "resourceProviders": {
@@ -472,6 +521,9 @@ failedFeatures | string |
             }
         },
         "deploymentScriptManagedIdentityName": {
+            "value": ""
+        },
+        "deploymentScriptStorageAccountName": {
             "value": ""
         }
     }
