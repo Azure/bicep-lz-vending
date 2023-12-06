@@ -571,7 +571,7 @@ module createDsVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }
-module registerResourceProviders 'br/public:avm/res/resources/deployment-script:0.1.0' = if (!empty(resourceProviders)) {
+module registerResourceProviders '../../avm/resources/deployment-script/deploy.bicep' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.registerResourceProviders
   params: {

@@ -7,7 +7,7 @@ This module deploys a Storage Account Blob Service.
 - [Resource Types](#resource-types)
 - [Parameters](#parameters)
 - [Outputs](#outputs)
-- [Cross-referenced modules](ross-referenced-modules)
+- [Cross-referenced modules](#cross-referenced-modules)
 
 ## Resource Types
 

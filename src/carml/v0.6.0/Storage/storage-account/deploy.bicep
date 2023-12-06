@@ -94,6 +94,15 @@ param dnsEndpointType string = ''
 @description('Optional. Blob service and containers to deploy.')
 param blobServices object = {}
 
+@description('Optional. File service and shares to deploy.')
+param fileServices object = {}
+
+@description('Optional. Queue service and queues to create.')
+param queueServices object = {}
+
+@description('Optional. Table service and tables to create.')
+param tableServices object = {}
+
 @description('Optional. Indicates whether public access is enabled for all blobs or containers in the storage account. For security reasons, it is recommended to set it to false.')
 param allowBlobPublicAccess bool = false
 
@@ -102,7 +111,6 @@ param allowBlobPublicAccess bool = false
   'TLS1_1'
   'TLS1_2'
 ])
-
 @description('Optional. Set the minimum TLS version on request to storage.')
 param minimumTlsVersion string = 'TLS1_2'
 
@@ -333,7 +341,7 @@ resource storageAccount_roleAssignments 'Microsoft.Authorization/roleAssignments
   scope: storageAccount
 }]
 
-module storageAccount_privateEndpoints '../../Microsoft.Network/private-endpoint/main.bicep' = [for (privateEndpoint, index) in (privateEndpoints ?? []): {
+module storageAccount_privateEndpoints '../../Microsoft.Network/private-endpoint/deploy.bicep' = [for (privateEndpoint, index) in (privateEndpoints ?? []): {
   name: '${uniqueString(deployment().name, location)}-storageAccount-PrivateEndpoint-${index}'
   params: {
     groupIds: [
@@ -411,6 +419,45 @@ module storageAccount_blobServices 'blob-service/main.bicep' = if (!empty(blobSe
     enableDefaultTelemetry: enableReferencedModulesTelemetry
   }
 }
+
+// File Shares
+module storageAccount_fileServices 'file-service/main.bicep' = if (!empty(fileServices)) {
+  name: '${uniqueString(deployment().name, location)}-Storage-FileServices'
+  params: {
+    storageAccountName: storageAccount.name
+    diagnosticSettings: blobServices.?diagnosticSettings
+    protocolSettings: contains(fileServices, 'protocolSettings') ? fileServices.protocolSettings : {}
+    shareDeleteRetentionPolicy: contains(fileServices, 'shareDeleteRetentionPolicy') ? fileServices.shareDeleteRetentionPolicy : {
+      enabled: true
+      days: 7
+    }
+    shares: contains(fileServices, 'shares') ? fileServices.shares : []
+    enableDefaultTelemetry: enableReferencedModulesTelemetry
+  }
+}
+
+// Queue
+module storageAccount_queueServices 'queue-service/main.bicep' = if (!empty(queueServices)) {
+  name: '${uniqueString(deployment().name, location)}-Storage-QueueServices'
+  params: {
+    storageAccountName: storageAccount.name
+    diagnosticSettings: blobServices.?diagnosticSettings
+    queues: contains(queueServices, 'queues') ? queueServices.queues : []
+    enableDefaultTelemetry: enableReferencedModulesTelemetry
+  }
+}
+
+// Table
+module storageAccount_tableServices 'table-service/main.bicep' = if (!empty(tableServices)) {
+  name: '${uniqueString(deployment().name, location)}-Storage-TableServices'
+  params: {
+    storageAccountName: storageAccount.name
+    diagnosticSettings: blobServices.?diagnosticSettings
+    tables: contains(tableServices, 'tables') ? tableServices.tables : []
+    enableDefaultTelemetry: enableReferencedModulesTelemetry
+  }
+}
+
 @description('The resource ID of the deployed storage account.')
 output resourceId string = storageAccount.id
 

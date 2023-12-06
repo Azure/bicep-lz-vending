@@ -1,6 +1,6 @@
-# Storage Account Blob Containers `[Microsoft.Storage/storageAccounts/blobServices/containers]`
+# Storage Account Queues `[Microsoft.Storage/storageAccounts/queueServices/queues]`
 
-This module deploys a Storage Account Blob Container.
+This module deploys a Storage Account Queue.
 
 ## Navigation
 
@@ -14,8 +14,7 @@ This module deploys a Storage Account Blob Container.
 | Resource Type | API Version |
 | :-- | :-- |
 | `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
-| `Microsoft.Storage/storageAccounts/blobServices/containers` | [2022-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2022-09-01/storageAccounts/blobServices/containers) |
-| `Microsoft.Storage/storageAccounts/blobServices/containers/immutabilityPolicies` | [2022-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2022-09-01/storageAccounts/blobServices/containers/immutabilityPolicies) |
+| `Microsoft.Storage/storageAccounts/queueServices/queues` | [2021-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2021-09-01/storageAccounts/queueServices/queues) |
 
 ## Parameters
 
@@ -23,7 +22,8 @@ This module deploys a Storage Account Blob Container.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`name`](#parameter-name) | string | The name of the storage container to deploy. |
+| [`metadata`](#parameter-metadata) | object | A name-value pair that represents queue metadata. |
+| [`name`](#parameter-name) | string | The name of the storage queue to deploy. |
 
 **Conditional parameters**
 
@@ -35,21 +35,20 @@ This module deploys a Storage Account Blob Container.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`defaultEncryptionScope`](#parameter-defaultencryptionscope) | string | Default the container to use specified encryption scope for all writes. |
-| [`denyEncryptionScopeOverride`](#parameter-denyencryptionscopeoverride) | bool | Block override of encryption scope from the container default. |
 | [`enableDefaultTelemetry`](#parameter-enabledefaulttelemetry) | bool | Enable telemetry via a Globally Unique Identifier (GUID). |
-| [`enableNfsV3AllSquash`](#parameter-enablenfsv3allsquash) | bool | Enable NFSv3 all squash on blob container. |
-| [`enableNfsV3RootSquash`](#parameter-enablenfsv3rootsquash) | bool | Enable NFSv3 root squash on blob container. |
-| [`immutabilityPolicyName`](#parameter-immutabilitypolicyname) | string | Name of the immutable policy. |
-| [`immutabilityPolicyProperties`](#parameter-immutabilitypolicyproperties) | object | Configure immutability policy. |
-| [`immutableStorageWithVersioningEnabled`](#parameter-immutablestoragewithversioningenabled) | bool | This is an immutable property, when set to true it enables object level immutability at the container level. The property is immutable and can only be set to true at the container creation time. Existing containers must undergo a migration process. |
-| [`metadata`](#parameter-metadata) | object | A name-value pair to associate with the container as metadata. |
-| [`publicAccess`](#parameter-publicaccess) | string | Specifies whether data in the container may be accessed publicly and the level of access. |
 | [`roleAssignments`](#parameter-roleassignments) | array | Array of role assignments to create. |
+
+### Parameter: `metadata`
+
+A name-value pair that represents queue metadata.
+
+- Required: No
+- Type: object
+- Default: `{}`
 
 ### Parameter: `name`
 
-The name of the storage container to deploy.
+The name of the storage queue to deploy.
 
 - Required: Yes
 - Type: string
@@ -61,22 +60,6 @@ The name of the parent Storage Account. Required if the template is used in a st
 - Required: Yes
 - Type: string
 
-### Parameter: `defaultEncryptionScope`
-
-Default the container to use specified encryption scope for all writes.
-
-- Required: No
-- Type: string
-- Default: `''`
-
-### Parameter: `denyEncryptionScopeOverride`
-
-Block override of encryption scope from the container default.
-
-- Required: No
-- Type: bool
-- Default: `False`
-
 ### Parameter: `enableDefaultTelemetry`
 
 Enable telemetry via a Globally Unique Identifier (GUID).
@@ -84,70 +67,6 @@ Enable telemetry via a Globally Unique Identifier (GUID).
 - Required: No
 - Type: bool
 - Default: `True`
-
-### Parameter: `enableNfsV3AllSquash`
-
-Enable NFSv3 all squash on blob container.
-
-- Required: No
-- Type: bool
-- Default: `False`
-
-### Parameter: `enableNfsV3RootSquash`
-
-Enable NFSv3 root squash on blob container.
-
-- Required: No
-- Type: bool
-- Default: `False`
-
-### Parameter: `immutabilityPolicyName`
-
-Name of the immutable policy.
-
-- Required: No
-- Type: string
-- Default: `'default'`
-
-### Parameter: `immutabilityPolicyProperties`
-
-Configure immutability policy.
-
-- Required: No
-- Type: object
-- Default: `{}`
-
-### Parameter: `immutableStorageWithVersioningEnabled`
-
-This is an immutable property, when set to true it enables object level immutability at the container level. The property is immutable and can only be set to true at the container creation time. Existing containers must undergo a migration process.
-
-- Required: No
-- Type: bool
-- Default: `False`
-
-### Parameter: `metadata`
-
-A name-value pair to associate with the container as metadata.
-
-- Required: No
-- Type: object
-- Default: `{}`
-
-### Parameter: `publicAccess`
-
-Specifies whether data in the container may be accessed publicly and the level of access.
-
-- Required: No
-- Type: string
-- Default: `'None'`
-- Allowed:
-  ```Bicep
-  [
-    'Blob'
-    'Container'
-    'None'
-  ]
-  ```
 
 ### Parameter: `roleAssignments`
 
@@ -243,9 +162,9 @@ The principal type of the assigned principal ID.
 
 | Output | Type | Description |
 | :-- | :-- | :-- |
-| `name` | string | The name of the deployed container. |
-| `resourceGroupName` | string | The resource group of the deployed container. |
-| `resourceId` | string | The resource ID of the deployed container. |
+| `name` | string | The name of the deployed queue. |
+| `resourceGroupName` | string | The resource group of the deployed queue. |
+| `resourceId` | string | The resource ID of the deployed queue. |
 
 ## Cross-referenced modules
 
