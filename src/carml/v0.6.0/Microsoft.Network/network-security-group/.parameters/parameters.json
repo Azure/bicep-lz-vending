@@ -1,0 +1,121 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "name": {
+        "value": "nnsgmax001"
+      },
+      "diagnosticSettings": {
+        "value": [
+          {
+            "eventHubAuthorizationRuleResourceId": "<eventHubAuthorizationRuleResourceId>",
+            "eventHubName": "<eventHubName>",
+            "name": "customSetting",
+            "storageAccountResourceId": "<storageAccountResourceId>",
+            "workspaceResourceId": "<workspaceResourceId>"
+          }
+        ]
+      },
+      "enableDefaultTelemetry": {
+        "value": "<enableDefaultTelemetry>"
+      },
+      "lock": {
+        "value": {
+          "kind": "CanNotDelete",
+          "name": "myCustomLockName"
+        }
+      },
+      "roleAssignments": {
+        "value": [
+          {
+            "principalId": "<principalId>",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionIdOrName": "Owner"
+          },
+          {
+            "principalId": "<principalId>",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionIdOrName": "b24988ac-6180-42a0-ab88-20f7382dd24c"
+          },
+          {
+            "principalId": "<principalId>",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionIdOrName": "<roleDefinitionIdOrName>"
+          }
+        ]
+      },
+      "securityRules": {
+        "value": [
+          {
+            "name": "Specific",
+            "properties": {
+              "access": "Allow",
+              "description": "Tests specific IPs and ports",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "8080",
+              "direction": "Inbound",
+              "priority": 100,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },
+          {
+            "name": "Ranges",
+            "properties": {
+              "access": "Allow",
+              "description": "Tests Ranges",
+              "destinationAddressPrefixes": [
+                "10.2.0.0/16",
+                "10.3.0.0/16"
+              ],
+              "destinationPortRanges": [
+                "90",
+                "91"
+              ],
+              "direction": "Inbound",
+              "priority": 101,
+              "protocol": "*",
+              "sourceAddressPrefixes": [
+                "10.0.0.0/16",
+                "10.1.0.0/16"
+              ],
+              "sourcePortRanges": [
+                "80",
+                "81"
+              ]
+            }
+          },
+          {
+            "name": "Port_8082",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow inbound access on TCP 8082",
+              "destinationApplicationSecurityGroups": [
+                {
+                  "id": "<id>"
+                }
+              ],
+              "destinationPortRange": "8082",
+              "direction": "Inbound",
+              "priority": 102,
+              "protocol": "*",
+              "sourceApplicationSecurityGroups": [
+                {
+                  "id": "<id>"
+                }
+              ],
+              "sourcePortRange": "*"
+            }
+          }
+        ]
+      },
+      "tags": {
+        "value": {
+          "Environment": "Non-Prod",
+          "hidden-title": "This is visible in the resource name",
+          "Role": "DeploymentValidation"
+        }
+      }
+    }
+  }

@@ -462,6 +462,18 @@ param deploymentScriptName string = 'ds-${deployment().location}'
 @sys.description('The name of the user managed identity for the resource providers registration deployment script.')
 param deploymentScriptManagedIdentityName string = 'id-${deployment().location}'
 
+@maxLength(64)
+@sys.description('The name of the private virtual network for the deployment script. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
+param deploymentScriptVirtualNetworkName string = 'vnet-${deployment().location}'
+
+@sys.description('The name of the network security group for the deployment script private subnet.')
+param deploymentScriptNetworkSecurityGroupName string = 'nsg-${deployment().location}'
+
+@sys.description('The address prefix of the private virtual network for the deployment script.')
+param virtualNetworkDeploymentScriptAddressPrefix string = '192.168.0.0/24'
+
+@sys.description('The name of the storage account for the deployment script.')
+param deploymentScriptStorageAccountName string = 'stgds${uniqueString(deployment().name)}'
 
 @metadata({
   example: {
@@ -471,7 +483,7 @@ param deploymentScriptManagedIdentityName string = 'id-${deployment().location}'
 
 })
 @sys.description('''
-An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.
+An object of resource providers and resource providers features to register. If left blank/empty, no resource providers will be registered.
 
 - Type: `{}` Object
 - Default value: `{
@@ -682,6 +694,10 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     deploymentScriptName: '${deploymentScriptName}-${deploymentScriptResourcesSubGuid}'
     deploymentScriptManagedIdentityName: '${deploymentScriptManagedIdentityName}-${deploymentScriptResourcesSubGuid}'
     resourceProviders: resourceProviders
+    deploymentScriptVirtualNetworkName: deploymentScriptVirtualNetworkName
+    deploymentScriptNetworkSecurityGroupName: deploymentScriptNetworkSecurityGroupName
+    virtualNetworkDeploymentScriptAddressPrefix: virtualNetworkDeploymentScriptAddressPrefix
+    deploymentScriptStorageAccountName: deploymentScriptStorageAccountName
   }
 }
 

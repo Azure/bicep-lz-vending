@@ -37,6 +37,10 @@ if ($providers.Count -gt 0) {
         Write-Output "`n The '$provider' provider is in registering state"
         $failedProviders += ",$provider"
       }
+      elseif( $null -eq $providerStatus) {
+        Write-Output "`n There was a problem registering the '$provider' provider. Please make sure this provider namespace is valid"
+        $failedProviders += ",$provider"
+      }
 
       if ($failedProviders.length -gt 0) {
         $output = $failedProviders.substring(1)
@@ -93,6 +97,9 @@ if ($providers.Count -gt 0) {
           $DeploymentScriptOutputs["failedFeaturesRegistrations"] = $output
         }
       }
+    }else{
+      $output = "No failures"
+      $DeploymentScriptOutputs["failedFeaturesRegistrations"] = $output
     }
   }
 }
