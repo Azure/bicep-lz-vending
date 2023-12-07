@@ -272,7 +272,7 @@ var deploymentNames = {
   createLzRoleAssignmentsRsgsSelf: take('lz-vend-rbac-rsg-self-create-${uniqueString(subscriptionId, deployment().name)}', 64)
   createLzRoleAssignmentsRsgsNotSelf: take('lz-vend-rbac-rsg-nself-create-${uniqueString(subscriptionId, deployment().name)}', 64)
   createResourceGroupForDeploymentScript: take('lz-vend-rsg-ds-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptLocation, deployment().name)}', 64)
-  registerResourceProviders: take('lz-vend-ds-create-${uniqueString(subscriptionId, deployment().name)}', 64)
+  registerResourceProviders: take('lz-vend-ds-create-${uniqueString(subscriptionId,deploymentScriptResourceGroupName,deploymentScriptName ,deployment().name)}', 64)
   createDeploymentScriptManagedIdentity: take('lz-vend-ds-msi-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deployment().name)}', 64)
   createRoleAssignmentsDeploymentScript: take('lz-vend-ds-rbac-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
   createRoleAssignmentsDeploymentScriptStorageAccount: take('lz-vend-stg-rbac-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
