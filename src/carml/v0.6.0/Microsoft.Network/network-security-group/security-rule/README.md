@@ -4,7 +4,7 @@ This module deploys a Network Security Group (NSG) Security Rule.
 
 ## Navigation
 
-- [Resource Types](#resource-Types)
+- [resource Types](#resource-types)
 - [Parameters](#parameters)
 - [Outputs](#outputs)
 - [Cross-referenced modules](#cross-referenced-modules)

@@ -4,12 +4,12 @@ This module deploys a Storage Account.
 
 ## Navigation
 
-- [Resource Types](#Resource-Types)
-- [Usage examples](#Usage-examples)
-- [Parameters](#Parameters)
-- [Outputs](#Outputs)
-- [Cross-referenced modules](#Cross-referenced-modules)
-- [Notes](#Notes)
+- [Resource Types](#esource-types)
+- [Usage examples](#usage-examples)
+- [Parameters](#parameters)
+- [Outputs](#outputs)
+- [Cross-referenced modules](#cross-referenced-modules)
+- [Notes](#notes)
 
 ## Resource Types
 
