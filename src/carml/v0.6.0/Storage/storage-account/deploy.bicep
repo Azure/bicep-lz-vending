@@ -366,7 +366,7 @@ module storageAccount_privateEndpoints '../../Microsoft.Network/private-endpoint
 }]
 
 // Lifecycle Policy
-module storageAccount_managementPolicies 'management-policy/main.bicep' = if (!empty(managementPolicyRules)) {
+module storageAccount_managementPolicies 'management-policy/deploy.bicep' = if (!empty(managementPolicyRules)) {
   name: '${uniqueString(deployment().name, location)}-Storage-ManagementPolicies'
   params: {
     storageAccountName: storageAccount.name
@@ -379,7 +379,7 @@ module storageAccount_managementPolicies 'management-policy/main.bicep' = if (!e
 }
 
 // SFTP user settings
-module storageAccount_localUsers 'local-user/main.bicep' = [for (localUser, index) in localUsers: {
+module storageAccount_localUsers 'local-user/deploy.bicep' = [for (localUser, index) in localUsers: {
   name: '${uniqueString(deployment().name, location)}-Storage-LocalUsers-${index}'
   params: {
     storageAccountName: storageAccount.name
@@ -395,7 +395,7 @@ module storageAccount_localUsers 'local-user/main.bicep' = [for (localUser, inde
 }]
 
 // Containers
-module storageAccount_blobServices 'blob-service/main.bicep' = if (!empty(blobServices)) {
+module storageAccount_blobServices 'blob-service/deploy.bicep' = if (!empty(blobServices)) {
   name: '${uniqueString(deployment().name, location)}-Storage-BlobServices'
   params: {
     storageAccountName: storageAccount.name
@@ -421,7 +421,7 @@ module storageAccount_blobServices 'blob-service/main.bicep' = if (!empty(blobSe
 }
 
 // File Shares
-module storageAccount_fileServices 'file-service/main.bicep' = if (!empty(fileServices)) {
+module storageAccount_fileServices 'file-service/deploy.bicep' = if (!empty(fileServices)) {
   name: '${uniqueString(deployment().name, location)}-Storage-FileServices'
   params: {
     storageAccountName: storageAccount.name
@@ -437,7 +437,7 @@ module storageAccount_fileServices 'file-service/main.bicep' = if (!empty(fileSe
 }
 
 // Queue
-module storageAccount_queueServices 'queue-service/main.bicep' = if (!empty(queueServices)) {
+module storageAccount_queueServices 'queue-service/deploy.bicep' = if (!empty(queueServices)) {
   name: '${uniqueString(deployment().name, location)}-Storage-QueueServices'
   params: {
     storageAccountName: storageAccount.name
@@ -448,7 +448,7 @@ module storageAccount_queueServices 'queue-service/main.bicep' = if (!empty(queu
 }
 
 // Table
-module storageAccount_tableServices 'table-service/main.bicep' = if (!empty(tableServices)) {
+module storageAccount_tableServices 'table-service/deploy.bicep' = if (!empty(tableServices)) {
   name: '${uniqueString(deployment().name, location)}-Storage-TableServices'
   params: {
     storageAccountName: storageAccount.name

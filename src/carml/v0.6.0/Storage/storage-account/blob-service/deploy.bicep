@@ -150,7 +150,7 @@ resource blobServices_diagnosticSettings 'Microsoft.Insights/diagnosticSettings@
   scope: blobServices
 }]
 
-module blobServices_container 'container/main.bicep' = [for (container, index) in containers: {
+module blobServices_container 'container/deploy.bicep' = [for (container, index) in containers: {
   name: '${deployment().name}-Container-${index}'
   params: {
     storageAccountName: storageAccount.name
