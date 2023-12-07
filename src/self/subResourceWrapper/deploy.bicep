@@ -485,17 +485,12 @@ module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Autho
   }
 }
 
-resource storageFileDataPrivilegedContributor 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
-  name: '69566ab7-960f-475b-8e7c-b3118f30c6bd'
-  scope: tenant()
-}
-
 module createRoleAssignmentsDeploymentScriptStorageAccount '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = if (!empty(resourceProviders)) {
   name: take('${deploymentNames.createRoleAssignmentsDeploymentScriptStorageAccount}', 64)
   params: {
     location: deploymentScriptLocation
     principalId: !empty(resourceProviders) ? createManagedIdentityForDeploymentScript.outputs.principalId : ''
-    roleDefinitionIdOrName: storageFileDataPrivilegedContributor.id
+    roleDefinitionIdOrName: 'Storage File Data Privileged Contributor'
     enableDefaultTelemetry: enableTelemetryForCarml
     subscriptionId: subscriptionId
     resourceGroupName: deploymentScriptResourceGroupName
@@ -514,7 +509,6 @@ module createDsNsg '../../carml/v0.6.0/Microsoft.Network/network-security-group/
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }
-
 module createDsStorageAccount '../../carml/v0.6.0/Storage/storage-account/deploy.bicep' = if (!empty(resourceProviders)) {
   dependsOn: [
     createRoleAssignmentsDeploymentScriptStorageAccount
@@ -571,7 +565,7 @@ module createDsVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }
-module registerResourceProviders '../../avm/resources/deployment-script/deploy.bicep' = if (!empty(resourceProviders)) {
+module registerResourceProviders 'br/public:avm/res/resources/deployment-script:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.registerResourceProviders
   params: {
