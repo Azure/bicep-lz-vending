@@ -490,7 +490,7 @@ module createRoleAssignmentsDeploymentScriptStorageAccount '../../carml/v0.6.0/M
   params: {
     location: deploymentScriptLocation
     principalId: !empty(resourceProviders) ? createManagedIdentityForDeploymentScript.outputs.principalId : ''
-    roleDefinitionIdOrName: 'Storage File Data Privileged Contributor'
+    roleDefinitionIdOrName: '69566ab7-960f-475b-8e7c-b3118f30c6bd'
     enableDefaultTelemetry: enableTelemetryForCarml
     subscriptionId: subscriptionId
     resourceGroupName: deploymentScriptResourceGroupName
