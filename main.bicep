@@ -697,7 +697,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     deploymentScriptVirtualNetworkName: deploymentScriptVirtualNetworkName
     deploymentScriptNetworkSecurityGroupName: deploymentScriptNetworkSecurityGroupName
     virtualNetworkDeploymentScriptAddressPrefix: virtualNetworkDeploymentScriptAddressPrefix
-    deploymentScriptStorageAccountName: deploymentScriptStorageAccountName
+    deploymentScriptStorageAccountName: '${deploymentScriptStorageAccountName}${deploymentScriptResourcesSubGuid}'
   }
 }
 
