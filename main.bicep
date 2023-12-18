@@ -451,7 +451,7 @@ For more information on the telemetry collected by this module, that is controll
 param disableTelemetry bool = false
 
 @sys.description('Guid for the deployment script resources names based on subscription Id.')
-var deploymentScriptResourcesSubGuid = substring((subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : existingSubscriptionId,0,8)
+var deploymentScriptResourcesSubGuid = substring((subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : existingSubscriptionId,0,6)
 
 @sys.description('The name of the resource group to create the deployment script for resource providers registration.')
 param deploymentScriptResourceGroupName string = 'rsg-${deployment().location}-ds'
