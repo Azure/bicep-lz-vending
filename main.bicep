@@ -473,7 +473,7 @@ param deploymentScriptNetworkSecurityGroupName string = 'nsg-${deployment().loca
 param virtualNetworkDeploymentScriptAddressPrefix string = '192.168.0.0/24'
 
 @sys.description('The name of the storage account for the deployment script.')
-param deploymentScriptStorageAccountName string = 'stgds${uniqueString(deployment().name)}'
+param deploymentScriptStorageAccountName string = 'stglzds${deployment().location}'
 
 @metadata({
   example: {
