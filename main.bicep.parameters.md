@@ -505,7 +505,7 @@ The address prefix of the private virtual network for the deployment script.
 
 The name of the storage account for the deployment script.
 
-- Default value: `[format('stgds{0}', uniqueString(deployment().name))]`
+- Default value: `[format('stglzds{0}', deployment().location)]`
 
 ### resourceProviders
 
@@ -768,7 +768,7 @@ failedResourceProvidersFeatures | string | The resource providers features that 
             "value": "192.168.0.0/24"
         },
         "deploymentScriptStorageAccountName": {
-            "value": "[format('stgds{0}', uniqueString(deployment().name))]"
+            "value": "[format('stglzds{0}', deployment().location)]"
         },
         "resourceProviders": {
             "value": {
