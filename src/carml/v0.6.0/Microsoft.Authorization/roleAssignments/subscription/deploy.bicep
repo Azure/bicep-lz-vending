@@ -63,13 +63,10 @@ resource defaultTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (ena
   }
 }
 
-var roleDefinitionId_var = contains(builtInRoleNames_var, roleDefinitionIdOrName) ? builtInRoleNames_var[roleDefinitionIdOrName] : contains(roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/') ? roleDefinitionIdOrName : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionIdOrName)
-
-
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
-  name: guid(subscriptionId, principalId, roleDefinitionId_var)
+  name: guid(subscriptionId, principalId,roleDefinitionIdOrName)
   properties: {
-    roleDefinitionId: roleDefinitionId_var
+    roleDefinitionId: contains(builtInRoleNames_var, roleDefinitionIdOrName) ? builtInRoleNames_var[roleDefinitionIdOrName] : contains(roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/') ? roleDefinitionIdOrName : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionIdOrName)
     principalId: principalId
     description: !empty(description) ? description : null
     principalType: !empty(principalType) ? any(principalType) : null

@@ -50,8 +50,6 @@ var builtInRoleNames_var = {
   'User Access Administrator': subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '18d7d88d-d35e-4fb5-a5c3-7773c20a72d9')
 }
 
-var roleDefinitionId_var = contains(builtInRoleNames_var, roleDefinitionIdOrName) ? builtInRoleNames_var[roleDefinitionIdOrName] : contains(roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/') ? roleDefinitionIdOrName : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionIdOrName)
-
 resource defaultTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (enableDefaultTelemetry) {
   name: 'pid-47ed15a6-730a-4827-bcb4-0fd963ffbd82-${uniqueString(deployment().name, location)}'
   location: location
@@ -66,9 +64,9 @@ resource defaultTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (ena
 }
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
-  name: guid(managementGroupId, roleDefinitionId_var, principalId)
+  name: guid(managementGroupId, principalId,roleDefinitionIdOrName)
   properties: {
-    roleDefinitionId: roleDefinitionId_var
+    roleDefinitionId: contains(builtInRoleNames_var, roleDefinitionIdOrName) ? builtInRoleNames_var[roleDefinitionIdOrName] : contains(roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/') ? roleDefinitionIdOrName : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionIdOrName)
     principalId: principalId
     description: !empty(description) ? description : null
     principalType: !empty(principalType) ? any(principalType) : null
