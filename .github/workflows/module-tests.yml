@@ -84,7 +84,7 @@ jobs:
 
       - name: Pester Tests
         id: pester
-        uses: azure/powershell@v1
+        uses: azure/powershell@v1.4.0
         with:
           inlineScript: |
             Import-Module Pester -Force
