@@ -62,6 +62,9 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
   }
 
   Context "Role-Based Access Control Assignment Tests" {
+    BeforeAll{
+      Connect-AzAccount -Identity
+    }
     It "Should Have a Role Assignment for an known AAD Group with the Reader role directly upon the Subscription" {
       $iterationCount = 0
       do {
