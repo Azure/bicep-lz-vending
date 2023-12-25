@@ -65,11 +65,8 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
     It "Should Have a Role Assignment for an known AAD Group with the Reader role directly upon the Subscription" {
       $iterationCount = 0
       do {
-        #$roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -RoleDefinitionName "Reader" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -ErrorAction SilentlyContinue
-        Write-Host "Sub Id: $subId"
-        $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId"
-        Write-Host "Role assignment: $roleAssignment"
-        $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Reader"}
+        $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -RoleDefinitionName "Reader" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3"
+        #$roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Reader"}
         if ($null -eq $roleAssignment) {
           Write-Host "Waiting for Subscription Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
           Start-Sleep -Seconds 40
@@ -87,8 +84,8 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
     It "Should Have a Role Assignment for an known AAD Group with the Network Contributor role directly upon the Resource Group" {
       $iterationCount = 0
       do {
-        #$roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -RoleDefinitionName "Network Contributor" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -ErrorAction SilentlyContinue
-        $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -ErrorAction SilentlyContinue | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Network Contributor"}
+        $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -RoleDefinitionName "Network Contributor" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -ErrorAction SilentlyContinue
+        #$roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -ErrorAction SilentlyContinue | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Network Contributor"}
         if ($null -eq $roleAssignment) {
           Write-Host "Waiting for Resource Group Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
           Start-Sleep -Seconds 40
