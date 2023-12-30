@@ -1,6 +1,6 @@
 # `main.bicep` Parameters
 
-This module is designed to accelerate deployment of landing zones (aka Subscriptions) within an Azure AD Tenant.
+This module is designed to accelerate deployment of landing zones (aka Subscriptions) within an Microsoft Entra Tenant.
 
 ## Parameters
 

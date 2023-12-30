@@ -62,7 +62,7 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
   }
 
   Context "Role-Based Access Control Assignment Tests" {
-    It "Should Have a Role Assignment for an known AAD Group with the Reader role directly upon the Subscription" {
+    It "Should Have a Role Assignment for an known Microsoft Entra Group with the Reader role directly upon the Subscription" {
       $iterationCount = 0
       do {
         $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -RoleDefinitionName "Reader" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -ErrorAction SilentlyContinue
@@ -80,7 +80,7 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
       $roleAssignment.scope | Should -Be "/subscriptions/$subId"
     }
 
-    It "Should Have a Role Assignment for an known AAD Group with the Network Contributor role directly upon the Resource Group" {
+    It "Should Have a Role Assignment for an known Microsoft Entra Group with the Network Contributor role directly upon the Resource Group" {
       $iterationCount = 0
       do {
         $roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -RoleDefinitionName "Network Contributor" -ObjectId "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -ErrorAction SilentlyContinue

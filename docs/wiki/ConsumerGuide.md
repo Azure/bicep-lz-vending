@@ -3,7 +3,7 @@
 
 ## Background
 
-This repository has been created to help customers and partners to create, deploy and deliver landing zone Subscriptions into an Azure AD Tenant utilizing [Bicep](https://aka.ms/bicep) as the Infrastructure-as-Code (IaC) tooling and language of choice.
+This repository has been created to help customers and partners to create, deploy and deliver landing zone Subscriptions into an Microsoft Entra Tenant utilizing [Bicep](https://aka.ms/bicep) as the Infrastructure-as-Code (IaC) tooling and language of choice.
 
 ## Ways to Consume `bicep-lz-vending`
 
