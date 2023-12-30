@@ -7,7 +7,34 @@ This repository has been created to help customers and partners to create, deplo
 
 ## Ways to Consume `bicep-lz-vending`
 
-There are various ways to consume the Bicep modules included in `bicep-lz-vending`. The options are:
+### Recommended Way to Consume
+
+The recommend way is to consume the module directly from the [Bicep public registry](https://github.com/Azure/bicep-registry-modules/tree/main/modules/lz/sub-vending#examples)
+
+```bicep
+targetScope = 'managementGroup'
+
+module sub001 'br/public:lz/sub-vending:1.5.1' = {
+  name: 'sub001'
+  params: {
+    subscriptionAliasEnabled: true
+    subscriptionBillingScope: '/providers/Microsoft.Billing/billingAccounts/1234567/enrollmentAccounts/123456'
+    subscriptionAliasName: 'sub-test-001'
+    subscriptionDisplayName: 'sub-test-001'
+    subscriptionTags: {
+      example: 'true'
+    }
+    subscriptionWorkload: 'Production'
+    subscriptionManagementGroupAssociationEnabled: true
+    subscriptionManagementGroupId: 'corp'
+    // Other parameter inputs available, see docs
+  }
+}
+```
+
+### Other Ways to Consume
+
+There are a number of other ways to consume the Bicep modules included in `bicep-lz-vending`. The options are:
 
 - Creating your own GitHub Repository & Utilizing the `Invoke-GitHubReleaseFetcher.ps1` script & `gh-release-checker.yml` GitHub Action Workflow
   - See detailed instruction on using this [below](#creating-your-own-github-repository--utilizing-the-invoke-githubreleasefetcherps1-script--gh-release-checkeryml-github-action-workflow)
