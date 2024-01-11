@@ -69,7 +69,7 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
         #$roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId" -ErrorAction SilentlyContinue | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Reader"}
         if ($null -eq $roleAssignment) {
           Write-Host "Waiting for Subscription Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
-          Start-Sleep -Seconds 40
+          Start-Sleep -Seconds 45
           $iterationCount++
         }
       } until (
@@ -88,7 +88,7 @@ Describe "Bicep Landing Zone (Sub) Vending Tests" {
         #$roleAssignment = Get-AzRoleAssignment -Scope "/subscriptions/$subId/resourceGroups/rsg-$location-net-hs-pr-$prNumber" -ErrorAction SilentlyContinue | Where-Object { $_.ObjectId -eq "7eca0dca-6701-46f1-b7b6-8b424dab50b3" -and $_.RoleDefinitionName -eq "Network Contributor"}
         if ($null -eq $roleAssignment) {
           Write-Host "Waiting for Resource Group Role Assignments to be eventually consistent... Iteration: $($iterationCount)" -ForegroundColor Yellow
-          Start-Sleep -Seconds 40
+          Start-Sleep -Seconds 45
           $iterationCount++
         }
       } until (
