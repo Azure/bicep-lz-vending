@@ -61,6 +61,15 @@ jobs:
             New-AzManagementGroupDeployment @inputObject -Whatif
           azPSVersion: "10.4.1"
 
+      - name: Azure Login
+        id: loginRefresh
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          enable-AzPSSession: true
+          allow-no-subscriptions: true
+
       - name: Vend Subscriptions & Networking Scenarios (Deploy)
         id: vend
         uses: azure/powershell@v1
