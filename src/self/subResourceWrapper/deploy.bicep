@@ -331,7 +331,7 @@ module tagSubscription '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bicep
   }
 }
 
-module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
+/*module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForLzNetworking
   params: {
@@ -339,6 +339,23 @@ module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resource
     location: virtualNetworkLocation
     lock: virtualNetworkResourceGroupLockEnabled ? 'CanNotDelete' : ''
     enableDefaultTelemetry: enableTelemetryForCarml
+  }
+}*/
+
+
+//virtualNetworkResourceGroupLockEnabled ? 'CanNotDelete' : ''
+
+module createResourceGroupForLzNetworking 'br/public:avm/res/resources/resource-group:0.2.0' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
+  scope: subscription(subscriptionId)
+  name: deploymentNames.createResourceGroupForLzNetworking
+  params: {
+    name: virtualNetworkResourceGroupName
+    location: virtualNetworkLocation
+    lock: virtualNetworkResourceGroupLockEnabled ? {
+      kind: 'CanNotDelete'
+      name: 'CanNotDelete'
+    } : null
+    enableTelemetry: disableTelemetry
   }
 }
 
@@ -451,13 +468,13 @@ module createLzRoleAssignmentsRsgsNotSelf '../../carml/v0.6.0/Microsoft.Authoriz
   }
 }]
 
-module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (!empty(resourceProviders)) {
+module createResourceGroupForDeploymentScript 'br/public:avm/res/resources/resource-group:0.2.0' = if (!empty(resourceProviders)) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForDeploymentScript
   params: {
     name: deploymentScriptResourceGroupName
     location: deploymentScriptLocation
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
 
@@ -496,19 +513,19 @@ module createRoleAssignmentsDeploymentScriptStorageAccount '../../carml/v0.6.0/M
     resourceGroupName: deploymentScriptResourceGroupName
   }
 }
-
-module createDsNsg '../../carml/v0.6.0/Microsoft.Network/network-security-group/deploy.bicep' = if (!empty(resourceProviders)) {
+module createDsNsg 'br/public:avm/res/network/network-security-group:0.1.0' = if (!empty(resourceProviders)) {
+  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   dependsOn: [
     createResourceGroupForDeploymentScript
   ]
-  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.createDsNsg
   params: {
     name: deploymentScriptNetworkSecurityGroupName
     location: deploymentScriptLocation
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
+
 module createDsStorageAccount '../../carml/v0.6.0/Storage/storage-account/deploy.bicep' = if (!empty(resourceProviders)) {
   dependsOn: [
     createRoleAssignmentsDeploymentScriptStorageAccount
