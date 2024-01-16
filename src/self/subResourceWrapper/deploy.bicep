@@ -463,16 +463,16 @@ module createResourceGroupForDeploymentScript 'br/public:avm/res/resources/resou
   }
 }
 
-module createManagedIdentityForDeploymentScript '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = if (!empty(resourceProviders)) {
+module createManagedIdentityForDeploymentScript 'br/public:avm/res/managed-identity/user-assigned-identity:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId,deploymentScriptResourceGroupName)
   name: deploymentNames.createDeploymentScriptManagedIdentity
   dependsOn: [
     createResourceGroupForDeploymentScript
   ]
-  params:{
+  params: {
     location: deploymentScriptLocation
     name: deploymentScriptManagedIdentityName
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
 
