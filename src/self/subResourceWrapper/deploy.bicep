@@ -330,21 +330,6 @@ module tagSubscription '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bicep
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }
-
-/*module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
-  scope: subscription(subscriptionId)
-  name: deploymentNames.createResourceGroupForLzNetworking
-  params: {
-    name: virtualNetworkResourceGroupName
-    location: virtualNetworkLocation
-    lock: virtualNetworkResourceGroupLockEnabled ? 'CanNotDelete' : ''
-    enableDefaultTelemetry: enableTelemetryForCarml
-  }
-}*/
-
-
-//virtualNetworkResourceGroupLockEnabled ? 'CanNotDelete' : ''
-
 module createResourceGroupForLzNetworking 'br/public:avm/res/resources/resource-group:0.2.0' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForLzNetworking
