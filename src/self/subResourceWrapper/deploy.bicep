@@ -359,7 +359,7 @@ module tagResourceGroup '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bice
   }
 }
 
-module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
+module createLzVnet 'br/public:avm/res/network/virtual-network:0.1.0' = if (virtualNetworkEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
   dependsOn: [
     createResourceGroupForLzNetworking
   ]
@@ -371,8 +371,8 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
     location: virtualNetworkLocation
     addressPrefixes: virtualNetworkAddressSpace
     dnsServers: virtualNetworkDnsServers
-    ddosProtectionPlanId: virtualNetworkDdosPlanId
-    virtualNetworkPeerings: (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(hubVirtualNetworkResourceIdChecked) && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) ? [
+    ddosProtectionPlanResourceId: virtualNetworkDdosPlanId
+    peerings: (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(hubVirtualNetworkResourceIdChecked) && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) ? [
       {
         allowForwardedTraffic: true
         allowVirtualNetworkAccess: true
@@ -386,7 +386,7 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
         remotePeeringUseRemoteGateways: false
       }
     ] : []
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
 
@@ -535,7 +535,7 @@ module createDsStorageAccount '../../carml/v0.6.0/Storage/storage-account/deploy
   }
 }
 
-module createDsVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy.bicep' = if (!empty(resourceProviders)) {
+module createDsVnet 'br/public:avm/res/network/virtual-network:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.createdsVnet
   params: {
@@ -564,9 +564,11 @@ module createDsVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
         ]
       }
     ]
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
+
+
 module registerResourceProviders 'br/public:avm/res/resources/deployment-script:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.registerResourceProviders
