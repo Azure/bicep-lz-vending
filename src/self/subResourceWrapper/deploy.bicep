@@ -498,6 +498,7 @@ module createRoleAssignmentsDeploymentScriptStorageAccount '../../carml/v0.6.0/M
     resourceGroupName: deploymentScriptResourceGroupName
   }
 }
+
 module createDsNsg 'br/public:avm/res/network/network-security-group:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   dependsOn: [
@@ -510,16 +511,15 @@ module createDsNsg 'br/public:avm/res/network/network-security-group:0.1.0' = if
     enableTelemetry: disableTelemetry
   }
 }
-
-module createDsStorageAccount '../../carml/v0.6.0/Storage/storage-account/deploy.bicep' = if (!empty(resourceProviders)) {
+module createDsStorageAccount 'br/public:avm/res/storage/storage-account:0.5.0' = if (!empty(resourceProviders)) {
   dependsOn: [
     createRoleAssignmentsDeploymentScriptStorageAccount
   ]
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.createDsStorageAccount
   params: {
-    name: deploymentScriptStorageAccountName
     location: deploymentScriptLocation
+    name: deploymentScriptStorageAccountName
     kind: 'StorageV2'
     skuName: 'Standard_LRS'
     networkAcls: {
@@ -532,6 +532,7 @@ module createDsStorageAccount '../../carml/v0.6.0/Storage/storage-account/deploy
         }
       ]
     }
+    enableTelemetry: disableTelemetry
   }
 }
 
