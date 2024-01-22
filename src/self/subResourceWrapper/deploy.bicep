@@ -181,8 +181,7 @@ An object of resource providers and resource providers features to register. If 
     'Microsoft.StreamAnalytics'         : []
     'Microsoft.TimeSeriesInsights'      : []
     'Microsoft.Web'                     : []
-}`
-''')
+}`''')
 param resourceProviders object = {
   'Microsoft.ApiManagement'             : []
     'Microsoft.AppPlatform'             : []
