@@ -41,7 +41,7 @@ param principalType string = ''
 @sys.description('Optional. Enable telemetry via the Customer Usage Attribution ID (GUID).')
 param enableDefaultTelemetry bool = true
 
-var builtInRoleNames_var = {
+var builtInRoleNames = {
   Contributor: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
   Owner: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')
   Reader: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')
@@ -66,7 +66,7 @@ resource defaultTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (ena
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
   name: guid(subscriptionId,resourceGroupName, principalId,roleDefinitionIdOrName)
   properties: {
-    roleDefinitionId: contains(builtInRoleNames_var, roleDefinitionIdOrName) ? builtInRoleNames_var[roleDefinitionIdOrName] : contains(roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/') ? roleDefinitionIdOrName : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionIdOrName)
+    roleDefinitionId: contains(builtInRoleNames, roleDefinitionIdOrName) ? builtInRoleNames[roleDefinitionIdOrName] : contains(roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/') ? roleDefinitionIdOrName : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionIdOrName)
     principalId: principalId
     description: !empty(description) ? description : null
     principalType: !empty(principalType) ? any(principalType) : null
