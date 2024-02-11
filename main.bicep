@@ -480,6 +480,9 @@ param virtualNetworkDeploymentScriptAddressPrefix string = '192.168.0.0/24'
 @sys.description('The name of the storage account for the deployment script.')
 param deploymentScriptStorageAccountName string = 'stglzds${deployment().location}'
 
+@sys.description('The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.')
+param deploymentScriptLocation string = deployment().location
+
 @metadata({
   example: {
     'Microsoft.Compute' : ['InGuestHotPatchVMPreview']
@@ -701,6 +704,7 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     resourceProviders: resourceProviders
     deploymentScriptVirtualNetworkName: deploymentScriptVirtualNetworkName
     deploymentScriptNetworkSecurityGroupName: deploymentScriptNetworkSecurityGroupName
+    deploymentScriptLocation: deploymentScriptLocation
     virtualNetworkDeploymentScriptAddressPrefix: virtualNetworkDeploymentScriptAddressPrefix
     deploymentScriptStorageAccountName: '${deploymentScriptStorageAccountName}${deploymentScriptResourcesSubGuid}'
   }
