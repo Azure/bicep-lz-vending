@@ -586,7 +586,7 @@ module registerResourceProviders 'br/public:avm/res/resources/deployment-script:
       userAssignedResourcesIds: [
         createManagedIdentityForDeploymentScript.outputs.resourceId
       ]
-    }: {}
+    }: null
     storageAccountResourceId: !(empty(resourceProviders)) ? createDsStorageAccount.outputs.resourceId : null
     subnetResourceIds: !(empty(resourceProviders)) ? createDsVnet.outputs.subnetResourceIds : null
     arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -resourceProvidersFeatures -subscriptionId ${subscriptionId}'
