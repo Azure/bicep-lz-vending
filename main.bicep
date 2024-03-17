@@ -698,9 +698,9 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     roleAssignmentEnabled: roleAssignmentEnabled
     roleAssignments: roleAssignments
     disableTelemetry: disableTelemetry
-    deploymentScriptResourceGroupName: deploymentScriptResourceGroupName
-    deploymentScriptName: deploymentScriptName
-    deploymentScriptManagedIdentityName: deploymentScriptManagedIdentityName
+    deploymentScriptResourceGroupName: '${deploymentScriptResourceGroupName}-${deploymentScriptResourcesSubGuid}'
+    deploymentScriptName: '${deploymentScriptName}-${deploymentScriptResourcesSubGuid}'
+    deploymentScriptManagedIdentityName: '${deploymentScriptManagedIdentityName}-${deploymentScriptResourcesSubGuid}'
     resourceProviders: resourceProviders
     deploymentScriptVirtualNetworkName: deploymentScriptVirtualNetworkName
     deploymentScriptNetworkSecurityGroupName: deploymentScriptNetworkSecurityGroupName
