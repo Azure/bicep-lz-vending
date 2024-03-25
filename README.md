@@ -9,7 +9,7 @@
 >
 > ℹ️ This module is also available on the Bicep Module Registry [here](https://github.com/Azure/bicep-registry-modules/tree/main/modules/lz/sub-vending). Examples also included in our [wiki examples](https://github.com/Azure/bicep-lz-vending/wiki/examples). ℹ️
 
-The landing zone Bicep modules are designed to accelerate deployment of the individual landing zones (aka Subscriptions) within an Azure AD Tenant.
+The landing zone Bicep modules are designed to accelerate deployment of the individual landing zones (aka Subscriptions) within an Microsoft Entra Tenant.
 
 > See the different types of landing zones in the Azure Landing Zones documentation here: [What is an Azure landing zone? - Platform vs. application landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/#platform-vs-application-landing-zones)
 
