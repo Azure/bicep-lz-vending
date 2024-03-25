@@ -567,7 +567,6 @@ module createDsVnet 'br/public:avm/res/network/virtual-network:0.1.0' = if (!emp
     enableTelemetry: disableTelemetry
   }
 }
-
 module registerResourceProviders 'br/public:avm/res/resources/deployment-script:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.registerResourceProviders
