@@ -34,14 +34,19 @@ virtualNetworkVwanEnableInternetSecurity | No       | Enables the ability for th
 virtualNetworkVwanAssociatedRouteTableResourceId | No       | The resource ID of the virtual hub route table to associate to the virtual hub connection (this virtual network). If left blank/empty the `defaultRouteTable` will be associated.  - Type: String - Default value: `''` *(empty string)* = Which means if the parameter `virtualNetworkPeeringEnabled` is `true` and also the parameter `hubNetworkResourceId` is not empty then the `defaultRouteTable` will be associated of the provided Virtual Hub in the parameter `hubNetworkResourceId`.     - e.g. `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xxxxxxxxxx/providers/Microsoft.Network/virtualHubs/xxxxxxxxx/hubRouteTables/defaultRouteTable` 
 virtualNetworkVwanPropagatedRouteTablesResourceIds | No       | An array of of objects of virtual hub route table resource IDs to propagate routes to. If left blank/empty the `defaultRouteTable` will be propagated to only.  Each object must contain the following `key`: - `id` = The Resource ID of the Virtual WAN Virtual Hub Route Table IDs you wish to propagate too  > See below [example in parameter file](#parameter-file)  > **IMPORTANT:** If you provide any Route Tables in this array of objects you must ensure you include also the `defaultRouteTable` Resource ID as an object in the array as it is not added by default when a value is provided for this parameter.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 virtualNetworkVwanPropagatedLabels | No       | An array of virtual hub route table labels to propagate routes to. If left blank/empty the default label will be propagated to only.  - Type: `[]` Array - Default value: `[]` *(empty array)* 
-vHubRoutingIntentEnabled | No       | Indicates whether routing intent is enabled on the Virtual Hub within the Virtual WAN.  - Type: Boolean
+vHubRoutingIntentEnabled | No       | Indicates whether routing intent is enabled on the Virtual Hub within the Virtual WAN.  - Type: Boolean 
 roleAssignmentEnabled | No       | Whether to create role assignments or not. If true, supply the array of role assignment objects in the parameter called `roleAssignments`.  - Type: Boolean 
-roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition. - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
+roleAssignments | No       | Supply an array of objects containing the details of the role assignments to create.  Each object must contain the following `keys`: - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too. - `definition` = The Name of one of the pre-defined built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition as follows:   - You can only provide the RBAC role name of the pre-defined roles (Contributor, Owner, Reader, Network Contributor, Role Based Access Control Administrator (Preview), User Access Administrator, Security Admin). We only provide those roles as they are the most common ones to assign to a new subscription, also to reduce the template size and complexity in case we define each and every Built-in RBAC role.   - You can provide the Resource ID of a Built-in or custom RBAC Role Definition     - e.g. `/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`   - You can provide the RBAC role Id of a Built-in RBAC Role Definition     - e.g. `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` - `relativeScope` = 2 options can be provided for input value:     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group  > See below [example in parameter file](#parameter-file) of various combinations  - Type: `[]` Array - Default value: `[]` *(empty array)* 
 disableTelemetry | No       | Disable telemetry collection by this module.  For more information on the telemetry collected by this module, that is controlled by this parameter, see this page in the wiki: [Telemetry Tracking Using Customer Usage Attribution (PID)](https://github.com/Azure/bicep-lz-vending/wiki/Telemetry) 
 deploymentScriptResourceGroupName | No       | The name of the resource group to create the deployment script for resource providers registration.
 deploymentScriptName | No       | The name of the deployment script to register resource providers
 deploymentScriptManagedIdentityName | No       | The name of the user managed identity for the resource providers registration deployment script.
-resourceProviders | No       | An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.  - Type: `{}` Object - Default value: `{   'Microsoft.ApiManagement'             : []     'Microsoft.AppPlatform'             : []     'Microsoft.Authorization'           : []     'Microsoft.Automation'              : []     'Microsoft.AVS'                     : []     'Microsoft.Blueprint'               : []     'Microsoft.BotService'              : []     'Microsoft.Cache'                   : []     'Microsoft.Cdn'                     : []     'Microsoft.CognitiveServices'       : []     'Microsoft.Compute'                 : []     'Microsoft.ContainerInstance'       : []     'Microsoft.ContainerRegistry'       : []     'Microsoft.ContainerService'        : []     'Microsoft.CostManagement'          : []     'Microsoft.CustomProviders'         : []     'Microsoft.Databricks'              : []     'Microsoft.DataLakeAnalytics'       : []     'Microsoft.DataLakeStore'           : []     'Microsoft.DataMigration'           : []     'Microsoft.DataProtection'          : []     'Microsoft.DBforMariaDB'            : []     'Microsoft.DBforMySQL'              : []     'Microsoft.DBforPostgreSQL'         : []     'Microsoft.DesktopVirtualization'   : []     'Microsoft.Devices'                 : []     'Microsoft.DevTestLab'              : []     'Microsoft.DocumentDB'              : []     'Microsoft.EventGrid'               : []     'Microsoft.EventHub'                : []     'Microsoft.HDInsight'               : []     'Microsoft.HealthcareApis'          : []     'Microsoft.GuestConfiguration'      : []     'Microsoft.KeyVault'                : []     'Microsoft.Kusto'                   : []     'microsoft.insights'                : []     'Microsoft.Logic'                   : []     'Microsoft.MachineLearningServices' : []     'Microsoft.Maintenance'             : []     'Microsoft.ManagedIdentity'         : []     'Microsoft.ManagedServices'         : []     'Microsoft.Management'              : []     'Microsoft.Maps'                    : []     'Microsoft.MarketplaceOrdering'     : []     'Microsoft.Media'                   : []     'Microsoft.MixedReality'            : []     'Microsoft.Network'                 : []     'Microsoft.NotificationHubs'        : []     'Microsoft.OperationalInsights'     : []     'Microsoft.OperationsManagement'    : []     'Microsoft.PolicyInsights'          : []     'Microsoft.PowerBIDedicated'        : []     'Microsoft.Relay'                   : []     'Microsoft.RecoveryServices'        : []     'Microsoft.Resources'               : []     'Microsoft.Search'                  : []     'Microsoft.Security'                : []     'Microsoft.SecurityInsights'        : []     'Microsoft.ServiceBus'              : []     'Microsoft.ServiceFabric'           : []     'Microsoft.Sql'                     : []     'Microsoft.Storage'                 : []     'Microsoft.StreamAnalytics'         : []     'Microsoft.TimeSeriesInsights'      : []     'Microsoft.Web'                     : [] }` 
+deploymentScriptVirtualNetworkName | No       | The name of the private virtual network for the deployment script. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
+deploymentScriptNetworkSecurityGroupName | No       | The name of the network security group for the deployment script private subnet.
+virtualNetworkDeploymentScriptAddressPrefix | No       | The address prefix of the private virtual network for the deployment script.
+deploymentScriptStorageAccountName | No       | The name of the storage account for the deployment script.
+deploymentScriptLocation | No       | The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.
+resourceProviders | No       | An object of resource providers and resource providers features to register. If left blank/empty, no resource providers will be registered.  - Type: `{}` Object - Default value: `{   'Microsoft.ApiManagement'             : []     'Microsoft.AppPlatform'             : []     'Microsoft.Authorization'           : []     'Microsoft.Automation'              : []     'Microsoft.AVS'                     : []     'Microsoft.Blueprint'               : []     'Microsoft.BotService'              : []     'Microsoft.Cache'                   : []     'Microsoft.Cdn'                     : []     'Microsoft.CognitiveServices'       : []     'Microsoft.Compute'                 : []     'Microsoft.ContainerInstance'       : []     'Microsoft.ContainerRegistry'       : []     'Microsoft.ContainerService'        : []     'Microsoft.CostManagement'          : []     'Microsoft.CustomProviders'         : []     'Microsoft.Databricks'              : []     'Microsoft.DataLakeAnalytics'       : []     'Microsoft.DataLakeStore'           : []     'Microsoft.DataMigration'           : []     'Microsoft.DataProtection'          : []     'Microsoft.DBforMariaDB'            : []     'Microsoft.DBforMySQL'              : []     'Microsoft.DBforPostgreSQL'         : []     'Microsoft.DesktopVirtualization'   : []     'Microsoft.Devices'                 : []     'Microsoft.DevTestLab'              : []     'Microsoft.DocumentDB'              : []     'Microsoft.EventGrid'               : []     'Microsoft.EventHub'                : []     'Microsoft.HDInsight'               : []     'Microsoft.HealthcareApis'          : []     'Microsoft.GuestConfiguration'      : []     'Microsoft.KeyVault'                : []     'Microsoft.Kusto'                   : []     'microsoft.insights'                : []     'Microsoft.Logic'                   : []     'Microsoft.MachineLearningServices' : []     'Microsoft.Maintenance'             : []     'Microsoft.ManagedIdentity'         : []     'Microsoft.ManagedServices'         : []     'Microsoft.Management'              : []     'Microsoft.Maps'                    : []     'Microsoft.MarketplaceOrdering'     : []     'Microsoft.Media'                   : []     'Microsoft.MixedReality'            : []     'Microsoft.Network'                 : []     'Microsoft.NotificationHubs'        : []     'Microsoft.OperationalInsights'     : []     'Microsoft.OperationsManagement'    : []     'Microsoft.PolicyInsights'          : []     'Microsoft.PowerBIDedicated'        : []     'Microsoft.Relay'                   : []     'Microsoft.RecoveryServices'        : []     'Microsoft.Resources'               : []     'Microsoft.Search'                  : []     'Microsoft.Security'                : []     'Microsoft.SecurityInsights'        : []     'Microsoft.ServiceBus'              : []     'Microsoft.ServiceFabric'           : []     'Microsoft.Sql'                     : []     'Microsoft.Storage'                 : []     'Microsoft.StreamAnalytics'         : []     'Microsoft.TimeSeriesInsights'      : []     'Microsoft.Web'                     : [] }` 
 
 ### subscriptionAliasEnabled
 
@@ -394,19 +399,17 @@ An array of virtual hub route table labels to propagate routes to. If left blank
 - Type: `[]` Array
 - Default value: `[]` *(empty array)*
 
-### vHubRoutingIntentEnabled 
+
+### vHubRoutingIntentEnabled
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-Indicates whether routing intent is enabled in the virtual hub. If it is enabled and this is not set the deployment will fail.
+Indicates whether routing intent is enabled on the Virtual Hub within the Virtual WAN.
 
 - Type: Boolean
 
-**Default value**
 
-```text
-False
-```
+- Default value: `False`
 
 ### roleAssignmentEnabled
 
@@ -427,7 +430,12 @@ Supply an array of objects containing the details of the role assignments to cre
 
 Each object must contain the following `keys`:
 - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too.
-- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition.
+- `definition` = The Name of one of the pre-defined built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition as follows:
+  - You can only provide the RBAC role name of the pre-defined roles (Contributor, Owner, Reader, Network Contributor, Role Based Access Control Administrator (Preview), User Access Administrator, Security Admin). We only provide those roles as they are the most common ones to assign to a new subscription, also to reduce the template size and complexity in case we define each and every Built-in RBAC role.
+  - You can provide the Resource ID of a Built-in or custom RBAC Role Definition
+    - e.g. `/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+  - You can provide the RBAC role Id of a Built-in RBAC Role Definition
+    - e.g. `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
 - `relativeScope` = 2 options can be provided for input value:
     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope
     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group
@@ -473,11 +481,51 @@ The name of the user managed identity for the resource providers registration de
 
 - Default value: `[format('id-{0}', deployment().location)]`
 
+### deploymentScriptVirtualNetworkName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The name of the private virtual network for the deployment script. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.
+
+- Default value: `[format('vnet-{0}', deployment().location)]`
+
+### deploymentScriptNetworkSecurityGroupName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The name of the network security group for the deployment script private subnet.
+
+- Default value: `[format('nsg-{0}', deployment().location)]`
+
+### virtualNetworkDeploymentScriptAddressPrefix
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The address prefix of the private virtual network for the deployment script.
+
+- Default value: `192.168.0.0/24`
+
+### deploymentScriptStorageAccountName
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The name of the storage account for the deployment script.
+
+- Default value: `[format('stglzds{0}', deployment().location)]`
+
+### deploymentScriptLocation
+
+![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
+
+The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.
+
+- Default value: `[deployment().location]`
+
 ### resourceProviders
 
 ![Parameter Setting](https://img.shields.io/badge/parameter-optional-green?style=flat-square)
 
-An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.
+An object of resource providers and resource providers features to register. If left blank/empty, no resource providers will be registered.
 
 - Type: `{}` Object
 - Default value: `{
@@ -682,6 +730,9 @@ failedResourceProvidersFeatures | string | The resource providers features that 
                 "anotherLabel"
             ]
         },
+        "vHubRoutingIntentEnabled": {
+            "value": false
+        },
         "roleAssignmentEnabled": {
             "value": true
         },
@@ -720,6 +771,21 @@ failedResourceProvidersFeatures | string | The resource providers features that 
         },
         "deploymentScriptManagedIdentityName": {
             "value": "[format('id-{0}', deployment().location)]"
+        },
+        "deploymentScriptVirtualNetworkName": {
+            "value": "[format('vnet-{0}', deployment().location)]"
+        },
+        "deploymentScriptNetworkSecurityGroupName": {
+            "value": "[format('nsg-{0}', deployment().location)]"
+        },
+        "virtualNetworkDeploymentScriptAddressPrefix": {
+            "value": "192.168.0.0/24"
+        },
+        "deploymentScriptStorageAccountName": {
+            "value": "[format('stglzds{0}', deployment().location)]"
+        },
+        "deploymentScriptLocation": {
+            "value": "[deployment().location]"
         },
         "resourceProviders": {
             "value": {

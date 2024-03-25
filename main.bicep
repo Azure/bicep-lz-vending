@@ -429,7 +429,12 @@ param roleAssignmentEnabled bool = false
 
 Each object must contain the following `keys`:
 - `principalId` = The Object ID of the User, Group, SPN, Managed Identity to assign the RBAC role too.
-- `definition` = The Name of built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition.
+- `definition` = The Name of one of the pre-defined built-In RBAC Roles or a Resource ID of a Built-in or custom RBAC Role Definition as follows:
+  - You can only provide the RBAC role name of the pre-defined roles (Contributor, Owner, Reader, Network Contributor, Role Based Access Control Administrator (Preview), User Access Administrator, Security Admin). We only provide those roles as they are the most common ones to assign to a new subscription, also to reduce the template size and complexity in case we define each and every Built-in RBAC role.
+  - You can provide the Resource ID of a Built-in or custom RBAC Role Definition
+    - e.g. `/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+  - You can provide the RBAC role Id of a Built-in RBAC Role Definition
+    - e.g. `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
 - `relativeScope` = 2 options can be provided for input value:
     1. `''` *(empty string)* = Make RBAC Role Assignment to Subscription scope
     2. `'/resourceGroups/<RESOURCE GROUP NAME>'` = Make RBAC Role Assignment to specified Resource Group
@@ -451,7 +456,7 @@ For more information on the telemetry collected by this module, that is controll
 param disableTelemetry bool = false
 
 @sys.description('Guid for the deployment script resources names based on subscription Id.')
-var deploymentScriptResourcesSubGuid = substring((subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : existingSubscriptionId,0,8)
+var deploymentScriptResourcesSubGuid = substring((subscriptionAliasEnabled && empty(existingSubscriptionId)) ? createSubscription.outputs.subscriptionId : existingSubscriptionId,0,6)
 
 @sys.description('The name of the resource group to create the deployment script for resource providers registration.')
 param deploymentScriptResourceGroupName string = 'rsg-${deployment().location}-ds'
@@ -462,6 +467,21 @@ param deploymentScriptName string = 'ds-${deployment().location}'
 @sys.description('The name of the user managed identity for the resource providers registration deployment script.')
 param deploymentScriptManagedIdentityName string = 'id-${deployment().location}'
 
+@maxLength(64)
+@sys.description('The name of the private virtual network for the deployment script. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
+param deploymentScriptVirtualNetworkName string = 'vnet-${deployment().location}'
+
+@sys.description('The name of the network security group for the deployment script private subnet.')
+param deploymentScriptNetworkSecurityGroupName string = 'nsg-${deployment().location}'
+
+@sys.description('The address prefix of the private virtual network for the deployment script.')
+param virtualNetworkDeploymentScriptAddressPrefix string = '192.168.0.0/24'
+
+@sys.description('The name of the storage account for the deployment script.')
+param deploymentScriptStorageAccountName string = 'stglzds${deployment().location}'
+
+@sys.description('The location of the deployment script. Use region shortnames e.g. uksouth, eastus, etc.')
+param deploymentScriptLocation string = deployment().location
 
 @metadata({
   example: {
@@ -471,7 +491,7 @@ param deploymentScriptManagedIdentityName string = 'id-${deployment().location}'
 
 })
 @sys.description('''
-An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.
+An object of resource providers and resource providers features to register. If left blank/empty, no resource providers will be registered.
 
 - Type: `{}` Object
 - Default value: `{
@@ -682,6 +702,11 @@ module createSubscriptionResources 'src/self/subResourceWrapper/deploy.bicep' = 
     deploymentScriptName: '${deploymentScriptName}-${deploymentScriptResourcesSubGuid}'
     deploymentScriptManagedIdentityName: '${deploymentScriptManagedIdentityName}-${deploymentScriptResourcesSubGuid}'
     resourceProviders: resourceProviders
+    deploymentScriptVirtualNetworkName: deploymentScriptVirtualNetworkName
+    deploymentScriptNetworkSecurityGroupName: deploymentScriptNetworkSecurityGroupName
+    deploymentScriptLocation: deploymentScriptLocation
+    virtualNetworkDeploymentScriptAddressPrefix: virtualNetworkDeploymentScriptAddressPrefix
+    deploymentScriptStorageAccountName: '${deploymentScriptStorageAccountName}${deploymentScriptResourcesSubGuid}'
   }
 }
 

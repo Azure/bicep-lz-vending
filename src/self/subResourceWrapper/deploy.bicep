@@ -101,8 +101,18 @@ param deploymentScriptLocation string = deployment().location
 @sys.description('The name of the deployment script to register resource providers')
 param deploymentScriptName string
 
+@maxLength(64)
+@sys.description('The name of the private virtual network for the deployment script. The string must consist of a-z, A-Z, 0-9, -, _, and . (period) and be between 2 and 64 characters in length.')
+param deploymentScriptVirtualNetworkName string = ''
+
+@sys.description('The name of the network security group for the deployment script private subnet.')
+param deploymentScriptNetworkSecurityGroupName string = ''
+
+@sys.description('The address prefix of the private virtual network for the deployment script.')
+param virtualNetworkDeploymentScriptAddressPrefix string = ''
+
 @sys.description('''
-An object of resource providers and resource providers features to register. If left blank/empty, a list of most common resource providers will be registered.
+An object of resource providers and resource providers features to register. If left blank/empty, no resource providers will be registered.
 
 - Type: `{}` Object
 - Default value: `{
@@ -171,8 +181,7 @@ An object of resource providers and resource providers features to register. If 
     'Microsoft.StreamAnalytics'         : []
     'Microsoft.TimeSeriesInsights'      : []
     'Microsoft.Web'                     : []
-}`
-''')
+}`''')
 param resourceProviders object = {
   'Microsoft.ApiManagement'             : []
     'Microsoft.AppPlatform'             : []
@@ -244,6 +253,9 @@ param resourceProviders object = {
 @sys.description('The name of the user managed identity for the resource providers registration deployment script.')
 param deploymentScriptManagedIdentityName string
 
+@sys.description('The name of the storage account for the deployment script.')
+param deploymentScriptStorageAccountName string
+
 // VARIABLES
 
 // Deployment name variables
@@ -259,9 +271,13 @@ var deploymentNames = {
   createLzRoleAssignmentsRsgsSelf: take('lz-vend-rbac-rsg-self-create-${uniqueString(subscriptionId, deployment().name)}', 64)
   createLzRoleAssignmentsRsgsNotSelf: take('lz-vend-rbac-rsg-nself-create-${uniqueString(subscriptionId, deployment().name)}', 64)
   createResourceGroupForDeploymentScript: take('lz-vend-rsg-ds-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptLocation, deployment().name)}', 64)
-  registerResourceProviders: take('lz-vend-ds-create-${uniqueString(subscriptionId, deployment().name)}', 64)
+  registerResourceProviders: take('lz-vend-ds-create-${uniqueString(subscriptionId,deploymentScriptResourceGroupName,deploymentScriptName ,deployment().name)}', 64)
   createDeploymentScriptManagedIdentity: take('lz-vend-ds-msi-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deployment().name)}', 64)
   createRoleAssignmentsDeploymentScript: take('lz-vend-ds-rbac-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
+  createRoleAssignmentsDeploymentScriptStorageAccount: take('lz-vend-stg-rbac-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptManagedIdentityName, deployment().name)}', 64)
+  createdsVnet: take('lz-vend-ds-vnet-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptLocation, deploymentScriptVirtualNetworkName, deployment().name)}', 64)
+  createDsNsg : take('lz-vend-ds-nsg-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptLocation, deploymentScriptNetworkSecurityGroupName, deployment().name)}', 64)
+  createDsStorageAccount : take('lz-vend-ds-stg-create-${uniqueString(subscriptionId, deploymentScriptResourceGroupName, deploymentScriptLocation, deploymentScriptStorageAccountName, deployment().name)}', 64)
 }
 
 // Role Assignments filtering and splitting
@@ -313,15 +329,17 @@ module tagSubscription '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bicep
     enableDefaultTelemetry: enableTelemetryForCarml
   }
 }
-
-module createResourceGroupForLzNetworking '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
+module createResourceGroupForLzNetworking 'br/public:avm/res/resources/resource-group:0.2.0' = if (virtualNetworkEnabled && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForLzNetworking
   params: {
     name: virtualNetworkResourceGroupName
     location: virtualNetworkLocation
-    lock: virtualNetworkResourceGroupLockEnabled ? 'CanNotDelete' : ''
-    enableDefaultTelemetry: enableTelemetryForCarml
+    lock: virtualNetworkResourceGroupLockEnabled ? {
+      kind: 'CanNotDelete'
+      name: 'CanNotDelete'
+    } : null
+    enableTelemetry: disableTelemetry
   }
 }
 
@@ -340,7 +358,7 @@ module tagResourceGroup '../../carml/v0.6.0/Microsoft.Resources/tags/deploy.bice
   }
 }
 
-module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy.bicep' = if (virtualNetworkEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
+module createLzVnet 'br/public:avm/res/network/virtual-network:0.1.0' = if (virtualNetworkEnabled && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) {
   dependsOn: [
     createResourceGroupForLzNetworking
   ]
@@ -352,8 +370,8 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
     location: virtualNetworkLocation
     addressPrefixes: virtualNetworkAddressSpace
     dnsServers: virtualNetworkDnsServers
-    ddosProtectionPlanId: virtualNetworkDdosPlanId
-    virtualNetworkPeerings: (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(hubVirtualNetworkResourceIdChecked) && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) ? [
+    ddosProtectionPlanResourceId: virtualNetworkDdosPlanId
+    peerings: (virtualNetworkEnabled && virtualNetworkPeeringEnabled && !empty(hubVirtualNetworkResourceIdChecked) && !empty(virtualNetworkName) && !empty(virtualNetworkAddressSpace) && !empty(virtualNetworkLocation) && !empty(virtualNetworkResourceGroupName)) ? [
       {
         allowForwardedTraffic: true
         allowVirtualNetworkAccess: true
@@ -367,7 +385,7 @@ module createLzVnet '../../carml/v0.6.0/Microsoft.Network/virtualNetworks/deploy
         remotePeeringUseRemoteGateways: false
       }
     ] : []
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
 
@@ -434,33 +452,30 @@ module createLzRoleAssignmentsRsgsNotSelf '../../carml/v0.6.0/Microsoft.Authoriz
   }
 }]
 
-module createResourceGroupForDeploymentScript '../../carml/v0.6.0/Microsoft.Resources/resourceGroups/deploy.bicep' = if (!empty(resourceProviders)) {
+module createResourceGroupForDeploymentScript 'br/public:avm/res/resources/resource-group:0.2.0' = if (!empty(resourceProviders)) {
   scope: subscription(subscriptionId)
   name: deploymentNames.createResourceGroupForDeploymentScript
   params: {
     name: deploymentScriptResourceGroupName
     location: deploymentScriptLocation
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
 
-module createManagedIdentityForDeploymentScript '../../carml/v0.6.0/Microsoft.ManagedIdentity/userAssignedIdentity/deploy.bicep' = if (!empty(resourceProviders)) {
+module createManagedIdentityForDeploymentScript 'br/public:avm/res/managed-identity/user-assigned-identity:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId,deploymentScriptResourceGroupName)
   name: deploymentNames.createDeploymentScriptManagedIdentity
   dependsOn: [
     createResourceGroupForDeploymentScript
   ]
-  params:{
+  params: {
     location: deploymentScriptLocation
     name: deploymentScriptManagedIdentityName
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
   }
 }
 
 module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = if (!empty(resourceProviders)) {
-  dependsOn: [
-    createManagedIdentityForDeploymentScript
-  ]
   name: take('${deploymentNames.createRoleAssignmentsDeploymentScript}', 64)
   params: {
     location: deploymentScriptLocation
@@ -471,7 +486,88 @@ module createRoleAssignmentsDeploymentScript '../../carml/v0.6.0/Microsoft.Autho
   }
 }
 
-module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = if (!empty(resourceProviders)) {
+module createRoleAssignmentsDeploymentScriptStorageAccount '../../carml/v0.6.0/Microsoft.Authorization/roleAssignments/deploy.bicep' = if (!empty(resourceProviders)) {
+  name: take('${deploymentNames.createRoleAssignmentsDeploymentScriptStorageAccount}', 64)
+  params: {
+    location: deploymentScriptLocation
+    principalId: !empty(resourceProviders) ? createManagedIdentityForDeploymentScript.outputs.principalId : ''
+    roleDefinitionIdOrName: '69566ab7-960f-475b-8e7c-b3118f30c6bd'
+    enableDefaultTelemetry: enableTelemetryForCarml
+    subscriptionId: subscriptionId
+    resourceGroupName: deploymentScriptResourceGroupName
+  }
+}
+
+module createDsNsg 'br/public:avm/res/network/network-security-group:0.1.0' = if (!empty(resourceProviders)) {
+  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
+  dependsOn: [
+    createResourceGroupForDeploymentScript
+  ]
+  name: deploymentNames.createDsNsg
+  params: {
+    name: deploymentScriptNetworkSecurityGroupName
+    location: deploymentScriptLocation
+    enableTelemetry: disableTelemetry
+  }
+}
+module createDsStorageAccount 'br/public:avm/res/storage/storage-account:0.5.0' = if (!empty(resourceProviders)) {
+  dependsOn: [
+    createRoleAssignmentsDeploymentScriptStorageAccount
+  ]
+  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
+  name: deploymentNames.createDsStorageAccount
+  params: {
+    location: deploymentScriptLocation
+    name: deploymentScriptStorageAccountName
+    kind: 'StorageV2'
+    skuName: 'Standard_LRS'
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Deny'
+      virtualNetworkRules: [
+        {
+          action: 'Allow'
+          id: !empty(resourceProviders) ? createDsVnet.outputs.subnetResourceIds[0] : null
+        }
+      ]
+    }
+    enableTelemetry: disableTelemetry
+  }
+}
+
+module createDsVnet 'br/public:avm/res/network/virtual-network:0.1.0' = if (!empty(resourceProviders)) {
+  scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
+  name: deploymentNames.createdsVnet
+  params: {
+    name: deploymentScriptVirtualNetworkName
+    location: deploymentScriptLocation
+    addressPrefixes: [
+      virtualNetworkDeploymentScriptAddressPrefix
+    ]
+    subnets: [
+      {
+        addressPrefix: cidrSubnet(virtualNetworkDeploymentScriptAddressPrefix, 24, 0)
+        name: 'ds-subnet-001'
+        networkSecurityGroupId: !empty(resourceProviders) ? createDsNsg.outputs.resourceId : null
+        serviceEndpoints: [
+          {
+            service: 'Microsoft.Storage'
+          }
+        ]
+        delegations: [
+          {
+            name: 'Microsoft.ContainerInstance.containerGroups'
+            properties: {
+              serviceName: 'Microsoft.ContainerInstance/containerGroups'
+            }
+          }
+        ]
+      }
+    ]
+    enableTelemetry: disableTelemetry
+  }
+}
+module registerResourceProviders 'br/public:avm/res/resources/deployment-script:0.1.0' = if (!empty(resourceProviders)) {
   scope: resourceGroup(subscriptionId, deploymentScriptResourceGroupName)
   name: deploymentNames.registerResourceProviders
   params: {
@@ -479,19 +575,24 @@ module registerResourceProviders '../../carml/v0.6.0/Microsoft.Resources/deploym
     kind: 'AzurePowerShell'
     azPowerShellVersion: '3.0'
     cleanupPreference: 'Always'
-    enableDefaultTelemetry: enableTelemetryForCarml
+    enableTelemetry: disableTelemetry
     location: deploymentScriptLocation
     retentionInterval: 'P1D'
     timeout: 'PT1H'
     runOnce: true
-    userAssignedIdentities: !(empty(resourceProviders)) ? {'${createManagedIdentityForDeploymentScript.outputs.resourceId}': {}} : {}
+    managedIdentities: !(empty(resourceProviders)) ? {
+      userAssignedResourcesIds: [
+        createManagedIdentityForDeploymentScript.outputs.resourceId
+      ]
+    }: null
+    storageAccountResourceId: !(empty(resourceProviders)) ? createDsStorageAccount.outputs.resourceId : null
+    subnetResourceIds: !(empty(resourceProviders)) ? createDsVnet.outputs.subnetResourceIds : null
     arguments: '-resourceProviders \'${resourceProvidersFormatted}\' -resourceProvidersFeatures -subscriptionId ${subscriptionId}'
     scriptContent: loadTextContent('../../scripts/Invoke-RegisterSubscriptionResourceProviders.ps1')
   }
 }
 
 // OUTPUTS
-
 output failedProviders string = !empty(resourceProviders) ? registerResourceProviders.outputs.outputs['failedProvidersRegistrations'] : ''
 output failedFeatures string = !empty(resourceProviders) ? registerResourceProviders.outputs.outputs['failedFeaturesRegistrations'] : ''
 
