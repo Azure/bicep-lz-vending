@@ -38,7 +38,7 @@ jobs:
 
       - name: Azure Login
         id: login
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: '{"clientId":"${{ env.ARM_CLIENT_ID }}","clientSecret":"${{ env.ARM_CLIENT_SECRET }}","tenantId":"${{ env.ARM_TENANT_ID }}"}'
           enable-AzPSSession: true
