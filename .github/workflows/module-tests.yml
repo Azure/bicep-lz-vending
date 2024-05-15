@@ -44,7 +44,7 @@ jobs:
 
       - name: Vend Subscriptions & Networking Scenarios (What-If & Validate)
         id: vend-whatif
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
             $inputObject = @{
@@ -63,7 +63,7 @@ jobs:
 
       - name: Vend Subscriptions & Networking Scenarios (Deploy)
         id: vend
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
             $inputObject = @{
@@ -84,7 +84,7 @@ jobs:
 
       - name: Pester Tests
         id: pester
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
             Import-Module Pester -Force
@@ -108,7 +108,7 @@ jobs:
       - name: Cleanup Vended Subscription & Networking Scenarios
         id: cleanup-vend
         if: always()
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
             # Resource Group Names
