@@ -15,6 +15,7 @@ param (
 
 Describe "Bicep Landing Zone (Sub) Vending Tests" {
 
+
   BeforeAll {
     Update-AzConfig -DisplayBreakingChangeWarning $false
     Select-AzSubscription -subscriptionId $subId
