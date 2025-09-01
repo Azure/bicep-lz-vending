@@ -1,5 +1,7 @@
 targetScope = 'managementGroup'
 
+// comment
+
 // METADATA - Used by PSDocs
 
 metadata name = '`main.bicep` Parameters'
